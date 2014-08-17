@@ -1,0 +1,84 @@
+/* BOOTSTRAP SPECIFIC CLASSES
+ * -------------------------- */
+
+/* Bootstrap 2.0 sprites.less reset */
+[class^="i-"],
+[class*=" i-"] {
+  display: inline;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  vertical-align: baseline;
+  background-image: none;
+  background-position: 0% 0%;
+  background-repeat: repeat;
+  margin-top: 0;
+}
+
+/* more sprites.less reset */
+.i-white,
+.nav-pills > .active > a > [class^="i-"],
+.nav-pills > .active > a > [class*=" i-"],
+.nav-list > .active > a > [class^="i-"],
+.nav-list > .active > a > [class*=" i-"],
+.navbar-inverse .nav > .active > a > [class^="i-"],
+.navbar-inverse .nav > .active > a > [class*=" i-"],
+.dropdown-menu > li > a:hover > [class^="i-"],
+.dropdown-menu > li > a:hover > [class*=" i-"],
+.dropdown-menu > .active > a > [class^="i-"],
+.dropdown-menu > .active > a > [class*=" i-"],
+.dropdown-submenu:hover > a > [class^="i-"],
+.dropdown-submenu:hover > a > [class*=" i-"] {
+  background-image: none;
+}
+
+
+/* keeps Bootstrap styles with and without icons the same */
+.btn, .nav {
+  [class^="i-"],
+  [class*=" i-"] {
+    //    display: inline;
+    &.i-large { line-height: .9em; }
+    &.i-spin { display: inline-block; }
+  }
+}
+.nav-tabs, .nav-pills {
+  [class^="i-"],
+  [class*=" i-"] {
+    &, &.i-large { line-height: .9em; }
+  }
+}
+.btn {
+  [class^="i-"],
+  [class*=" i-"] {
+    &.pull-left, &.pull-right {
+      &.i-2x { margin-top: .18em; }
+    }
+    &.i-spin.i-large { line-height: .8em; }
+  }
+}
+.btn.btn-small {
+  [class^="i-"],
+  [class*=" i-"] {
+    &.pull-left, &.pull-right {
+      &.i-2x { margin-top: .25em; }
+    }
+  }
+}
+.btn.btn-large {
+  [class^="i-"],
+  [class*=" i-"] {
+    margin-top: 0; // overrides bootstrap default
+    &.pull-left, &.pull-right {
+      &.i-2x { margin-top: .05em; }
+    }
+    &.pull-left.i-2x { margin-right: .2em; }
+    &.pull-right.i-2x { margin-left: .2em; }
+  }
+}
+
+/* Fixes alignment in nav lists */
+.nav-list [class^="i-"],
+.nav-list [class*=" i-"] {
+  line-height: inherit;
+}

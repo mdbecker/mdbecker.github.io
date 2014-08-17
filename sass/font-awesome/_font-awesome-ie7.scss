@@ -1,0 +1,1953 @@
+/*!
+ *  Font Awesome 3.2.1
+ *  the iconic font designed for Bootstrap
+ *  ------------------------------------------------------------------------------
+ *  The full suite of pictographic icons, examples, and documentation can be
+ *  found at http://fontawesome.io.  Stay up to date on Twitter at
+ *  http://twitter.com/fontawesome.
+ *
+ *  License
+ *  ------------------------------------------------------------------------------
+ *  - The Font Awesome font is licensed under SIL OFL 1.1 -
+ *    http://scripts.sil.org/OFL
+ *  - Font Awesome CSS, LESS, and SASS files are licensed under MIT License -
+ *    http://opensource.org/licenses/mit-license.html
+ *  - Font Awesome documentation licensed under CC BY 3.0 -
+ *    http://creativecommons.org/licenses/by/3.0/
+ *  - Attribution is no longer required in Font Awesome 3.0, but much appreciated:
+ *    "Font Awesome by Dave Gandy - http://fontawesome.io"
+ *
+ *  Author - Dave Gandy
+ *  ------------------------------------------------------------------------------
+ *  Email: dave@fontawesome.io
+ *  Twitter: http://twitter.com/davegandy
+ *  Work: Lead Product Designer @ Kyruus - http://kyruus.com
+ */
+
+.i-large {
+  font-size: (4em/3);
+  margin-top: -4px;
+  padding-top: 3px;
+  margin-bottom: -4px;
+  padding-bottom: 3px;
+  vertical-align: middle;
+}
+
+.nav {
+  [class^="i-"],
+  [class*=" i-"] {
+    vertical-align: inherit;
+    margin-top: -4px;
+    padding-top: 3px;
+    margin-bottom: -4px;
+    padding-bottom: 3px;
+    &.i-large {
+      vertical-align: -25%;
+    }
+  }
+}
+
+.nav-pills, .nav-tabs {
+  [class^="i-"],
+  [class*=" i-"] {
+    &.i-large {
+      line-height: .75em;
+      margin-top: -7px;
+      padding-top: 5px;
+      margin-bottom: -5px;
+      padding-bottom: 4px;
+    }
+  }
+}
+
+.btn {
+  [class^="i-"],
+  [class*=" i-"] {
+    &.pull-left, &.pull-right { vertical-align: inherit; }
+    &.i-large {
+      margin-top: -.5em;
+    }
+  }
+}
+
+a [class^="i-"],
+a [class*=" i-"] {
+  cursor: pointer;
+}
+
+@mixin ie7icon($inner) { *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '#{$inner}'); }
+
+
+.i-glass {
+  @include ie7icon('&#xf000;');
+}
+
+
+.i-music {
+  @include ie7icon('&#xf001;');
+}
+
+
+.i-search {
+  @include ie7icon('&#xf002;');
+}
+
+
+.i-envelope-alt {
+  @include ie7icon('&#xf003;');
+}
+
+
+.i-heart {
+  @include ie7icon('&#xf004;');
+}
+
+
+.i-star {
+  @include ie7icon('&#xf005;');
+}
+
+
+.i-star-empty {
+  @include ie7icon('&#xf006;');
+}
+
+
+.i-user {
+  @include ie7icon('&#xf007;');
+}
+
+
+.i-film {
+  @include ie7icon('&#xf008;');
+}
+
+
+.i-th-large {
+  @include ie7icon('&#xf009;');
+}
+
+
+.i-th {
+  @include ie7icon('&#xf00a;');
+}
+
+
+.i-th-list {
+  @include ie7icon('&#xf00b;');
+}
+
+
+.i-ok {
+  @include ie7icon('&#xf00c;');
+}
+
+
+.i-remove {
+  @include ie7icon('&#xf00d;');
+}
+
+
+.i-zoom-in {
+  @include ie7icon('&#xf00e;');
+}
+
+
+.i-zoom-out {
+  @include ie7icon('&#xf010;');
+}
+
+
+.i-off {
+  @include ie7icon('&#xf011;');
+}
+
+.i-power-off {
+  @include ie7icon('&#xf011;');
+}
+
+
+.i-signal {
+  @include ie7icon('&#xf012;');
+}
+
+
+.i-cog {
+  @include ie7icon('&#xf013;');
+}
+
+.i-gear {
+  @include ie7icon('&#xf013;');
+}
+
+
+.i-trash {
+  @include ie7icon('&#xf014;');
+}
+
+
+.i-home {
+  @include ie7icon('&#xf015;');
+}
+
+
+.i-file-alt {
+  @include ie7icon('&#xf016;');
+}
+
+
+.i-time {
+  @include ie7icon('&#xf017;');
+}
+
+
+.i-road {
+  @include ie7icon('&#xf018;');
+}
+
+
+.i-download-alt {
+  @include ie7icon('&#xf019;');
+}
+
+
+.i-download {
+  @include ie7icon('&#xf01a;');
+}
+
+
+.i-upload {
+  @include ie7icon('&#xf01b;');
+}
+
+
+.i-inbox {
+  @include ie7icon('&#xf01c;');
+}
+
+
+.i-play-circle {
+  @include ie7icon('&#xf01d;');
+}
+
+
+.i-repeat {
+  @include ie7icon('&#xf01e;');
+}
+
+.i-rotate-right {
+  @include ie7icon('&#xf01e;');
+}
+
+
+.i-refresh {
+  @include ie7icon('&#xf021;');
+}
+
+
+.i-list-alt {
+  @include ie7icon('&#xf022;');
+}
+
+
+.i-lock {
+  @include ie7icon('&#xf023;');
+}
+
+
+.i-flag {
+  @include ie7icon('&#xf024;');
+}
+
+
+.i-headphones {
+  @include ie7icon('&#xf025;');
+}
+
+
+.i-volume-off {
+  @include ie7icon('&#xf026;');
+}
+
+
+.i-volume-down {
+  @include ie7icon('&#xf027;');
+}
+
+
+.i-volume-up {
+  @include ie7icon('&#xf028;');
+}
+
+
+.i-qrcode {
+  @include ie7icon('&#xf029;');
+}
+
+
+.i-barcode {
+  @include ie7icon('&#xf02a;');
+}
+
+
+.i-tag {
+  @include ie7icon('&#xf02b;');
+}
+
+
+.i-tags {
+  @include ie7icon('&#xf02c;');
+}
+
+
+.i-book {
+  @include ie7icon('&#xf02d;');
+}
+
+
+.i-bookmark {
+  @include ie7icon('&#xf02e;');
+}
+
+
+.i-print {
+  @include ie7icon('&#xf02f;');
+}
+
+
+.i-camera {
+  @include ie7icon('&#xf030;');
+}
+
+
+.i-font {
+  @include ie7icon('&#xf031;');
+}
+
+
+.i-bold {
+  @include ie7icon('&#xf032;');
+}
+
+
+.i-italic {
+  @include ie7icon('&#xf033;');
+}
+
+
+.i-text-height {
+  @include ie7icon('&#xf034;');
+}
+
+
+.i-text-width {
+  @include ie7icon('&#xf035;');
+}
+
+
+.i-align-left {
+  @include ie7icon('&#xf036;');
+}
+
+
+.i-align-center {
+  @include ie7icon('&#xf037;');
+}
+
+
+.i-align-right {
+  @include ie7icon('&#xf038;');
+}
+
+
+.i-align-justify {
+  @include ie7icon('&#xf039;');
+}
+
+
+.i-list {
+  @include ie7icon('&#xf03a;');
+}
+
+
+.i-indent-left {
+  @include ie7icon('&#xf03b;');
+}
+
+
+.i-indent-right {
+  @include ie7icon('&#xf03c;');
+}
+
+
+.i-facetime-video {
+  @include ie7icon('&#xf03d;');
+}
+
+
+.i-picture {
+  @include ie7icon('&#xf03e;');
+}
+
+
+.i-pencil {
+  @include ie7icon('&#xf040;');
+}
+
+
+.i-map-marker {
+  @include ie7icon('&#xf041;');
+}
+
+
+.i-adjust {
+  @include ie7icon('&#xf042;');
+}
+
+
+.i-tint {
+  @include ie7icon('&#xf043;');
+}
+
+
+.i-edit {
+  @include ie7icon('&#xf044;');
+}
+
+
+.i-share {
+  @include ie7icon('&#xf045;');
+}
+
+
+.i-check {
+  @include ie7icon('&#xf046;');
+}
+
+
+.i-move {
+  @include ie7icon('&#xf047;');
+}
+
+
+.i-step-backward {
+  @include ie7icon('&#xf048;');
+}
+
+
+.i-fast-backward {
+  @include ie7icon('&#xf049;');
+}
+
+
+.i-backward {
+  @include ie7icon('&#xf04a;');
+}
+
+
+.i-play {
+  @include ie7icon('&#xf04b;');
+}
+
+
+.i-pause {
+  @include ie7icon('&#xf04c;');
+}
+
+
+.i-stop {
+  @include ie7icon('&#xf04d;');
+}
+
+
+.i-forward {
+  @include ie7icon('&#xf04e;');
+}
+
+
+.i-fast-forward {
+  @include ie7icon('&#xf050;');
+}
+
+
+.i-step-forward {
+  @include ie7icon('&#xf051;');
+}
+
+
+.i-eject {
+  @include ie7icon('&#xf052;');
+}
+
+
+.i-chevron-left {
+  @include ie7icon('&#xf053;');
+}
+
+
+.i-chevron-right {
+  @include ie7icon('&#xf054;');
+}
+
+
+.i-plus-sign {
+  @include ie7icon('&#xf055;');
+}
+
+
+.i-minus-sign {
+  @include ie7icon('&#xf056;');
+}
+
+
+.i-remove-sign {
+  @include ie7icon('&#xf057;');
+}
+
+
+.i-ok-sign {
+  @include ie7icon('&#xf058;');
+}
+
+
+.i-question-sign {
+  @include ie7icon('&#xf059;');
+}
+
+
+.i-info-sign {
+  @include ie7icon('&#xf05a;');
+}
+
+
+.i-screenshot {
+  @include ie7icon('&#xf05b;');
+}
+
+
+.i-remove-circle {
+  @include ie7icon('&#xf05c;');
+}
+
+
+.i-ok-circle {
+  @include ie7icon('&#xf05d;');
+}
+
+
+.i-ban-circle {
+  @include ie7icon('&#xf05e;');
+}
+
+
+.i-arrow-left {
+  @include ie7icon('&#xf060;');
+}
+
+
+.i-arrow-right {
+  @include ie7icon('&#xf061;');
+}
+
+
+.i-arrow-up {
+  @include ie7icon('&#xf062;');
+}
+
+
+.i-arrow-down {
+  @include ie7icon('&#xf063;');
+}
+
+
+.i-share-alt {
+  @include ie7icon('&#xf064;');
+}
+
+.i-mail-forward {
+  @include ie7icon('&#xf064;');
+}
+
+
+.i-resize-full {
+  @include ie7icon('&#xf065;');
+}
+
+
+.i-resize-small {
+  @include ie7icon('&#xf066;');
+}
+
+
+.i-plus {
+  @include ie7icon('&#xf067;');
+}
+
+
+.i-minus {
+  @include ie7icon('&#xf068;');
+}
+
+
+.i-asterisk {
+  @include ie7icon('&#xf069;');
+}
+
+
+.i-exclamation-sign {
+  @include ie7icon('&#xf06a;');
+}
+
+
+.i-gift {
+  @include ie7icon('&#xf06b;');
+}
+
+
+.i-leaf {
+  @include ie7icon('&#xf06c;');
+}
+
+
+.i-fire {
+  @include ie7icon('&#xf06d;');
+}
+
+
+.i-eye-open {
+  @include ie7icon('&#xf06e;');
+}
+
+
+.i-eye-close {
+  @include ie7icon('&#xf070;');
+}
+
+
+.i-warning-sign {
+  @include ie7icon('&#xf071;');
+}
+
+
+.i-plane {
+  @include ie7icon('&#xf072;');
+}
+
+
+.i-calendar {
+  @include ie7icon('&#xf073;');
+}
+
+
+.i-random {
+  @include ie7icon('&#xf074;');
+}
+
+
+.i-comment {
+  @include ie7icon('&#xf075;');
+}
+
+
+.i-magnet {
+  @include ie7icon('&#xf076;');
+}
+
+
+.i-chevron-up {
+  @include ie7icon('&#xf077;');
+}
+
+
+.i-chevron-down {
+  @include ie7icon('&#xf078;');
+}
+
+
+.i-retweet {
+  @include ie7icon('&#xf079;');
+}
+
+
+.i-shopping-cart {
+  @include ie7icon('&#xf07a;');
+}
+
+
+.i-folder-close {
+  @include ie7icon('&#xf07b;');
+}
+
+
+.i-folder-open {
+  @include ie7icon('&#xf07c;');
+}
+
+
+.i-resize-vertical {
+  @include ie7icon('&#xf07d;');
+}
+
+
+.i-resize-horizontal {
+  @include ie7icon('&#xf07e;');
+}
+
+
+.i-bar-chart {
+  @include ie7icon('&#xf080;');
+}
+
+
+.i-twttr-sign {
+  @include ie7icon('&#xf081;');
+}
+
+
+.i-facebook-sign {
+  @include ie7icon('&#xf082;');
+}
+
+
+.i-camera-retro {
+  @include ie7icon('&#xf083;');
+}
+
+
+.i-key {
+  @include ie7icon('&#xf084;');
+}
+
+
+.i-cogs {
+  @include ie7icon('&#xf085;');
+}
+
+.i-gears {
+  @include ie7icon('&#xf085;');
+}
+
+
+.i-comments {
+  @include ie7icon('&#xf086;');
+}
+
+
+.i-thumbs-up-alt {
+  @include ie7icon('&#xf087;');
+}
+
+
+.i-thumbs-down-alt {
+  @include ie7icon('&#xf088;');
+}
+
+
+.i-star-half {
+  @include ie7icon('&#xf089;');
+}
+
+
+.i-heart-empty {
+  @include ie7icon('&#xf08a;');
+}
+
+
+.i-signout {
+  @include ie7icon('&#xf08b;');
+}
+
+
+.i-lnkdn-sign {
+  @include ie7icon('&#xf08c;');
+}
+
+
+.i-pushpin {
+  @include ie7icon('&#xf08d;');
+}
+
+
+.i-external-link {
+  @include ie7icon('&#xf08e;');
+}
+
+
+.i-signin {
+  @include ie7icon('&#xf090;');
+}
+
+
+.i-trophy {
+  @include ie7icon('&#xf091;');
+}
+
+
+.i-gthb {
+  @include ie7icon('&#xf092;');
+}
+
+
+.i-upload-alt {
+  @include ie7icon('&#xf093;');
+}
+
+
+.i-lemon {
+  @include ie7icon('&#xf094;');
+}
+
+
+.i-phone {
+  @include ie7icon('&#xf095;');
+}
+
+
+.i-check-empty {
+  @include ie7icon('&#xf096;');
+}
+
+.i-unchecked {
+  @include ie7icon('&#xf096;');
+}
+
+
+.i-bookmark-empty {
+  @include ie7icon('&#xf097;');
+}
+
+
+.i-phone-sign {
+  @include ie7icon('&#xf098;');
+}
+
+
+.i-twttr {
+  @include ie7icon('&#xf099;');
+}
+
+
+.i-facebook {
+  @include ie7icon('&#xf09a;');
+}
+
+
+.i-gthb {
+  @include ie7icon('&#xf09b;');
+}
+
+
+.i-unlock {
+  @include ie7icon('&#xf09c;');
+}
+
+
+.i-credit-card {
+  @include ie7icon('&#xf09d;');
+}
+
+
+.i-rss {
+  @include ie7icon('&#xf09e;');
+}
+
+
+.i-hdd {
+  @include ie7icon('&#xf0a0;');
+}
+
+
+.i-bullhorn {
+  @include ie7icon('&#xf0a1;');
+}
+
+
+.i-bell {
+  @include ie7icon('&#xf0a2;');
+}
+
+
+.i-certificate {
+  @include ie7icon('&#xf0a3;');
+}
+
+
+.i-hand-right {
+  @include ie7icon('&#xf0a4;');
+}
+
+
+.i-hand-left {
+  @include ie7icon('&#xf0a5;');
+}
+
+
+.i-hand-up {
+  @include ie7icon('&#xf0a6;');
+}
+
+
+.i-hand-down {
+  @include ie7icon('&#xf0a7;');
+}
+
+
+.i-circle-arrow-left {
+  @include ie7icon('&#xf0a8;');
+}
+
+
+.i-circle-arrow-right {
+  @include ie7icon('&#xf0a9;');
+}
+
+
+.i-circle-arrow-up {
+  @include ie7icon('&#xf0aa;');
+}
+
+
+.i-circle-arrow-down {
+  @include ie7icon('&#xf0ab;');
+}
+
+
+.i-globe {
+  @include ie7icon('&#xf0ac;');
+}
+
+
+.i-wrench {
+  @include ie7icon('&#xf0ad;');
+}
+
+
+.i-tasks {
+  @include ie7icon('&#xf0ae;');
+}
+
+
+.i-filter {
+  @include ie7icon('&#xf0b0;');
+}
+
+
+.i-briefcase {
+  @include ie7icon('&#xf0b1;');
+}
+
+
+.i-fullscreen {
+  @include ie7icon('&#xf0b2;');
+}
+
+
+.i-group {
+  @include ie7icon('&#xf0c0;');
+}
+
+
+.i-link {
+  @include ie7icon('&#xf0c1;');
+}
+
+
+.i-cloud {
+  @include ie7icon('&#xf0c2;');
+}
+
+
+.i-beaker {
+  @include ie7icon('&#xf0c3;');
+}
+
+
+.i-cut {
+  @include ie7icon('&#xf0c4;');
+}
+
+
+.i-copy {
+  @include ie7icon('&#xf0c5;');
+}
+
+
+.i-paper-clip {
+  @include ie7icon('&#xf0c6;');
+}
+
+.i-paperclip {
+  @include ie7icon('&#xf0c6;');
+}
+
+
+.i-save {
+  @include ie7icon('&#xf0c7;');
+}
+
+
+.i-sign-blank {
+  @include ie7icon('&#xf0c8;');
+}
+
+
+.i-reorder {
+  @include ie7icon('&#xf0c9;');
+}
+
+
+.i-list-ul {
+  @include ie7icon('&#xf0ca;');
+}
+
+
+.i-list-ol {
+  @include ie7icon('&#xf0cb;');
+}
+
+
+.i-strikethrough {
+  @include ie7icon('&#xf0cc;');
+}
+
+
+.i-underline {
+  @include ie7icon('&#xf0cd;');
+}
+
+
+.i-table {
+  @include ie7icon('&#xf0ce;');
+}
+
+
+.i-magic {
+  @include ie7icon('&#xf0d0;');
+}
+
+
+.i-truck {
+  @include ie7icon('&#xf0d1;');
+}
+
+
+.i-pinterest {
+  @include ie7icon('&#xf0d2;');
+}
+
+
+.i-pinterest-sign {
+  @include ie7icon('&#xf0d3;');
+}
+
+
+.i-ggl-pls-sign {
+  @include ie7icon('&#xf0d4;');
+}
+
+
+.i-ggl-pls {
+  @include ie7icon('&#xf0d5;');
+}
+
+
+.i-money {
+  @include ie7icon('&#xf0d6;');
+}
+
+
+.i-caret-down {
+  @include ie7icon('&#xf0d7;');
+}
+
+
+.i-caret-up {
+  @include ie7icon('&#xf0d8;');
+}
+
+
+.i-caret-left {
+  @include ie7icon('&#xf0d9;');
+}
+
+
+.i-caret-right {
+  @include ie7icon('&#xf0da;');
+}
+
+
+.i-columns {
+  @include ie7icon('&#xf0db;');
+}
+
+
+.i-sort {
+  @include ie7icon('&#xf0dc;');
+}
+
+
+.i-sort-down {
+  @include ie7icon('&#xf0dd;');
+}
+
+
+.i-sort-up {
+  @include ie7icon('&#xf0de;');
+}
+
+
+.i-envelope {
+  @include ie7icon('&#xf0e0;');
+}
+
+
+.i-lnkdn {
+  @include ie7icon('&#xf0e1;');
+}
+
+
+.i-undo {
+  @include ie7icon('&#xf0e2;');
+}
+
+.i-rotate-left {
+  @include ie7icon('&#xf0e2;');
+}
+
+
+.i-legal {
+  @include ie7icon('&#xf0e3;');
+}
+
+
+.i-dashboard {
+  @include ie7icon('&#xf0e4;');
+}
+
+
+.i-comment-alt {
+  @include ie7icon('&#xf0e5;');
+}
+
+
+.i-comments-alt {
+  @include ie7icon('&#xf0e6;');
+}
+
+
+.i-bolt {
+  @include ie7icon('&#xf0e7;');
+}
+
+
+.i-sitemap {
+  @include ie7icon('&#xf0e8;');
+}
+
+
+.i-umbrella {
+  @include ie7icon('&#xf0e9;');
+}
+
+
+.i-paste {
+  @include ie7icon('&#xf0ea;');
+}
+
+
+.i-lightbulb {
+  @include ie7icon('&#xf0eb;');
+}
+
+
+.i-exchange {
+  @include ie7icon('&#xf0ec;');
+}
+
+
+.i-cloud-download {
+  @include ie7icon('&#xf0ed;');
+}
+
+
+.i-cloud-upload {
+  @include ie7icon('&#xf0ee;');
+}
+
+
+.i-user-md {
+  @include ie7icon('&#xf0f0;');
+}
+
+
+.i-stethoscope {
+  @include ie7icon('&#xf0f1;');
+}
+
+
+.i-suitcase {
+  @include ie7icon('&#xf0f2;');
+}
+
+
+.i-bell-alt {
+  @include ie7icon('&#xf0f3;');
+}
+
+
+.i-coffee {
+  @include ie7icon('&#xf0f4;');
+}
+
+
+.i-food {
+  @include ie7icon('&#xf0f5;');
+}
+
+
+.i-file-text-alt {
+  @include ie7icon('&#xf0f6;');
+}
+
+
+.i-building {
+  @include ie7icon('&#xf0f7;');
+}
+
+
+.i-hospital {
+  @include ie7icon('&#xf0f8;');
+}
+
+
+.i-ambulance {
+  @include ie7icon('&#xf0f9;');
+}
+
+
+.i-medkit {
+  @include ie7icon('&#xf0fa;');
+}
+
+
+.i-fighter-jet {
+  @include ie7icon('&#xf0fb;');
+}
+
+
+.i-beer {
+  @include ie7icon('&#xf0fc;');
+}
+
+
+.i-h-sign {
+  @include ie7icon('&#xf0fd;');
+}
+
+
+.i-plus-sign-alt {
+  @include ie7icon('&#xf0fe;');
+}
+
+
+.i-double-angle-left {
+  @include ie7icon('&#xf100;');
+}
+
+
+.i-double-angle-right {
+  @include ie7icon('&#xf101;');
+}
+
+
+.i-double-angle-up {
+  @include ie7icon('&#xf102;');
+}
+
+
+.i-double-angle-down {
+  @include ie7icon('&#xf103;');
+}
+
+
+.i-angle-left {
+  @include ie7icon('&#xf104;');
+}
+
+
+.i-angle-right {
+  @include ie7icon('&#xf105;');
+}
+
+
+.i-angle-up {
+  @include ie7icon('&#xf106;');
+}
+
+
+.i-angle-down {
+  @include ie7icon('&#xf107;');
+}
+
+
+.i-desktop {
+  @include ie7icon('&#xf108;');
+}
+
+
+.i-laptop {
+  @include ie7icon('&#xf109;');
+}
+
+
+.i-tablet {
+  @include ie7icon('&#xf10a;');
+}
+
+
+.i-mobile-phone {
+  @include ie7icon('&#xf10b;');
+}
+
+
+.i-circle-blank {
+  @include ie7icon('&#xf10c;');
+}
+
+
+.i-quote-left {
+  @include ie7icon('&#xf10d;');
+}
+
+
+.i-quote-right {
+  @include ie7icon('&#xf10e;');
+}
+
+
+.i-spinner {
+  @include ie7icon('&#xf110;');
+}
+
+
+.i-circle {
+  @include ie7icon('&#xf111;');
+}
+
+
+.i-reply {
+  @include ie7icon('&#xf112;');
+}
+
+.i-mail-reply {
+  @include ie7icon('&#xf112;');
+}
+
+
+.fa-github-altalt {
+  @include ie7icon('&#xf113;');
+}
+
+
+.i-folder-close-alt {
+  @include ie7icon('&#xf114;');
+}
+
+
+.i-folder-open-alt {
+  @include ie7icon('&#xf115;');
+}
+
+
+.i-expand-alt {
+  @include ie7icon('&#xf116;');
+}
+
+
+.i-collapse-alt {
+  @include ie7icon('&#xf117;');
+}
+
+
+.i-smile {
+  @include ie7icon('&#xf118;');
+}
+
+
+.i-frown {
+  @include ie7icon('&#xf119;');
+}
+
+
+.i-meh {
+  @include ie7icon('&#xf11a;');
+}
+
+
+.i-gamepad {
+  @include ie7icon('&#xf11b;');
+}
+
+
+.i-keyboard {
+  @include ie7icon('&#xf11c;');
+}
+
+
+.i-flag-alt {
+  @include ie7icon('&#xf11d;');
+}
+
+
+.i-flag-checkered {
+  @include ie7icon('&#xf11e;');
+}
+
+
+.i-terminal {
+  @include ie7icon('&#xf120;');
+}
+
+
+.i-code {
+  @include ie7icon('&#xf121;');
+}
+
+
+.i-reply-all {
+  @include ie7icon('&#xf122;');
+}
+
+
+.i-mail-reply-all {
+  @include ie7icon('&#xf122;');
+}
+
+
+.i-star-half-empty {
+  @include ie7icon('&#xf123;');
+}
+
+.i-star-half-full {
+  @include ie7icon('&#xf123;');
+}
+
+
+.i-location-arrow {
+  @include ie7icon('&#xf124;');
+}
+
+
+.i-crop {
+  @include ie7icon('&#xf125;');
+}
+
+
+.i-code-fork {
+  @include ie7icon('&#xf126;');
+}
+
+
+.i-unlink {
+  @include ie7icon('&#xf127;');
+}
+
+
+.i-question {
+  @include ie7icon('&#xf128;');
+}
+
+
+.i-info {
+  @include ie7icon('&#xf129;');
+}
+
+
+.i-exclamation {
+  @include ie7icon('&#xf12a;');
+}
+
+
+.i-superscript {
+  @include ie7icon('&#xf12b;');
+}
+
+
+.i-subscript {
+  @include ie7icon('&#xf12c;');
+}
+
+
+.i-eraser {
+  @include ie7icon('&#xf12d;');
+}
+
+
+.i-puzzle-piece {
+  @include ie7icon('&#xf12e;');
+}
+
+
+.i-microphone {
+  @include ie7icon('&#xf130;');
+}
+
+
+.i-microphone-off {
+  @include ie7icon('&#xf131;');
+}
+
+
+.i-shield {
+  @include ie7icon('&#xf132;');
+}
+
+
+.i-calendar-empty {
+  @include ie7icon('&#xf133;');
+}
+
+
+.i-fire-extinguisher {
+  @include ie7icon('&#xf134;');
+}
+
+
+.i-rocket {
+  @include ie7icon('&#xf135;');
+}
+
+
+.i-maxcdn {
+  @include ie7icon('&#xf136;');
+}
+
+
+.i-chevron-sign-left {
+  @include ie7icon('&#xf137;');
+}
+
+
+.i-chevron-sign-right {
+  @include ie7icon('&#xf138;');
+}
+
+
+.i-chevron-sign-up {
+  @include ie7icon('&#xf139;');
+}
+
+
+.i-chevron-sign-down {
+  @include ie7icon('&#xf13a;');
+}
+
+
+.i-html5 {
+  @include ie7icon('&#xf13b;');
+}
+
+
+.i-css3 {
+  @include ie7icon('&#xf13c;');
+}
+
+
+.i-anchor {
+  @include ie7icon('&#xf13d;');
+}
+
+
+.i-unlock-alt {
+  @include ie7icon('&#xf13e;');
+}
+
+
+.i-bullseye {
+  @include ie7icon('&#xf140;');
+}
+
+
+.i-ellipsis-horizontal {
+  @include ie7icon('&#xf141;');
+}
+
+
+.i-ellipsis-vertical {
+  @include ie7icon('&#xf142;');
+}
+
+
+.i-rss-sign {
+  @include ie7icon('&#xf143;');
+}
+
+
+.i-play-sign {
+  @include ie7icon('&#xf144;');
+}
+
+
+.i-ticket {
+  @include ie7icon('&#xf145;');
+}
+
+
+.i-minus-sign-alt {
+  @include ie7icon('&#xf146;');
+}
+
+
+.i-check-minus {
+  @include ie7icon('&#xf147;');
+}
+
+
+.i-level-up {
+  @include ie7icon('&#xf148;');
+}
+
+
+.i-level-down {
+  @include ie7icon('&#xf149;');
+}
+
+
+.i-check-sign {
+  @include ie7icon('&#xf14a;');
+}
+
+
+.i-edit-sign {
+  @include ie7icon('&#xf14b;');
+}
+
+
+.i-external-link-sign {
+  @include ie7icon('&#xf14c;');
+}
+
+
+.i-share-sign {
+  @include ie7icon('&#xf14d;');
+}
+
+
+.i-compass {
+  @include ie7icon('&#xf14e;');
+}
+
+
+.i-collapse {
+  @include ie7icon('&#xf150;');
+}
+
+
+.i-collapse-top {
+  @include ie7icon('&#xf151;');
+}
+
+
+.i-expand {
+  @include ie7icon('&#xf152;');
+}
+
+
+.i-eur {
+  @include ie7icon('&#xf153;');
+}
+
+.i-euro {
+  @include ie7icon('&#xf153;');
+}
+
+
+.i-gbp {
+  @include ie7icon('&#xf154;');
+}
+
+
+.i-usd {
+  @include ie7icon('&#xf155;');
+}
+
+.i-dollar {
+  @include ie7icon('&#xf155;');
+}
+
+
+.i-inr {
+  @include ie7icon('&#xf156;');
+}
+
+.i-rupee {
+  @include ie7icon('&#xf156;');
+}
+
+
+.i-jpy {
+  @include ie7icon('&#xf157;');
+}
+
+.i-yen {
+  @include ie7icon('&#xf157;');
+}
+
+
+.i-cny {
+  @include ie7icon('&#xf158;');
+}
+
+.i-renminbi {
+  @include ie7icon('&#xf158;');
+}
+
+
+.i-krw {
+  @include ie7icon('&#xf159;');
+}
+
+.i-won {
+  @include ie7icon('&#xf159;');
+}
+
+
+.i-btc {
+  @include ie7icon('&#xf15a;');
+}
+
+.i-bitcoin {
+  @include ie7icon('&#xf15a;');
+}
+
+
+.i-file {
+  @include ie7icon('&#xf15b;');
+}
+
+
+.i-file-text {
+  @include ie7icon('&#xf15c;');
+}
+
+
+.i-sort-by-alphabet {
+  @include ie7icon('&#xf15d;');
+}
+
+
+.i-sort-by-alphabet-alt {
+  @include ie7icon('&#xf15e;');
+}
+
+
+.i-sort-by-attributes {
+  @include ie7icon('&#xf160;');
+}
+
+
+.i-sort-by-attributes-alt {
+  @include ie7icon('&#xf161;');
+}
+
+
+.i-sort-by-order {
+  @include ie7icon('&#xf162;');
+}
+
+
+.i-sort-by-order-alt {
+  @include ie7icon('&#xf163;');
+}
+
+
+.i-thumbs-up {
+  @include ie7icon('&#xf164;');
+}
+
+
+.i-thumbs-down {
+  @include ie7icon('&#xf165;');
+}
+
+
+.i-youtube-sign {
+  @include ie7icon('&#xf166;');
+}
+
+
+.i-youtube {
+  @include ie7icon('&#xf167;');
+}
+
+
+.i-xing {
+  @include ie7icon('&#xf168;');
+}
+
+
+.i-xing-sign {
+  @include ie7icon('&#xf169;');
+}
+
+
+.i-youtube-play {
+  @include ie7icon('&#xf16a;');
+}
+
+
+.i-dropbox {
+  @include ie7icon('&#xf16b;');
+}
+
+
+.i-stackexchange {
+  @include ie7icon('&#xf16c;');
+}
+
+
+.i-instagram {
+  @include ie7icon('&#xf16d;');
+}
+
+
+.i-flickr {
+  @include ie7icon('&#xf16e;');
+}
+
+
+.i-adn {
+  @include ie7icon('&#xf170;');
+}
+
+
+.i-bitbucket {
+  @include ie7icon('&#xf171;');
+}
+
+
+.i-bitbucket-sign {
+  @include ie7icon('&#xf172;');
+}
+
+
+.i-tumblr {
+  @include ie7icon('&#xf173;');
+}
+
+
+.i-tumblr-sign {
+  @include ie7icon('&#xf174;');
+}
+
+
+.i-long-arrow-down {
+  @include ie7icon('&#xf175;');
+}
+
+
+.i-long-arrow-up {
+  @include ie7icon('&#xf176;');
+}
+
+
+.i-long-arrow-left {
+  @include ie7icon('&#xf177;');
+}
+
+
+.i-long-arrow-right {
+  @include ie7icon('&#xf178;');
+}
+
+
+.i-apple {
+  @include ie7icon('&#xf179;');
+}
+
+
+.i-windows {
+  @include ie7icon('&#xf17a;');
+}
+
+
+.i-android {
+  @include ie7icon('&#xf17b;');
+}
+
+
+.i-linux {
+  @include ie7icon('&#xf17c;');
+}
+
+
+.i-dribbble {
+  @include ie7icon('&#xf17d;');
+}
+
+
+.i-skype {
+  @include ie7icon('&#xf17e;');
+}
+
+
+.i-foursquare {
+  @include ie7icon('&#xf180;');
+}
+
+
+.i-trello {
+  @include ie7icon('&#xf181;');
+}
+
+
+.i-female {
+  @include ie7icon('&#xf182;');
+}
+
+
+.i-male {
+  @include ie7icon('&#xf183;');
+}
+
+
+.i-gittip {
+  @include ie7icon('&#xf184;');
+}
+
+
+.i-sun {
+  @include ie7icon('&#xf185;');
+}
+
+
+.i-moon {
+  @include ie7icon('&#xf186;');
+}
+
+
+.i-archive {
+  @include ie7icon('&#xf187;');
+}
+
+
+.i-bug {
+  @include ie7icon('&#xf188;');
+}
+
+
+.i-vk {
+  @include ie7icon('&#xf189;');
+}
+
+
+.i-weibo {
+  @include ie7icon('&#xf18a;');
+}
+
+
+.i-renren {
+  @include ie7icon('&#xf18b;');
+}
+
+
