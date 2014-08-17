@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: data science | Beckerfuffle]]></title>
+  <link href="http://mdbecker.github.io/blog/categories/data-science/atom.xml" rel="self"/>
+  <link href="http://mdbecker.github.io/"/>
+  <updated>2014-08-17T19:55:02-04:00</updated>
+  <id>http://mdbecker.github.io/</id>
+  <author>
+    <name><![CDATA[Michael Becker]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Data Science With Python: Part 1]]></title>
+    <link href="http://mdbecker.github.io/blog/2014/07/30/data-science-with-python-part-1/"/>
+    <updated>2014-07-30T18:12:00-04:00</updated>
+    <id>http://mdbecker.github.io/blog/2014/07/30/data-science-with-python-part-1</id>
+    <content type="html"><![CDATA[<p>This is the first post in a multi-part series wherein I will explain the details surrounding the language prediction model I presented in <a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn">my Pycon 2014 talk</a>. If you make it all the way through, you will learn how to create and deploy a language prediction model of your own.</p>
+
+<p><a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Becker.png" alt="Realtime predictive analytics using scikit-learn &amp; RabbitMQ" /></a><br>
+<em>Realtime predictive analytics using scikit-learn &amp; RabbitMQ</em></p>
+
+<h2>OSEMN</h2>
+
+<p>I&rsquo;m not sure if <a href="http://www.hilarymason.com/">Hilary Mason</a> originally coined the term OSEMN, but I certainly learned it from her. OSEMN (pronounced <a href="http://www.dataists.com/2010/09/a-taxonomy-of-data-science/">awesome</a>) is a typical data science process that is followed by many data scientists. OSEMN stands for <strong>Obtain</strong>, <strong>Scrub</strong>, <strong>Explore</strong>, <strong>Model</strong>, and <strong>iNterpret</strong>. As Hilary put it in <a href="http://www.dataists.com/2010/09/a-taxonomy-of-data-science/">a blog post on the subject</a>: &ldquo;Different data scientists have different levels of expertise with each of these 5 areas, but ideally a data scientist should be at home with them all.&rdquo; As a common data science process, this is a great start, but sometimes this isn&rsquo;t enough. If you want to make your model a critical piece of your application, you must also make it accessible and performant. For this reason, I&rsquo;ll also discuss two more steps, <strong>Deploy</strong> and <strong>Scale</strong>.</p>
+
+<h2>Obtain &amp; Scrub</h2>
+
+<p>In this post, I&rsquo;ll cover how I <strong>obtained</strong> and <strong>scrubbed</strong> the training data for the predictive algorithm in my talk. For those who didn&rsquo;t have a chance to watch my talk, I used data from Wikipedia to train a predictive algorithm to predict the language of some text. We use this algorithm at <a href="http://aweber.jobs/">the company I work for</a> to partition user generated content for further processing and analysis.</p>
+
+<h3>Pagecounts</h3>
+
+<p>So step 1 is <strong>obtaining</strong> a dataset we can use to train a predictive model. <a href="https://www.cs.drexel.edu/~urlass/">My friend Rob</a> recommended I use Wikipedia for this, so I decided to try it out. There are <a href="https://meta.wikimedia.org/wiki/Datasets">a few datasets</a> extracted from Wikipedia obtainable online at the time of this writing. Otherwise you need to generate the dataset yourself, which is what I did. I grabbed hourly page views per article for the past 5 months from <a href="http://dumps.wikimedia.org/other/pagecounts-ez/">dumps.wikimedia.org</a>. I wrote some Python scripts to aggregate these counts and dump the top 50,000 articles from each language.</p>
+
+<h3>Export bot</h3>
+
+<p>After this, I wrote an insanely simple bot to execute queries against the Wikipedia <a href="https://en.wikipedia.org/wiki/Special:Export"><code>Special:Export</code></a> page. Originally, I was considering using <a href="http://scrapy.org/">scrapy</a> for this since I&rsquo;ve been looking for an excuse to use it. A quick read through of the tutorial left me feeling like scrapy was overkill for my problem. I decided a simple bot would be more appropriate. I was inspecting the fields of the web-form for the <code>Special:Export</code> page using <a href="https://developer.chrome.com/devtools/index">Chrome Developer Tools</a> when I stumbled upon a pretty cool trick. Under the &ldquo;Network&rdquo; tab, if you <code>ctrl</code> click on a request, you can use &ldquo;<a href="https://developer.chrome.com/devtools/docs/network#copying-requests-as-curl-commands">Copy as cURL</a>&rdquo; to get a curl command that will reproduce the exact request made by the Chrome browser (headers, User-Agent and all). This makes it easy to write a simple bot that just interacts with a single web-form. The bot code looks a little something like this:</p>
+
+<pre><code class="python">from subprocess import call
+from urllib.parse import urlencode
+
+curl = """curl 'https://{2}.wikipedia.org/w/index.php?title=Special:Export&amp;action=submit' -H 'Origin: https://{2}.wikipedia.org' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'User-Agent: Mozilla/5.0 Chrome/35.0' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Cache-Control: max-age=0' -H 'Referer: https://{2}.wikipedia.org/wiki/Special:Export' -H 'Connection: keep-alive' -H 'DNT: 1' --compressed --data '{0}' &gt; {1}"""
+
+data = {
+    'catname': '',
+    'pages': 'Main_Page\nClimatic_Research_Unit_email_controversy\nJava\nundefined',
+    'curonly': '1',
+    'wpDownload': '1',
+}
+
+enc_data = urlencode(data)
+call(curl.format(enc_data, filename, lang), shell=True)
+</code></pre>
+
+<p>The final version of my bot splits the list of articles into small chunks since the <code>Special:Export</code> page throws 503 errors when the requests are too large.</p>
+
+<h3>Convert to plain text</h3>
+
+<p>The <code>Special:Export</code> page on Wikipedia returns an XML file that contains the page contents and other pieces of information. The page contents include wiki markup, which for my purposes are not useful. I needed to <strong>scrub</strong> the Wikipedia markup to convert the pages to plain text. Fortunately, I found <a href="https://github.com/bwbaugh/wikipedia-extractor">a tool that already does this</a>. There was one downside to this tool which is that it produces output in a format that looks strikingly similar to XML, but is not actually valid XML. To address this, I wrote a simple parser using <a href="https://docs.python.org/2/library/re.html#re.MatchObject.groupdict">a regex</a> that looks something like this:</p>
+
+<pre><code class="python">import bz2
+import re
+
+article = re.compile(r'&lt;doc id="(?P&lt;id&gt;\d+)" url="(?P&lt;url&gt;[^"]+)" title="(?P&lt;title&gt;[^"]+)"&gt;\n(?P&lt;content&gt;.+)\n&lt;\/doc&gt;', re.S|re.U)
+
+def parse(filename):
+  data = ""
+  with bz2.BZ2File(filename, 'r') as f:
+    for line in f:
+      line = line.decode('utf-8')
+      data += line
+      if line.count('&lt;/doc&gt;'):
+        m = article.search(data)
+        if m:
+          yield m.groupdict()
+        data = ""
+</code></pre>
+
+<p>This function will read every page in <code>filename</code> and return a dictionary with the <code>id</code> (an integer tracking the version of the page), the <code>url</code> (a permanent link to this version of the page), the <code>title</code>, and the plain text <code>content</code> of the page. Going through the file one article at a time, and using the <code>yield</code> keyword makes this function <a href="https://wiki.python.org/moin/Generators">a generator</a> which means that it will be more memory efficient.</p>
+
+<h2>What&rsquo;s next?</h2>
+
+<p>In my next post I will cover the <strong>explore</strong> step using some of Python&rsquo;s state-of-the-art tools for data manipulation and visualization. You&rsquo;ll also get your first taste of <a href="http://scikit-learn.org/stable/">scikit-learn</a>, my machine learning library of choice. If you have any questions or comments, please post them below!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Working with email content]]></title>
+    <link href="http://mdbecker.github.io/blog/2013/02/14/working-with-email-content/"/>
+    <updated>2013-02-14T22:23:00-05:00</updated>
+    <id>http://mdbecker.github.io/blog/2013/02/14/working-with-email-content</id>
+    <content type="html"><![CDATA[<p>When it comes to <a href="http://goo.gl/F2i6l" title="Wikipedia: Tokenization">tokenization</a>, email content presents some unique challenges. Some messages have a plain text version, some have a HTML version, and some have both. Before you can do cool things with this data like <a href="http://goo.gl/X0vQ" title="Wikipedia: NLP">natural language processing</a> or <a href="http://goo.gl/X9l0z" title="Wikipedia: Predictive Analytics">predictive analysis</a>, you have to convert the data into a uniform format (sometimes referred to as <a href="http://goo.gl/bMqGP">scrubbing</a>) prior to tokenization. In my case, I wanted all of my data to be plain text.</p>
+
+<p>If you have a plain text version of the email, it is probably safe to use it without scrubbing. However if you encounter an e-mail without a plain text version, you&rsquo;ll need to convert the HTML version to text. <a href="http://goo.gl/wnRiJu" title="search &quot;python convert html to text&quot;">Searching the web</a>, you&rsquo;re likely to find a myriad of solutions for converting HTML to text. Python is my language of choice, and a few suggestions I found used <a href="http://goo.gl/xBDJZ" title="lxml website">lxml</a>, <a href="http://goo.gl/YUOe" title="BeautifulSoup website">BeautifulSoup</a>, and <a href="http://goo.gl/JGYNk" title="Natural Language Toolkit website">nltk</a> to convert HTML to text.</p>
+
+<h3>lxml and soupparser, an exercise in futility</h3>
+
+<p>lxml has a <a href="http://lxml.de/api/lxml.html.clean.Cleaner-class.html" title="lxml cleaner class">Cleaner</a> class which &ldquo;cleans the document of each of the possible offending elements.&rdquo; The biggest problem with using lxml is it doesn&rsquo;t handle malformed HTML gracefully. To handle these edge cases, you can use the lxml <a href="http://lxml.de/elementsoup.html">soupparser</a> to parse malformed HTML. While in most cases this will work without error, it doesn&rsquo;t produce the desired results for all input. For example, in the following case soupparser will produce an empty HTML document even though there is clearly text in the data:
+&#8220;` python
+from lxml.etree import tostring
+from lxml.html.soupparser import fromstring</p>
+
+<p>data = &lsquo;&lt;/form all my text is at the end of this malformed html&rsquo;
+root = fromstring(data)
+print tostring(root)</p>
+
+<p>&lsquo;<html/>&rsquo;
+&#8220;`
+This is because the default HTML parser used by BeautifulSoup is the built-in HTMLParser. As the BeautifulSoup4 docs point out, in older versions (before 2.7.3 or 3.2.2) &ldquo;Python’s built-in HTML parser is just not very good&rdquo;. Now there are work arounds to this. If you&rsquo;re using BeautifulSoup4, you can <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser" title="bs4 3rd party parser documentation">specify a different parser</a> to use, which will provide better results. This all seems like a lot of work to convert HTML to text, isn&rsquo;t there a better way?</p>
+
+<h3>nltk.util.clean_html is full of win!</h3>
+
+<p>Enter <a href="http://nltk.org/book/ch03.html#dealing-with-html" title="nltk.util.clean_html">nltk.util.clean_html</a>. clean_html uses regular expressions to strip HTML tags from text. This approach helps avoid the issues found with lxml and BeautifulSoup. Looking at our previous example, we don&rsquo;t lose our text data using clean_html:</p>
+
+<p><img src="http://cdn.memegenerator.net/instances/400x/34904914.jpg" alt="NLTK is full of win!" />
+&#8220;` python
+from nltk import clean_html</p>
+
+<p>data = &lsquo;&lt;/form all my text is at the end of this malformed html&rsquo;
+print clean_html(root)</p>
+
+<p>&lsquo;&lt;/form all my text is at the end of this malformed html&rsquo;
+&#8220;`
+Looking at <a href="http://nltk.org/_modules/nltk/util.html#clean_html" title="clean_html source code">the implementation</a>, it almost seems too simple. There are six regular expressions, and that&rsquo;s it! I&rsquo;ve tested all three solutions against several million real e-mail messages, and in all cases nltk provided the best results.</p>
+
+<p>Sifting through all the possible solutions for converting HTML to text and testing each of them was pretty time consuming. If your goal is to scrub the HTML for further analysis, nltk clean_html is definitely the way to go!</p>
+]]></content>
+  </entry>
+  
+</feed>

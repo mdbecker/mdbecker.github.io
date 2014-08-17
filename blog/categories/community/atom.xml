@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: community | Beckerfuffle]]></title>
+  <link href="http://mdbecker.github.io/blog/categories/community/atom.xml" rel="self"/>
+  <link href="http://mdbecker.github.io/"/>
+  <updated>2014-08-17T19:55:02-04:00</updated>
+  <id>http://mdbecker.github.io/</id>
+  <author>
+    <name><![CDATA[Michael Becker]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[PyCon 2014: The Long Journey North]]></title>
+    <link href="http://mdbecker.github.io/blog/2014/04/23/pycon-2014-the-long-journey-north/"/>
+    <updated>2014-04-23T20:36:00-04:00</updated>
+    <id>http://mdbecker.github.io/blog/2014/04/23/pycon-2014-the-long-journey-north</id>
+    <content type="html"><![CDATA[<p><a href="https://us.pycon.org/2014/"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/pycon2014-logo.png" alt="PyCon 2014 Logo" /></a></p>
+
+<h2>The Journey Begins</h2>
+
+<h3><a href="http://www.meetup.com/DataPhilly/"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/dataphilly.png" alt="DataPhilly" /></a></h3>
+
+<p>A little over a year ago I was frustrated with the lack of data meetups in the Philadelphia area, so I started <a href="http://www.meetup.com/DataPhilly/">DataPhilly</a>. I quickly learned that when you start a tech meetup you&rsquo;re going to have to do some public speaking to get the ball rolling. I was DataPhilly&rsquo;s first speaker because no one else volunteered to present at the first meeting. Even though I&rsquo;d had the opportunity to practice public speaking several times prior to this as part of our weekly Tutorial Tuesday series at <a href="http://www.aweber.com">AWeber</a>, my first talk for DataPhilly felt really rough. Despite this, DataPhilly quickly gained steam, and we&rsquo;ve had <a href="http://www.meetup.com/DataPhilly/events/past/?scroll=true">a ton of excellent speakers and fantastic talks</a>. Since then I&rsquo;ve had the opportunity to speak at both DataPhilly and <a href="http://www.meetup.com/phillypug/">PhillyPUG</a>.</p>
+
+<h3><a href="http://pydata.org/bos2013/"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/pydatalogo-generic.png" alt="PyData Logo" /></a></h3>
+
+<p>Last July I was fortunate enough to speak at <a href="http://vimeo.com/73628112">PyData in Boston</a> where I learned an important lesson; do not commit to delivering more than one talk at a conference. Giving two talks back to back was a bit much, but like my first talk at DataPhilly, I made it through and learned a lot in the process.</p>
+
+<h3>PyCon</h3>
+
+<p>After my experience at PyData, I decided to submit a talk to PyCon. I became anxious waiting to see if my talk would be accepted, so I decided to hack the process a bit. I wanted to gain insight into the PyCon planning process, and so I joined the <a href="https://mail.python.org/mailman/listinfo/pycon-pc">PyCon Program Committee</a>. One really cool thing about the PyCon planning process is that anyone can get involved! With the number of submissions growing each year, I encourage anyone interested to volunteer. It doesn&rsquo;t take a lot of time (really you can devote as little or as much time as you can spare), and it is a great way to give back to the community. On top of this, you&rsquo;ll help decide which talks get accepted at the next PyCon!</p>
+
+<p>Only one in seven talks submitted were selected by the program committee for PyCon this year. A lot of great talks were rejected, and I feel very lucky that my submission made the cut. Being picked to speak at such a selective conference is truly an honor!</p>
+
+<h2>The Speaking Experience</h2>
+
+<p>Speaking at PyCon was made really simple by the awesome staff of volunteers and A/V crew. A green room is provided for speakers so they can hide from their fans and prepare for their talks. One cool side-effect of this is that, as a speaker, you get to hang out with all these famous people from the Python scene. I got to personally thank <a href="http://fperez.org">Fernando Pérez</a> (the creator of IPython, not the baseball player) for his hard work on IPython. Fernando was very humble about his work and gave credit to the rest of the IPython community rather than taking credit for himself. This was a common theme at PyCon. All of the &ldquo;big name&rdquo; people I talked to seemed equally as humble. It seems that the Python community is not a place for egos, and that&rsquo;s really refreshing. I suppose part of this is the nature of open source projects. Those projects started by people who seek inclusiveness are the most successful. An important part of this is sharing credit with others. So it only makes sense that many successful open source projects have a <a href="http://en.wikipedia.org/wiki/Benevolent_Dictator_for_Life">BDFL</a> whom is humble and honest about their own part in the effort.</p>
+
+<h2>Keynotes</h2>
+
+<p>All the of the keynotes were excellent but I especially enjoyed the keynotes by <a href="http://pyvideo.org/video/2686/keynote-guido-van-rossum-0">Guido Van Rossum</a>, <a href="http://pyvideo.org/video/2684/keynote-jessica-mckellar">Jessica McKellar</a> and <a href="http://pyvideo.org/video/2683/keynote-fernando-perez">Fernando Pérez</a>.</p>
+
+<h3>Diversity in Tech</h3>
+
+<p><a href="http://pyvideo.org/video/2684/keynote-jessica-mckellar"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Jessica_McKellar.png" alt="Jessica McKellar" /></a></p>
+
+<p><a href="http://jesstess.com/">Jessica</a> gave an excellent talk about teaching computer science to the next generation and how to fix the diversity gap in the tech community. She talked about how so few high school students are taking the AP computer science exam. &ldquo;There are entire states in the United States where no African-American students take the exam at all. There are states where no Hispanic students have taken the exam. And, despite being 50 percent of the population, there are even states where no girls took the exam&rdquo;. Despite the fact that the President of the United States of America believes that it is important for children to learn to code, in many school districts, there isn&rsquo;t even a computer science class offered to high school students. Jessica&rsquo;s talk continued with a series of suggestions on how to help change the status quo. She also pointed out that there isn&rsquo;t much incentive for Computer Scientists to become teachers. They will make far more money in the software industry than teaching. This is a serious problem. Why can&rsquo;t some of our top tech companies help fix this problem? They certainly can afford to!</p>
+
+<h3>Guido&rsquo;s Q&amp;A</h3>
+
+<p><a href="http://pyvideo.org/video/2686/keynote-guido-van-rossum-0"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Guido.png" alt="Guido Van Rossum" /></a></p>
+
+<p><a href="https://www.python.org/~guido/">Guido&rsquo;s</a> talk was very entertaining. His entire talk was an extended Q&amp;A. He started off by live coding a random question chooser to pick questions from twitter. He then took questions from the audience, but only women, &ldquo;because throughout the conference, I&rsquo;ve been attacked by people with questions, and they were almost all men.&rdquo; Overall, I found this keynote much more entertaining than his keynote last year, so I would definitely recommend watching it.</p>
+
+<h3>Fernando&rsquo;s Keynote</h3>
+
+<p><a href="http://pyvideo.org/video/2683/keynote-fernando-perez"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Fernando.png" alt="Fernando Pérez" /></a></p>
+
+<p>In <a href="http://pyvideo.org/video/2683/keynote-fernando-perez">his keynote</a>, Fernando told the story of how he started the IPython project. &ldquo;It began as me trying to procrastinate a little bit on finishing my dissertation&rdquo; he said. (See <a href="http://pyvideo.org/video/2637/set-your-code-free-releasing-and-maintaining-an">&ldquo;Set your code free&rdquo;</a> for some useful information on running your own open source projects.). In addition to the IPython project, Fernando covered a lot of the progress made in the SciPy community as a whole over the last year.</p>
+
+<h2>Recommended Talks</h2>
+
+<p>The full list of talks can be found on <a href="http://pyvideo.org/category/50/pycon-us-2014">pyvideo.org</a>, but I&rsquo;d like to highlight a few of my favorites.</p>
+
+<h3>Technical Onboarding</h3>
+
+<p><a href="http://pyvideo.org/video/2661/technical-on-boarding-training-and-mentoring"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Heddleston_Zuckerman.png" alt="Kate Heddleston &amp; Nicole Zuckerman on technical onboarding" /></a></p>
+
+<p>One great talk I attended was by <a href="http://pyvideo.org/video/2661/technical-on-boarding-training-and-mentoring">Kate Heddleston &amp; Nicole Zuckerman on technical onboarding</a>. This talk was chock-full of practical advice. I&rsquo;ll definitely be re-watching this video and taking detailed notes.</p>
+
+<h3>Moar Data!</h3>
+
+<p>Maybe I&rsquo;m biased, but one of the most exciting things about PyCon was all of the data related talks! I still have a ton of them left to watch, but of the ones I&rsquo;ve seen, my favorites are:</p>
+
+<h4>Diving into Open Data with IPython Notebook &amp; Pandas</h4>
+
+<p><a href="http://pyvideo.org/video/2657/diving-into-open-data-with-ipython-notebook-pan-0"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Julia_Evans.png" alt="Diving into Open Data with IPython Notebook &amp; Pandas" /></a></p>
+
+<h4>Enough Machine Learning to Make Hacker News Readable Again</h4>
+
+<p><a href="http://pyvideo.org/video/2612/enough-machine-learning-to-make-hacker-news-reada"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Ned_Jackson_Lovely.png" alt="Enough Machine Learning to Make Hacker News Readable Again" /></a></p>
+
+<h4>How to Get Started with Machine Learning</h4>
+
+<p><a href="http://pyvideo.org/video/2604/how-to-get-started-with-machine-learning"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Melanie_Warrick.png" alt="How to Get Started with Machine Learning" /></a></p>
+
+<h4>Realtime predictive analytics using scikit-learn &amp; RabbitMQ</h4>
+
+<p><a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Becker.png" alt="Realtime predictive analytics using scikit-learn &amp; RabbitMQ" /></a></p>
+
+<p>Yes, I really like my own talk ;-).</p>
+
+<p>I also highly recommend watching the lightning talks. They were all very high quality and packed with lots of great insights. I hope they expand the lightning talks next year; they&rsquo;re an excellent use of time!</p>
+
+<h2>The Hallway Track</h2>
+
+<p>On the second day of the conference, I met in one of the open spaces with a bunch of other data people (Thanks <a href="http://jvns.ca">Julia Evans</a> for arranging this!). The guys at <a href="http://plot.ly">Plotly</a> demoed their product, and <a href="http://camdp.com">Cameron Davidson-Pilon</a> showed off his new project <a href="https://github.com/CamDavidsonPilon/lifelines">lifelines</a>, a library for survival analysis, which I&rsquo;ll definitely be having a closer look at in the future.</p>
+
+<h2>Sprinting</h2>
+
+<p><a href="http://scikit-learn.org"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/scikit-learn-logo.png" alt="scikit-learn Logo" /></a></p>
+
+<p>Finally my PyCon experience ended with 2 days of sprinting on the <a href="http://scikit-learn.org/">scikit-learn</a> project. I started by <a href="https://github.com/scikit-learn/scikit-learn/pull/3059">updating the Travis-CI build system from Python 3.3 to Python 3.4</a>. A simple task but one which was perfect for my first commit. Then <a href="http://ogrisel.com/">Olivier Grisel</a> helped me fix <a href="https://github.com/scikit-learn/scikit-learn/pull/3067">an issue I had found while working on my talk</a>. Contributing to scikit-learn was made really easy by both scikit-learn&rsquo;s solid test coverage/CI system, and by the help of Olivier. Overall it seems like an extremely well run project which I can recommend getting involved in if you have the opportunity. If you&rsquo;re interested in getting involved, I recommend checking out the issue tracker and looking for <a href="https://github.com/scikit-learn/scikit-learn/issues?labels=Easy%2CDocumentation&amp;state=open">&ldquo;Easy&rdquo; issues</a>. Another good place to look is <a href="https://github.com/scikit-learn/scikit-learn/search?o=desc&amp;q=MRG&amp;ref=cmdform&amp;s=created&amp;state=open&amp;type=Issues">pull requests that are ready to merge</a>. Reviewing open pull requests and testing them out in your environment is always helpful.</p>
+
+<h2>See You Next Year!</h2>
+
+<p>Montreal is an awesome town and a great place for a conference. I ate lots of poutine and met a ton of awesome people! To all the awesome people I met, I hope to see you next year in Montreal!</p>
+]]></content>
+  </entry>
+  
+</feed>

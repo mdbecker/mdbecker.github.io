@@ -1,177 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Beckerfuffle</title>
-  <meta name="author" content="Michael Becker">
-
-   
-  <meta name="description" content="I'm a Data Engineer at AWeber and founder of the DataPhilly Meetup group. On a day to day basis, I spend a majority of my time acquiring, scrubbing, exploring, and visualizing data. I love machine learning and I get my kicks out of clustering, regression and classification algorithms.">
-  
-  <meta name="keywords" content="">
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><![CDATA[Beckerfuffle]]></title>
+  <link href="http://mdbecker.github.io/atom.xml" rel="self"/>
+  <link href="http://mdbecker.github.io/"/>
+  <updated>2014-08-17T19:55:02-04:00</updated>
+  <id>http://mdbecker.github.io/</id>
+  <author>
+    <name><![CDATA[Michael Becker]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
   
-  <link rel="canonical" href="http://mdbecker.github.io">
-  <link href="/favicon.png" rel="icon">
-  <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="Beckerfuffle" type="application/atom+xml">
-  <script src="/js/jquery.js"></script>
-  <script src="/js/bootstrap-collapse.js"></script>
-  <script src="/js/modernizr-2.0.js"></script>
-  <script src="/js/octopress.js" type="text/javascript"></script>
-  <script src="/js/application.js"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-53278003-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <div class="navbar navbar-inverse navbar-static-top">
-  	<div class="navbar-inner">
-  	  <div class="container">
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-          <span class="fui-menu-24"></span>
-        </a>
-  	  	<div class="nav-collapse collapse navbar-responsive-collapse" style="height:0;">
-  	      <ul class="nav">
-<div class="AW-Form-1479709334"></div>
-<script type="text/javascript">(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "http://forms.aweber.com/form/34/1479709334.js";
-    fjs.parentNode.insertBefore(js, fjs);
-    }(document, "script", "aweber-wjs-j22dfsu6o"));
-</script>
-    
-        <li ><a href="/">Blog</a></li>
-    
-        <li ><a href="/blog/archives">Archives</a></li>
-    
-        <li ><a href="/talks">My Talks</a></li>
-    
-</ul>
-
-<ul class="nav pull-right">
-    
-    <li><a href="http://github.com/mdbecker" title="Github Profile"><i class="i-gthb social-navbar"></i></a></li>
-    
-    
-    
-    <li><a href="http://linkedin.com/in/mdbecker" title="Linkedin Profile"><i class="i-lnkdn-sign social-navbar"></i></a></li>
-    
-    
-    <li><a href="http://twitter.com/beckerfuffle" title="Twitter Profile"><i class="i-twttr-sign social-navbar"></i></a></li>
-    
-    
-    <li><a href="http://plus.google.com/107771119496405367239" title="Google+ Profile"><i class="i-ggl-pls-sign social-navbar"></i></a></li>
-    
-    
-    
-
-    
-</ul>
-
-  	    </div>
-  	  </div>
-  	</div>
-  </div>
-  <div class="container" id="main">
-      <div class="row-fluid">
-        <div id="content">
-          <div class="jumbotron">
-  <div class="container">
-    
-      Beckerfuffle
-    
-    <h3 class="tagline">
-      
-        Go fuffle yourself!
-      
-    </h3>
-  </div>
-</div>
-
-
-<div class="blog-index">
-  
-  
-  
-    <article>
-      
-
-  <div class="row-fluid">
-    <div class="span2 post-meta">
-	  <h5 class="date-time">
-
-
-
-
-
-
-
-
-  
-
-
-<i class="icon-calendar-empty"></i> <time datetime="2014-07-30T18:12:00-04:00" pubdate data-updated="true"></time></h5>
-          <div class="row-fluid">
-          
-          <a href="http://mdbecker.github.io/blog/2014/07/30/data-science-with-python-part-1/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
-          
-          </div>
-          
-          <div class="row-fluid">
-          
-          <a href="/blog/categories/data-mining/"><span class="badge">data mining</span></a>
-          
-          <a href="/blog/categories/data-science/"><span class="badge">data science</span></a>
-          
-          <a href="/blog/categories/machine-learning/"><span class="badge">machine learning</span></a>
-          
-          <a href="/blog/categories/natural-language-processing/"><span class="badge">natural language processing</span></a>
-          
-          <a href="/blog/categories/predictive-analysis/"><span class="badge">predictive analysis</span></a>
-          
-          <a href="/blog/categories/pycon/"><span class="badge">pycon</span></a>
-          
-          <a href="/blog/categories/python/"><span class="badge">python</span></a>
-          
-          <a href="/blog/categories/text-processing/"><span class="badge">text processing</span></a>
-          
-          <a href="/blog/categories/wikipedia/"><span class="badge">wikipedia</span></a>
-          
-          </div>
-          
-    </div>
-    <div class="span10 post-container">
-      <h1 class="link"><a href="/blog/2014/07/30/data-science-with-python-part-1/">Data Science With Python: Part 1</a></h1>
-      <p>This is the first post in a multi-part series wherein I will explain the details surrounding the language prediction model I presented in <a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn">my Pycon 2014 talk</a>. If you make it all the way through, you will learn how to create and deploy a language prediction model of your own.</p>
+  <entry>
+    <title type="html"><![CDATA[Data Science With Python: Part 1]]></title>
+    <link href="http://mdbecker.github.io/blog/2014/07/30/data-science-with-python-part-1/"/>
+    <updated>2014-07-30T18:12:00-04:00</updated>
+    <id>http://mdbecker.github.io/blog/2014/07/30/data-science-with-python-part-1</id>
+    <content type="html"><![CDATA[<p>This is the first post in a multi-part series wherein I will explain the details surrounding the language prediction model I presented in <a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn">my Pycon 2014 talk</a>. If you make it all the way through, you will learn how to create and deploy a language prediction model of your own.</p>
 
 <p><a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Becker.png" alt="Realtime predictive analytics using scikit-learn &amp; RabbitMQ" /></a><br>
 <em>Realtime predictive analytics using scikit-learn &amp; RabbitMQ</em></p>
@@ -269,66 +116,15 @@
 <h2>What&rsquo;s next?</h2>
 
 <p>In my next post I will cover the <strong>explore</strong> step using some of Python&rsquo;s state-of-the-art tools for data manipulation and visualization. You&rsquo;ll also get your first taste of <a href="http://scikit-learn.org/stable/">scikit-learn</a>, my machine learning library of choice. If you have any questions or comments, please post them below!</p>
-
-      
-      
-    </div>
-  </div>
-
-
-
-    </article>
-    
-    <hr>
-    
+]]></content>
+  </entry>
   
-  
-    <article>
-      
-
-  <div class="row-fluid">
-    <div class="span2 post-meta">
-	  <h5 class="date-time">
-
-
-
-
-
-
-
-
-  
-
-
-<i class="icon-calendar-empty"></i> <time datetime="2014-04-23T20:36:00-04:00" pubdate data-updated="true"></time></h5>
-          <div class="row-fluid">
-          
-          <a href="http://mdbecker.github.io/blog/2014/04/23/pycon-2014-the-long-journey-north/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
-          
-          </div>
-          
-          <div class="row-fluid">
-          
-          <a href="/blog/categories/community/"><span class="badge">community</span></a>
-          
-          <a href="/blog/categories/conferences/"><span class="badge">conferences</span></a>
-          
-          <a href="/blog/categories/open-source/"><span class="badge">open source</span></a>
-          
-          <a href="/blog/categories/public-speaking/"><span class="badge">public speaking</span></a>
-          
-          <a href="/blog/categories/pycon/"><span class="badge">pycon</span></a>
-          
-          <a href="/blog/categories/python/"><span class="badge">python</span></a>
-          
-          <a href="/blog/categories/speaking/"><span class="badge">speaking</span></a>
-          
-          </div>
-          
-    </div>
-    <div class="span10 post-container">
-      <h1 class="link"><a href="/blog/2014/04/23/pycon-2014-the-long-journey-north/">PyCon 2014: The Long Journey North</a></h1>
-      <p><a href="https://us.pycon.org/2014/"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/pycon2014-logo.png" alt="PyCon 2014 Logo" /></a></p>
+  <entry>
+    <title type="html"><![CDATA[PyCon 2014: The Long Journey North]]></title>
+    <link href="http://mdbecker.github.io/blog/2014/04/23/pycon-2014-the-long-journey-north/"/>
+    <updated>2014-04-23T20:36:00-04:00</updated>
+    <id>http://mdbecker.github.io/blog/2014/04/23/pycon-2014-the-long-journey-north</id>
+    <content type="html"><![CDATA[<p><a href="https://us.pycon.org/2014/"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/pycon2014-logo.png" alt="PyCon 2014 Logo" /></a></p>
 
 <h2>The Journey Begins</h2>
 
@@ -419,58 +215,15 @@
 <h2>See You Next Year!</h2>
 
 <p>Montreal is an awesome town and a great place for a conference. I ate lots of poutine and met a ton of awesome people! To all the awesome people I met, I hope to see you next year in Montreal!</p>
-
-      
-      
-    </div>
-  </div>
-
-
-
-    </article>
-    
-    <hr>
-    
+]]></content>
+  </entry>
   
-  
-    <article>
-      
-
-  <div class="row-fluid">
-    <div class="span2 post-meta">
-	  <h5 class="date-time">
-
-
-
-
-
-
-
-
-  
-
-
-<i class="icon-calendar-empty"></i> <time datetime="2013-12-16T19:51:00-05:00" pubdate data-updated="true"></time></h5>
-          <div class="row-fluid">
-          
-          <a href="http://mdbecker.github.io/blog/2013/12/16/pycon-2014-a-preview/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
-          
-          </div>
-          
-          <div class="row-fluid">
-          
-          <a href="/blog/categories/public-speaking/"><span class="badge">public speaking</span></a>
-          
-          <a href="/blog/categories/pycon/"><span class="badge">pycon</span></a>
-          
-          <a href="/blog/categories/python/"><span class="badge">python</span></a>
-          
-          </div>
-          
-    </div>
-    <div class="span10 post-container">
-      <h1 class="link"><a href="/blog/2013/12/16/pycon-2014-a-preview/">Pycon 2014: A Preview</a></h1>
-      <p><a href="https://us.pycon.org/2014/schedule/talks/list/"><img src="https://us.pycon.org/2014/site_media/static/img/pycon2014-logo.png" title="Pycon 2014 Logo" alt="Pycon 2014 Logo" /></a></p>
+  <entry>
+    <title type="html"><![CDATA[Pycon 2014: A Preview]]></title>
+    <link href="http://mdbecker.github.io/blog/2013/12/16/pycon-2014-a-preview/"/>
+    <updated>2013-12-16T19:51:00-05:00</updated>
+    <id>http://mdbecker.github.io/blog/2013/12/16/pycon-2014-a-preview</id>
+    <content type="html"><![CDATA[<p><a href="https://us.pycon.org/2014/schedule/talks/list/"><img src="https://us.pycon.org/2014/site_media/static/img/pycon2014-logo.png" title="Pycon 2014 Logo" alt="Pycon 2014 Logo" /></a></p>
 
 <p>After <a href="https://github.com/mdbecker/pydata_2013">my successful talks</a> at <a href="http://pydata.org/bos2013">PyData Boston in July</a>, I decided to submit one of my talks to Pycon. I&rsquo;m happy to say <a href="https://us.pycon.org/2014/schedule/presentation/224/">my talk was accepted</a>! This will be my first Pycon and I&rsquo;m really excited! Montréal is an amazing city with some awesome cuisine (Un poutine végétarien s&#8217;il vous plaît) and the best micro-brew pubs I&rsquo;ve ever been to (sorry Philly)! Besides the awesome location, I&rsquo;m really psyched about some of the talks this year! Here&rsquo;s some of my favorites.</p>
 
@@ -539,60 +292,15 @@
 <p>After onboarding a few new devs myself, I know that I could use some guidance in this area. This talk looks like it should have some great take-aways.</p>
 
 <blockquote><p>This is a talk about how to make junior and new engineers into independent and productive members of your engineering team faster and cheaper. We will focus on python specific resources and libraries that will help you create a simple but effective on boarding program, and talk about case studies of companies that have had success using these techniques.</p></blockquote>
-
-      
-      
-    </div>
-  </div>
-
-
-
-    </article>
-    
-    <hr>
-    
+]]></content>
+  </entry>
   
-  
-    <article>
-      
-
-  <div class="row-fluid">
-    <div class="span2 post-meta">
-	  <h5 class="date-time">
-
-
-
-
-
-
-
-
-  
-
-
-<i class="icon-calendar-empty"></i> <time datetime="2013-05-21T09:49:00-04:00" pubdate data-updated="true"></time></h5>
-          <div class="row-fluid">
-          
-          <a href="http://mdbecker.github.io/blog/2013/05/21/elephant-enlightenment-part-1/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
-          
-          </div>
-          
-          <div class="row-fluid">
-          
-          <a href="/blog/categories/big-data/"><span class="badge">big data</span></a>
-          
-          <a href="/blog/categories/bloom-filters/"><span class="badge">bloom filters</span></a>
-          
-          <a href="/blog/categories/hadoop/"><span class="badge">hadoop</span></a>
-          
-          <a href="/blog/categories/mapreduce/"><span class="badge">mapreduce</span></a>
-          
-          </div>
-          
-    </div>
-    <div class="span10 post-container">
-      <h1 class="link"><a href="/blog/2013/05/21/elephant-enlightenment-part-1/">Elephant Enlightenment: Part 1</a></h1>
-      <p><a href="https://engineering.aweber.com/?attachment_id=761"><img src="https://engineering.aweber.com/wp-content/uploads/2013/05/Hadoop_logo.svg_.png" title="Hadoop_logo.svg" alt="" /></a></p>
+  <entry>
+    <title type="html"><![CDATA[Elephant Enlightenment: Part 1]]></title>
+    <link href="http://mdbecker.github.io/blog/2013/05/21/elephant-enlightenment-part-1/"/>
+    <updated>2013-05-21T09:49:00-04:00</updated>
+    <id>http://mdbecker.github.io/blog/2013/05/21/elephant-enlightenment-part-1</id>
+    <content type="html"><![CDATA[<p><a href="https://engineering.aweber.com/?attachment_id=761"><img src="https://engineering.aweber.com/wp-content/uploads/2013/05/Hadoop_logo.svg_.png" title="Hadoop_logo.svg" alt="" /></a></p>
 
 <p>For some light vacation reading, I started reading <a href="http://goo.gl/9Kk20">Hadoop Beginner&rsquo;s Guide</a>. I made it through about half of the book, and I wanted to share some random facts that I found particularly enlightening.</p>
 
@@ -642,72 +350,15 @@ You can find a great cheat sheet for compression &amp; splitting in <a href="htt
 <p>Often times in a map reduce job you want to logically combine two data sources together, or &ldquo;join&rdquo; them. There are a couple of methods for doing this; one way of doing this is by joining the data during the map portion of the MapReduce. This is more efficient that doing it in the reduce portion. To accomplish the join in the map portion of the job, you must be able to store one of your data sources in the memory of every cluster. But what if you can&rsquo;t fit all of the data into memory? &ldquo;In cases where we can accept some false positives while still guaranteeing no false negatives, a <a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloom filter</a> provides an extremely compact way of representing such information.&rdquo; [<a href="http://goo.gl/PBxJ8">3</a>] &ldquo;The use of Bloom filters is in fact a standard technique for joining in distributed databases, and it’s used in commercial products such as Oracle 11g.&rdquo; [<a href="http://goo.gl/9KfWQ">4</a>] More information on Bloom filters &amp; Hadoop can be found in the book <a href="http://goo.gl/c6K47">Hadoop in Action</a> in section 5.2. An example application of this can also be found <a href="http://blog.liveramp.com/2013/04/03/bloomjoin-bloomfilter-cogroup/">here</a>.</p>
 
 <p>That&rsquo;s all for now. Check back in the future for further Elephant Enlightenments!</p>
-
-      
-      
-    </div>
-  </div>
-
-
-
-    </article>
-    
-    <hr>
-    
+]]></content>
+  </entry>
   
-  
-    <article>
-      
-
-  <div class="row-fluid">
-    <div class="span2 post-meta">
-	  <h5 class="date-time">
-
-
-
-
-
-
-
-
-  
-
-
-<i class="icon-calendar-empty"></i> <time datetime="2013-02-14T22:23:00-05:00" pubdate data-updated="true"></time></h5>
-          <div class="row-fluid">
-          
-          <a href="http://mdbecker.github.io/blog/2013/02/14/working-with-email-content/#disqus_thread">Comments </a> <span class="fui-bubble-16"></span>
-          
-          </div>
-          
-          <div class="row-fluid">
-          
-          <a href="/blog/categories/data-mining/"><span class="badge">data mining</span></a>
-          
-          <a href="/blog/categories/data-science/"><span class="badge">data science</span></a>
-          
-          <a href="/blog/categories/feature-extraction/"><span class="badge">feature extraction</span></a>
-          
-          <a href="/blog/categories/html/"><span class="badge">html</span></a>
-          
-          <a href="/blog/categories/machine-learning/"><span class="badge">machine learning</span></a>
-          
-          <a href="/blog/categories/natural-language-processing/"><span class="badge">natural language processing</span></a>
-          
-          <a href="/blog/categories/nltk/"><span class="badge">nltk</span></a>
-          
-          <a href="/blog/categories/predictive-analysis/"><span class="badge">predictive analysis</span></a>
-          
-          <a href="/blog/categories/python/"><span class="badge">python</span></a>
-          
-          <a href="/blog/categories/text-processing/"><span class="badge">text processing</span></a>
-          
-          </div>
-          
-    </div>
-    <div class="span10 post-container">
-      <h1 class="link"><a href="/blog/2013/02/14/working-with-email-content/">Working with email content</a></h1>
-      <p>When it comes to <a href="http://goo.gl/F2i6l" title="Wikipedia: Tokenization">tokenization</a>, email content presents some unique challenges. Some messages have a plain text version, some have a HTML version, and some have both. Before you can do cool things with this data like <a href="http://goo.gl/X0vQ" title="Wikipedia: NLP">natural language processing</a> or <a href="http://goo.gl/X9l0z" title="Wikipedia: Predictive Analytics">predictive analysis</a>, you have to convert the data into a uniform format (sometimes referred to as <a href="http://goo.gl/bMqGP">scrubbing</a>) prior to tokenization. In my case, I wanted all of my data to be plain text.</p>
+  <entry>
+    <title type="html"><![CDATA[Working with email content]]></title>
+    <link href="http://mdbecker.github.io/blog/2013/02/14/working-with-email-content/"/>
+    <updated>2013-02-14T22:23:00-05:00</updated>
+    <id>http://mdbecker.github.io/blog/2013/02/14/working-with-email-content</id>
+    <content type="html"><![CDATA[<p>When it comes to <a href="http://goo.gl/F2i6l" title="Wikipedia: Tokenization">tokenization</a>, email content presents some unique challenges. Some messages have a plain text version, some have a HTML version, and some have both. Before you can do cool things with this data like <a href="http://goo.gl/X0vQ" title="Wikipedia: NLP">natural language processing</a> or <a href="http://goo.gl/X9l0z" title="Wikipedia: Predictive Analytics">predictive analysis</a>, you have to convert the data into a uniform format (sometimes referred to as <a href="http://goo.gl/bMqGP">scrubbing</a>) prior to tokenization. In my case, I wanted all of my data to be plain text.</p>
 
 <p>If you have a plain text version of the email, it is probably safe to use it without scrubbing. However if you encounter an e-mail without a plain text version, you&rsquo;ll need to convert the HTML version to text. <a href="http://goo.gl/wnRiJu" title="search &quot;python convert html to text&quot;">Searching the web</a>, you&rsquo;re likely to find a myriad of solutions for converting HTML to text. Python is my language of choice, and a few suggestions I found used <a href="http://goo.gl/xBDJZ" title="lxml website">lxml</a>, <a href="http://goo.gl/YUOe" title="BeautifulSoup website">BeautifulSoup</a>, and <a href="http://goo.gl/JGYNk" title="Natural Language Toolkit website">nltk</a> to convert HTML to text.</p>
 
@@ -760,81 +411,7 @@ You can find a great cheat sheet for compression &amp; splitting in <a href="htt
 <p>Looking at <a href="http://nltk.org/_modules/nltk/util.html#clean_html" title="clean_html source code">the implementation</a>, it almost seems too simple. There are six regular expressions, and that&rsquo;s it! I&rsquo;ve tested all three solutions against several million real e-mail messages, and in all cases nltk provided the best results.</p>
 
 <p>Sifting through all the possible solutions for converting HTML to text and testing each of them was pretty time consuming. If your goal is to scrub the HTML for further analysis, nltk clean_html is definitely the way to go!</p>
-
-      
-      
-    </div>
-  </div>
-
-
-
-    </article>
-    
+]]></content>
+  </entry>
   
-  <div class="pagination">
-    
-
-    
-  </div>
-</div>
-
-
-        </div>
-      </div>
-      <div class="row-fluid">
-        <footer class="footer-page" role="contentinfo">
-          <p>
-  Copyright &copy; 2014 - Michael Becker -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - Theme by <a href="http://alexgaribay.com">Alex Garibay</a>
-</p>
-
-
-        </footer>
-      </div>
-  </div>
-  
-
-<script type="text/javascript">
-      var disqus_shortname = 'beckerfuffle';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
-</html>
+</feed>

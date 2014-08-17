@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: nltk | Beckerfuffle]]></title>
+  <link href="http://mdbecker.github.io/blog/categories/nltk/atom.xml" rel="self"/>
+  <link href="http://mdbecker.github.io/"/>
+  <updated>2014-08-17T19:55:02-04:00</updated>
+  <id>http://mdbecker.github.io/</id>
+  <author>
+    <name><![CDATA[Michael Becker]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Working with email content]]></title>
+    <link href="http://mdbecker.github.io/blog/2013/02/14/working-with-email-content/"/>
+    <updated>2013-02-14T22:23:00-05:00</updated>
+    <id>http://mdbecker.github.io/blog/2013/02/14/working-with-email-content</id>
+    <content type="html"><![CDATA[<p>When it comes to <a href="http://goo.gl/F2i6l" title="Wikipedia: Tokenization">tokenization</a>, email content presents some unique challenges. Some messages have a plain text version, some have a HTML version, and some have both. Before you can do cool things with this data like <a href="http://goo.gl/X0vQ" title="Wikipedia: NLP">natural language processing</a> or <a href="http://goo.gl/X9l0z" title="Wikipedia: Predictive Analytics">predictive analysis</a>, you have to convert the data into a uniform format (sometimes referred to as <a href="http://goo.gl/bMqGP">scrubbing</a>) prior to tokenization. In my case, I wanted all of my data to be plain text.</p>
+
+<p>If you have a plain text version of the email, it is probably safe to use it without scrubbing. However if you encounter an e-mail without a plain text version, you&rsquo;ll need to convert the HTML version to text. <a href="http://goo.gl/wnRiJu" title="search &quot;python convert html to text&quot;">Searching the web</a>, you&rsquo;re likely to find a myriad of solutions for converting HTML to text. Python is my language of choice, and a few suggestions I found used <a href="http://goo.gl/xBDJZ" title="lxml website">lxml</a>, <a href="http://goo.gl/YUOe" title="BeautifulSoup website">BeautifulSoup</a>, and <a href="http://goo.gl/JGYNk" title="Natural Language Toolkit website">nltk</a> to convert HTML to text.</p>
+
+<h3>lxml and soupparser, an exercise in futility</h3>
+
+<p>lxml has a <a href="http://lxml.de/api/lxml.html.clean.Cleaner-class.html" title="lxml cleaner class">Cleaner</a> class which &ldquo;cleans the document of each of the possible offending elements.&rdquo; The biggest problem with using lxml is it doesn&rsquo;t handle malformed HTML gracefully. To handle these edge cases, you can use the lxml <a href="http://lxml.de/elementsoup.html">soupparser</a> to parse malformed HTML. While in most cases this will work without error, it doesn&rsquo;t produce the desired results for all input. For example, in the following case soupparser will produce an empty HTML document even though there is clearly text in the data:
+&#8220;` python
+from lxml.etree import tostring
+from lxml.html.soupparser import fromstring</p>
+
+<p>data = &lsquo;&lt;/form all my text is at the end of this malformed html&rsquo;
+root = fromstring(data)
+print tostring(root)</p>
+
+<p>&lsquo;<html/>&rsquo;
+&#8220;`
+This is because the default HTML parser used by BeautifulSoup is the built-in HTMLParser. As the BeautifulSoup4 docs point out, in older versions (before 2.7.3 or 3.2.2) &ldquo;Python’s built-in HTML parser is just not very good&rdquo;. Now there are work arounds to this. If you&rsquo;re using BeautifulSoup4, you can <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser" title="bs4 3rd party parser documentation">specify a different parser</a> to use, which will provide better results. This all seems like a lot of work to convert HTML to text, isn&rsquo;t there a better way?</p>
+
+<h3>nltk.util.clean_html is full of win!</h3>
+
+<p>Enter <a href="http://nltk.org/book/ch03.html#dealing-with-html" title="nltk.util.clean_html">nltk.util.clean_html</a>. clean_html uses regular expressions to strip HTML tags from text. This approach helps avoid the issues found with lxml and BeautifulSoup. Looking at our previous example, we don&rsquo;t lose our text data using clean_html:</p>
+
+<p><img src="http://cdn.memegenerator.net/instances/400x/34904914.jpg" alt="NLTK is full of win!" />
+&#8220;` python
+from nltk import clean_html</p>
+
+<p>data = &lsquo;&lt;/form all my text is at the end of this malformed html&rsquo;
+print clean_html(root)</p>
+
+<p>&lsquo;&lt;/form all my text is at the end of this malformed html&rsquo;
+&#8220;`
+Looking at <a href="http://nltk.org/_modules/nltk/util.html#clean_html" title="clean_html source code">the implementation</a>, it almost seems too simple. There are six regular expressions, and that&rsquo;s it! I&rsquo;ve tested all three solutions against several million real e-mail messages, and in all cases nltk provided the best results.</p>
+
+<p>Sifting through all the possible solutions for converting HTML to text and testing each of them was pretty time consuming. If your goal is to scrub the HTML for further analysis, nltk clean_html is definitely the way to go!</p>
+]]></content>
+  </entry>
+  
+</feed>

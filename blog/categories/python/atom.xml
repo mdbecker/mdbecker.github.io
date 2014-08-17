@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: python | Beckerfuffle]]></title>
+  <link href="http://mdbecker.github.io/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://mdbecker.github.io/"/>
+  <updated>2014-08-17T19:55:02-04:00</updated>
+  <id>http://mdbecker.github.io/</id>
+  <author>
+    <name><![CDATA[Michael Becker]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Data Science With Python: Part 1]]></title>
+    <link href="http://mdbecker.github.io/blog/2014/07/30/data-science-with-python-part-1/"/>
+    <updated>2014-07-30T18:12:00-04:00</updated>
+    <id>http://mdbecker.github.io/blog/2014/07/30/data-science-with-python-part-1</id>
+    <content type="html"><![CDATA[<p>This is the first post in a multi-part series wherein I will explain the details surrounding the language prediction model I presented in <a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn">my Pycon 2014 talk</a>. If you make it all the way through, you will learn how to create and deploy a language prediction model of your own.</p>
+
+<p><a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Becker.png" alt="Realtime predictive analytics using scikit-learn &amp; RabbitMQ" /></a><br>
+<em>Realtime predictive analytics using scikit-learn &amp; RabbitMQ</em></p>
+
+<h2>OSEMN</h2>
+
+<p>I&rsquo;m not sure if <a href="http://www.hilarymason.com/">Hilary Mason</a> originally coined the term OSEMN, but I certainly learned it from her. OSEMN (pronounced <a href="http://www.dataists.com/2010/09/a-taxonomy-of-data-science/">awesome</a>) is a typical data science process that is followed by many data scientists. OSEMN stands for <strong>Obtain</strong>, <strong>Scrub</strong>, <strong>Explore</strong>, <strong>Model</strong>, and <strong>iNterpret</strong>. As Hilary put it in <a href="http://www.dataists.com/2010/09/a-taxonomy-of-data-science/">a blog post on the subject</a>: &ldquo;Different data scientists have different levels of expertise with each of these 5 areas, but ideally a data scientist should be at home with them all.&rdquo; As a common data science process, this is a great start, but sometimes this isn&rsquo;t enough. If you want to make your model a critical piece of your application, you must also make it accessible and performant. For this reason, I&rsquo;ll also discuss two more steps, <strong>Deploy</strong> and <strong>Scale</strong>.</p>
+
+<h2>Obtain &amp; Scrub</h2>
+
+<p>In this post, I&rsquo;ll cover how I <strong>obtained</strong> and <strong>scrubbed</strong> the training data for the predictive algorithm in my talk. For those who didn&rsquo;t have a chance to watch my talk, I used data from Wikipedia to train a predictive algorithm to predict the language of some text. We use this algorithm at <a href="http://aweber.jobs/">the company I work for</a> to partition user generated content for further processing and analysis.</p>
+
+<h3>Pagecounts</h3>
+
+<p>So step 1 is <strong>obtaining</strong> a dataset we can use to train a predictive model. <a href="https://www.cs.drexel.edu/~urlass/">My friend Rob</a> recommended I use Wikipedia for this, so I decided to try it out. There are <a href="https://meta.wikimedia.org/wiki/Datasets">a few datasets</a> extracted from Wikipedia obtainable online at the time of this writing. Otherwise you need to generate the dataset yourself, which is what I did. I grabbed hourly page views per article for the past 5 months from <a href="http://dumps.wikimedia.org/other/pagecounts-ez/">dumps.wikimedia.org</a>. I wrote some Python scripts to aggregate these counts and dump the top 50,000 articles from each language.</p>
+
+<h3>Export bot</h3>
+
+<p>After this, I wrote an insanely simple bot to execute queries against the Wikipedia <a href="https://en.wikipedia.org/wiki/Special:Export"><code>Special:Export</code></a> page. Originally, I was considering using <a href="http://scrapy.org/">scrapy</a> for this since I&rsquo;ve been looking for an excuse to use it. A quick read through of the tutorial left me feeling like scrapy was overkill for my problem. I decided a simple bot would be more appropriate. I was inspecting the fields of the web-form for the <code>Special:Export</code> page using <a href="https://developer.chrome.com/devtools/index">Chrome Developer Tools</a> when I stumbled upon a pretty cool trick. Under the &ldquo;Network&rdquo; tab, if you <code>ctrl</code> click on a request, you can use &ldquo;<a href="https://developer.chrome.com/devtools/docs/network#copying-requests-as-curl-commands">Copy as cURL</a>&rdquo; to get a curl command that will reproduce the exact request made by the Chrome browser (headers, User-Agent and all). This makes it easy to write a simple bot that just interacts with a single web-form. The bot code looks a little something like this:</p>
+
+<pre><code class="python">from subprocess import call
+from urllib.parse import urlencode
+
+curl = """curl 'https://{2}.wikipedia.org/w/index.php?title=Special:Export&amp;action=submit' -H 'Origin: https://{2}.wikipedia.org' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'User-Agent: Mozilla/5.0 Chrome/35.0' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Cache-Control: max-age=0' -H 'Referer: https://{2}.wikipedia.org/wiki/Special:Export' -H 'Connection: keep-alive' -H 'DNT: 1' --compressed --data '{0}' &gt; {1}"""
+
+data = {
+    'catname': '',
+    'pages': 'Main_Page\nClimatic_Research_Unit_email_controversy\nJava\nundefined',
+    'curonly': '1',
+    'wpDownload': '1',
+}
+
+enc_data = urlencode(data)
+call(curl.format(enc_data, filename, lang), shell=True)
+</code></pre>
+
+<p>The final version of my bot splits the list of articles into small chunks since the <code>Special:Export</code> page throws 503 errors when the requests are too large.</p>
+
+<h3>Convert to plain text</h3>
+
+<p>The <code>Special:Export</code> page on Wikipedia returns an XML file that contains the page contents and other pieces of information. The page contents include wiki markup, which for my purposes are not useful. I needed to <strong>scrub</strong> the Wikipedia markup to convert the pages to plain text. Fortunately, I found <a href="https://github.com/bwbaugh/wikipedia-extractor">a tool that already does this</a>. There was one downside to this tool which is that it produces output in a format that looks strikingly similar to XML, but is not actually valid XML. To address this, I wrote a simple parser using <a href="https://docs.python.org/2/library/re.html#re.MatchObject.groupdict">a regex</a> that looks something like this:</p>
+
+<pre><code class="python">import bz2
+import re
+
+article = re.compile(r'&lt;doc id="(?P&lt;id&gt;\d+)" url="(?P&lt;url&gt;[^"]+)" title="(?P&lt;title&gt;[^"]+)"&gt;\n(?P&lt;content&gt;.+)\n&lt;\/doc&gt;', re.S|re.U)
+
+def parse(filename):
+  data = ""
+  with bz2.BZ2File(filename, 'r') as f:
+    for line in f:
+      line = line.decode('utf-8')
+      data += line
+      if line.count('&lt;/doc&gt;'):
+        m = article.search(data)
+        if m:
+          yield m.groupdict()
+        data = ""
+</code></pre>
+
+<p>This function will read every page in <code>filename</code> and return a dictionary with the <code>id</code> (an integer tracking the version of the page), the <code>url</code> (a permanent link to this version of the page), the <code>title</code>, and the plain text <code>content</code> of the page. Going through the file one article at a time, and using the <code>yield</code> keyword makes this function <a href="https://wiki.python.org/moin/Generators">a generator</a> which means that it will be more memory efficient.</p>
+
+<h2>What&rsquo;s next?</h2>
+
+<p>In my next post I will cover the <strong>explore</strong> step using some of Python&rsquo;s state-of-the-art tools for data manipulation and visualization. You&rsquo;ll also get your first taste of <a href="http://scikit-learn.org/stable/">scikit-learn</a>, my machine learning library of choice. If you have any questions or comments, please post them below!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[PyCon 2014: The Long Journey North]]></title>
+    <link href="http://mdbecker.github.io/blog/2014/04/23/pycon-2014-the-long-journey-north/"/>
+    <updated>2014-04-23T20:36:00-04:00</updated>
+    <id>http://mdbecker.github.io/blog/2014/04/23/pycon-2014-the-long-journey-north</id>
+    <content type="html"><![CDATA[<p><a href="https://us.pycon.org/2014/"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/pycon2014-logo.png" alt="PyCon 2014 Logo" /></a></p>
+
+<h2>The Journey Begins</h2>
+
+<h3><a href="http://www.meetup.com/DataPhilly/"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/dataphilly.png" alt="DataPhilly" /></a></h3>
+
+<p>A little over a year ago I was frustrated with the lack of data meetups in the Philadelphia area, so I started <a href="http://www.meetup.com/DataPhilly/">DataPhilly</a>. I quickly learned that when you start a tech meetup you&rsquo;re going to have to do some public speaking to get the ball rolling. I was DataPhilly&rsquo;s first speaker because no one else volunteered to present at the first meeting. Even though I&rsquo;d had the opportunity to practice public speaking several times prior to this as part of our weekly Tutorial Tuesday series at <a href="http://www.aweber.com">AWeber</a>, my first talk for DataPhilly felt really rough. Despite this, DataPhilly quickly gained steam, and we&rsquo;ve had <a href="http://www.meetup.com/DataPhilly/events/past/?scroll=true">a ton of excellent speakers and fantastic talks</a>. Since then I&rsquo;ve had the opportunity to speak at both DataPhilly and <a href="http://www.meetup.com/phillypug/">PhillyPUG</a>.</p>
+
+<h3><a href="http://pydata.org/bos2013/"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/pydatalogo-generic.png" alt="PyData Logo" /></a></h3>
+
+<p>Last July I was fortunate enough to speak at <a href="http://vimeo.com/73628112">PyData in Boston</a> where I learned an important lesson; do not commit to delivering more than one talk at a conference. Giving two talks back to back was a bit much, but like my first talk at DataPhilly, I made it through and learned a lot in the process.</p>
+
+<h3>PyCon</h3>
+
+<p>After my experience at PyData, I decided to submit a talk to PyCon. I became anxious waiting to see if my talk would be accepted, so I decided to hack the process a bit. I wanted to gain insight into the PyCon planning process, and so I joined the <a href="https://mail.python.org/mailman/listinfo/pycon-pc">PyCon Program Committee</a>. One really cool thing about the PyCon planning process is that anyone can get involved! With the number of submissions growing each year, I encourage anyone interested to volunteer. It doesn&rsquo;t take a lot of time (really you can devote as little or as much time as you can spare), and it is a great way to give back to the community. On top of this, you&rsquo;ll help decide which talks get accepted at the next PyCon!</p>
+
+<p>Only one in seven talks submitted were selected by the program committee for PyCon this year. A lot of great talks were rejected, and I feel very lucky that my submission made the cut. Being picked to speak at such a selective conference is truly an honor!</p>
+
+<h2>The Speaking Experience</h2>
+
+<p>Speaking at PyCon was made really simple by the awesome staff of volunteers and A/V crew. A green room is provided for speakers so they can hide from their fans and prepare for their talks. One cool side-effect of this is that, as a speaker, you get to hang out with all these famous people from the Python scene. I got to personally thank <a href="http://fperez.org">Fernando Pérez</a> (the creator of IPython, not the baseball player) for his hard work on IPython. Fernando was very humble about his work and gave credit to the rest of the IPython community rather than taking credit for himself. This was a common theme at PyCon. All of the &ldquo;big name&rdquo; people I talked to seemed equally as humble. It seems that the Python community is not a place for egos, and that&rsquo;s really refreshing. I suppose part of this is the nature of open source projects. Those projects started by people who seek inclusiveness are the most successful. An important part of this is sharing credit with others. So it only makes sense that many successful open source projects have a <a href="http://en.wikipedia.org/wiki/Benevolent_Dictator_for_Life">BDFL</a> whom is humble and honest about their own part in the effort.</p>
+
+<h2>Keynotes</h2>
+
+<p>All the of the keynotes were excellent but I especially enjoyed the keynotes by <a href="http://pyvideo.org/video/2686/keynote-guido-van-rossum-0">Guido Van Rossum</a>, <a href="http://pyvideo.org/video/2684/keynote-jessica-mckellar">Jessica McKellar</a> and <a href="http://pyvideo.org/video/2683/keynote-fernando-perez">Fernando Pérez</a>.</p>
+
+<h3>Diversity in Tech</h3>
+
+<p><a href="http://pyvideo.org/video/2684/keynote-jessica-mckellar"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Jessica_McKellar.png" alt="Jessica McKellar" /></a></p>
+
+<p><a href="http://jesstess.com/">Jessica</a> gave an excellent talk about teaching computer science to the next generation and how to fix the diversity gap in the tech community. She talked about how so few high school students are taking the AP computer science exam. &ldquo;There are entire states in the United States where no African-American students take the exam at all. There are states where no Hispanic students have taken the exam. And, despite being 50 percent of the population, there are even states where no girls took the exam&rdquo;. Despite the fact that the President of the United States of America believes that it is important for children to learn to code, in many school districts, there isn&rsquo;t even a computer science class offered to high school students. Jessica&rsquo;s talk continued with a series of suggestions on how to help change the status quo. She also pointed out that there isn&rsquo;t much incentive for Computer Scientists to become teachers. They will make far more money in the software industry than teaching. This is a serious problem. Why can&rsquo;t some of our top tech companies help fix this problem? They certainly can afford to!</p>
+
+<h3>Guido&rsquo;s Q&amp;A</h3>
+
+<p><a href="http://pyvideo.org/video/2686/keynote-guido-van-rossum-0"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Guido.png" alt="Guido Van Rossum" /></a></p>
+
+<p><a href="https://www.python.org/~guido/">Guido&rsquo;s</a> talk was very entertaining. His entire talk was an extended Q&amp;A. He started off by live coding a random question chooser to pick questions from twitter. He then took questions from the audience, but only women, &ldquo;because throughout the conference, I&rsquo;ve been attacked by people with questions, and they were almost all men.&rdquo; Overall, I found this keynote much more entertaining than his keynote last year, so I would definitely recommend watching it.</p>
+
+<h3>Fernando&rsquo;s Keynote</h3>
+
+<p><a href="http://pyvideo.org/video/2683/keynote-fernando-perez"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Fernando.png" alt="Fernando Pérez" /></a></p>
+
+<p>In <a href="http://pyvideo.org/video/2683/keynote-fernando-perez">his keynote</a>, Fernando told the story of how he started the IPython project. &ldquo;It began as me trying to procrastinate a little bit on finishing my dissertation&rdquo; he said. (See <a href="http://pyvideo.org/video/2637/set-your-code-free-releasing-and-maintaining-an">&ldquo;Set your code free&rdquo;</a> for some useful information on running your own open source projects.). In addition to the IPython project, Fernando covered a lot of the progress made in the SciPy community as a whole over the last year.</p>
+
+<h2>Recommended Talks</h2>
+
+<p>The full list of talks can be found on <a href="http://pyvideo.org/category/50/pycon-us-2014">pyvideo.org</a>, but I&rsquo;d like to highlight a few of my favorites.</p>
+
+<h3>Technical Onboarding</h3>
+
+<p><a href="http://pyvideo.org/video/2661/technical-on-boarding-training-and-mentoring"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Heddleston_Zuckerman.png" alt="Kate Heddleston &amp; Nicole Zuckerman on technical onboarding" /></a></p>
+
+<p>One great talk I attended was by <a href="http://pyvideo.org/video/2661/technical-on-boarding-training-and-mentoring">Kate Heddleston &amp; Nicole Zuckerman on technical onboarding</a>. This talk was chock-full of practical advice. I&rsquo;ll definitely be re-watching this video and taking detailed notes.</p>
+
+<h3>Moar Data!</h3>
+
+<p>Maybe I&rsquo;m biased, but one of the most exciting things about PyCon was all of the data related talks! I still have a ton of them left to watch, but of the ones I&rsquo;ve seen, my favorites are:</p>
+
+<h4>Diving into Open Data with IPython Notebook &amp; Pandas</h4>
+
+<p><a href="http://pyvideo.org/video/2657/diving-into-open-data-with-ipython-notebook-pan-0"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Julia_Evans.png" alt="Diving into Open Data with IPython Notebook &amp; Pandas" /></a></p>
+
+<h4>Enough Machine Learning to Make Hacker News Readable Again</h4>
+
+<p><a href="http://pyvideo.org/video/2612/enough-machine-learning-to-make-hacker-news-reada"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Ned_Jackson_Lovely.png" alt="Enough Machine Learning to Make Hacker News Readable Again" /></a></p>
+
+<h4>How to Get Started with Machine Learning</h4>
+
+<p><a href="http://pyvideo.org/video/2604/how-to-get-started-with-machine-learning"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Melanie_Warrick.png" alt="How to Get Started with Machine Learning" /></a></p>
+
+<h4>Realtime predictive analytics using scikit-learn &amp; RabbitMQ</h4>
+
+<p><a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Becker.png" alt="Realtime predictive analytics using scikit-learn &amp; RabbitMQ" /></a></p>
+
+<p>Yes, I really like my own talk ;-).</p>
+
+<p>I also highly recommend watching the lightning talks. They were all very high quality and packed with lots of great insights. I hope they expand the lightning talks next year; they&rsquo;re an excellent use of time!</p>
+
+<h2>The Hallway Track</h2>
+
+<p>On the second day of the conference, I met in one of the open spaces with a bunch of other data people (Thanks <a href="http://jvns.ca">Julia Evans</a> for arranging this!). The guys at <a href="http://plot.ly">Plotly</a> demoed their product, and <a href="http://camdp.com">Cameron Davidson-Pilon</a> showed off his new project <a href="https://github.com/CamDavidsonPilon/lifelines">lifelines</a>, a library for survival analysis, which I&rsquo;ll definitely be having a closer look at in the future.</p>
+
+<h2>Sprinting</h2>
+
+<p><a href="http://scikit-learn.org"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/scikit-learn-logo.png" alt="scikit-learn Logo" /></a></p>
+
+<p>Finally my PyCon experience ended with 2 days of sprinting on the <a href="http://scikit-learn.org/">scikit-learn</a> project. I started by <a href="https://github.com/scikit-learn/scikit-learn/pull/3059">updating the Travis-CI build system from Python 3.3 to Python 3.4</a>. A simple task but one which was perfect for my first commit. Then <a href="http://ogrisel.com/">Olivier Grisel</a> helped me fix <a href="https://github.com/scikit-learn/scikit-learn/pull/3067">an issue I had found while working on my talk</a>. Contributing to scikit-learn was made really easy by both scikit-learn&rsquo;s solid test coverage/CI system, and by the help of Olivier. Overall it seems like an extremely well run project which I can recommend getting involved in if you have the opportunity. If you&rsquo;re interested in getting involved, I recommend checking out the issue tracker and looking for <a href="https://github.com/scikit-learn/scikit-learn/issues?labels=Easy%2CDocumentation&amp;state=open">&ldquo;Easy&rdquo; issues</a>. Another good place to look is <a href="https://github.com/scikit-learn/scikit-learn/search?o=desc&amp;q=MRG&amp;ref=cmdform&amp;s=created&amp;state=open&amp;type=Issues">pull requests that are ready to merge</a>. Reviewing open pull requests and testing them out in your environment is always helpful.</p>
+
+<h2>See You Next Year!</h2>
+
+<p>Montreal is an awesome town and a great place for a conference. I ate lots of poutine and met a ton of awesome people! To all the awesome people I met, I hope to see you next year in Montreal!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pycon 2014: A Preview]]></title>
+    <link href="http://mdbecker.github.io/blog/2013/12/16/pycon-2014-a-preview/"/>
+    <updated>2013-12-16T19:51:00-05:00</updated>
+    <id>http://mdbecker.github.io/blog/2013/12/16/pycon-2014-a-preview</id>
+    <content type="html"><![CDATA[<p><a href="https://us.pycon.org/2014/schedule/talks/list/"><img src="https://us.pycon.org/2014/site_media/static/img/pycon2014-logo.png" title="Pycon 2014 Logo" alt="Pycon 2014 Logo" /></a></p>
+
+<p>After <a href="https://github.com/mdbecker/pydata_2013">my successful talks</a> at <a href="http://pydata.org/bos2013">PyData Boston in July</a>, I decided to submit one of my talks to Pycon. I&rsquo;m happy to say <a href="https://us.pycon.org/2014/schedule/presentation/224/">my talk was accepted</a>! This will be my first Pycon and I&rsquo;m really excited! Montréal is an amazing city with some awesome cuisine (Un poutine végétarien s&#8217;il vous plaît) and the best micro-brew pubs I&rsquo;ve ever been to (sorry Philly)! Besides the awesome location, I&rsquo;m really psyched about some of the talks this year! Here&rsquo;s some of my favorites.</p>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/198/">Discovering Python</a> <em>(David Beazley)</em></h2>
+
+<p>Looking for an entertaining way to learn about various built-in python libraries? Look no further! Imagine if you had access to python, but couldn&rsquo;t install any 3rd party modules! Maybe this is you? If so, then you won&rsquo;t want to miss this talk!</p>
+
+<blockquote><p>So, what happens when you lock a Python programmer in a secret vault containing 1.5 TBytes of C++ source code and no internet connection? Find out as I describe how I used Python as a secret weapon of &ldquo;discovery&rdquo; in an epic legal battle.</p></blockquote>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/163/">Enough Machine Learning to Make Hacker News Readable Again</a> <em>(Ned Jackson Lovely)</em></h2>
+
+<p>Machine Learning talk, `nuff said!</p>
+
+<blockquote><p>It&rsquo;s inevitable that online communities will change, and that we&rsquo;ll remember the community with a fondness that likely doesn&rsquo;t accurately reflect the former reality. We&rsquo;ll explore how we can take a set of articles from an online community and winnow out the stuff we feel is unworthy. We&rsquo;ll explore some of the machine learning tools that are just a &ldquo;pip install&rdquo; away, such as scikit-learn and nltk.</p></blockquote>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/148/">Diving into Open Data with IPython Notebook &amp; Pandas</a> <em>(Julia Evans)</em></h2>
+
+<p>I&rsquo;m glad to see a Pandas talk at PyCon, even if it&rsquo;s not being given by Wes Mckinney ;-).</p>
+
+<blockquote><p>I&rsquo;ll walk you through Python&rsquo;s best tools for getting a grip on data: IPython Notebook and pandas. I&rsquo;ll show you how to read in data, clean it up, graph it, and draw some conclusions, using some open data about the number of cyclists on Montréal&rsquo;s bike paths as an example.</p></blockquote>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/144/">The Sorry State of SSL</a> <em>(Hynek Schlawack)</em></h2>
+
+<p>These days it&rsquo;s important not just  to use encryption, but to also configure it properly. Having spent many hours reading about cyphers and theoretical attacks in the past, this looks like it should be a good talk even for coders who know something about security.</p>
+
+<blockquote><p>Those web pages with shiny lock icons boasting that your data is safe because of “256 bit encryption”? They are lying. In times of mass surveillance and commercialized Internet crime you should know why that’s the case. This talk will give you an overview that will help you to assess your personal security more realistically and to make your applications as secure as possible against all odds.</p></blockquote>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/152/">Ansible - Python-Powered Radically Simple IT Automation</a> <em>(Michael DeHaan)</em></h2>
+
+<p>Having experienced both puppet and chef I&rsquo;m looking forward to learning more about this python alternative.</p>
+
+<blockquote><p>Learn about Ansible &ndash; a radically simple way to deploy applications, configure operating systems, and orchestrate IT operations including zero downtime rolling updates. Let&rsquo;s bring about SkyNet faster.</p></blockquote>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/221/">Modern Web Services, Lessons Learned and Why REST is not the Best</a> <em>(Armin Ronacher)</em></h2>
+
+<p>Talk about writing APIs from the creator of Flask? Yes please!</p>
+
+<blockquote><p>A few years of experiences writing RESTful APIs, especially my experiences working for Fireteam&rsquo;s online services. What worked, what did not work so well and about how to avoid making mistakes with REST.</p></blockquote>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/183/">Games for Science: Creating interactive psychology experiments in Python with Panda3D</a> <em>(Jessica Hamrick)</em></h2>
+
+<p>Applying games to science?! How can you lose?</p>
+
+<blockquote><p>Have you ever wanted to play video games while also contributing to science? In psychology experiments developed by myself and Peter Battaglia, participants are immersed in an interactive 3D world which is experimentally well-controlled, yet also extremely fun. This talk will explain how we created these &ldquo;game-like&rdquo; experiments in Python using the Panda3D video game engine.</p></blockquote>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/173/">Cache me if you can: memcached, caching patterns and best practices</a> <em>(Guillaume Ardaud)</em></h2>
+
+<p>Caching is an important tool for any developers toolkit. When to use memcache vs. a SQL database? This talk should help answer this question and more!</p>
+
+<blockquote><p>Memcached is a popular, blazing fast in-RAM key/object store mainly used in web applications (although it can be used in virtually any software). You will walk out of this talk with a solid understanding of memcached and what it does under the hood, and become familiar with several patterns and best practices for making the most of it in your own Python applications.</p></blockquote>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/141/">Postgres Performance for Humans</a> <em>(Craig Kerstiens)</em></h2>
+
+<p>Probably the most important tool in a developers toolkit is the database. Knowing how to manage your databases is an important skill (often learned when something starts to go wrong).</p>
+
+<blockquote><p>To many developers the database is a black box. You expect to be able to put data into your database, have it to stay there, and get it out when you query it&hellip; hopefully in a performant manner. When its not performant enough the two options are usually add some indexes or throw some hardware at it. We&rsquo;ll walk through a bit of a clearer guide of how you can understand and manage DB performance.</p></blockquote>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/150/">Getting Started Testing</a> <em>(Ned Batchelder)</em></h2>
+
+<p>This talk looks like the end-all and be-all of Python testing talks. You&rsquo;ll learn pretty much everything there is to know about testing Python code.</p>
+
+<blockquote><p>If you&rsquo;ve never written tests before, you probably know you <em>should</em>, but view the whole process as a bureaucratic paperwork nightmare to check off on your ready-to-ship checklist. This is the wrong way to approach testing. Tests are a solution to a problem that is important to you: does my code work? I&rsquo;ll show how Python tests are written, and why.</p></blockquote>
+
+<h2><a href="https://us.pycon.org/2014/schedule/presentation/223/">Technical on-boarding, training, and mentoring</a> <em>(Kate Heddleston)</em></h2>
+
+<p>After onboarding a few new devs myself, I know that I could use some guidance in this area. This talk looks like it should have some great take-aways.</p>
+
+<blockquote><p>This is a talk about how to make junior and new engineers into independent and productive members of your engineering team faster and cheaper. We will focus on python specific resources and libraries that will help you create a simple but effective on boarding program, and talk about case studies of companies that have had success using these techniques.</p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Working with email content]]></title>
+    <link href="http://mdbecker.github.io/blog/2013/02/14/working-with-email-content/"/>
+    <updated>2013-02-14T22:23:00-05:00</updated>
+    <id>http://mdbecker.github.io/blog/2013/02/14/working-with-email-content</id>
+    <content type="html"><![CDATA[<p>When it comes to <a href="http://goo.gl/F2i6l" title="Wikipedia: Tokenization">tokenization</a>, email content presents some unique challenges. Some messages have a plain text version, some have a HTML version, and some have both. Before you can do cool things with this data like <a href="http://goo.gl/X0vQ" title="Wikipedia: NLP">natural language processing</a> or <a href="http://goo.gl/X9l0z" title="Wikipedia: Predictive Analytics">predictive analysis</a>, you have to convert the data into a uniform format (sometimes referred to as <a href="http://goo.gl/bMqGP">scrubbing</a>) prior to tokenization. In my case, I wanted all of my data to be plain text.</p>
+
+<p>If you have a plain text version of the email, it is probably safe to use it without scrubbing. However if you encounter an e-mail without a plain text version, you&rsquo;ll need to convert the HTML version to text. <a href="http://goo.gl/wnRiJu" title="search &quot;python convert html to text&quot;">Searching the web</a>, you&rsquo;re likely to find a myriad of solutions for converting HTML to text. Python is my language of choice, and a few suggestions I found used <a href="http://goo.gl/xBDJZ" title="lxml website">lxml</a>, <a href="http://goo.gl/YUOe" title="BeautifulSoup website">BeautifulSoup</a>, and <a href="http://goo.gl/JGYNk" title="Natural Language Toolkit website">nltk</a> to convert HTML to text.</p>
+
+<h3>lxml and soupparser, an exercise in futility</h3>
+
+<p>lxml has a <a href="http://lxml.de/api/lxml.html.clean.Cleaner-class.html" title="lxml cleaner class">Cleaner</a> class which &ldquo;cleans the document of each of the possible offending elements.&rdquo; The biggest problem with using lxml is it doesn&rsquo;t handle malformed HTML gracefully. To handle these edge cases, you can use the lxml <a href="http://lxml.de/elementsoup.html">soupparser</a> to parse malformed HTML. While in most cases this will work without error, it doesn&rsquo;t produce the desired results for all input. For example, in the following case soupparser will produce an empty HTML document even though there is clearly text in the data:
+&#8220;` python
+from lxml.etree import tostring
+from lxml.html.soupparser import fromstring</p>
+
+<p>data = &lsquo;&lt;/form all my text is at the end of this malformed html&rsquo;
+root = fromstring(data)
+print tostring(root)</p>
+
+<p>&lsquo;<html/>&rsquo;
+&#8220;`
+This is because the default HTML parser used by BeautifulSoup is the built-in HTMLParser. As the BeautifulSoup4 docs point out, in older versions (before 2.7.3 or 3.2.2) &ldquo;Python’s built-in HTML parser is just not very good&rdquo;. Now there are work arounds to this. If you&rsquo;re using BeautifulSoup4, you can <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser" title="bs4 3rd party parser documentation">specify a different parser</a> to use, which will provide better results. This all seems like a lot of work to convert HTML to text, isn&rsquo;t there a better way?</p>
+
+<h3>nltk.util.clean_html is full of win!</h3>
+
+<p>Enter <a href="http://nltk.org/book/ch03.html#dealing-with-html" title="nltk.util.clean_html">nltk.util.clean_html</a>. clean_html uses regular expressions to strip HTML tags from text. This approach helps avoid the issues found with lxml and BeautifulSoup. Looking at our previous example, we don&rsquo;t lose our text data using clean_html:</p>
+
+<p><img src="http://cdn.memegenerator.net/instances/400x/34904914.jpg" alt="NLTK is full of win!" />
+&#8220;` python
+from nltk import clean_html</p>
+
+<p>data = &lsquo;&lt;/form all my text is at the end of this malformed html&rsquo;
+print clean_html(root)</p>
+
+<p>&lsquo;&lt;/form all my text is at the end of this malformed html&rsquo;
+&#8220;`
+Looking at <a href="http://nltk.org/_modules/nltk/util.html#clean_html" title="clean_html source code">the implementation</a>, it almost seems too simple. There are six regular expressions, and that&rsquo;s it! I&rsquo;ve tested all three solutions against several million real e-mail messages, and in all cases nltk provided the best results.</p>
+
+<p>Sifting through all the possible solutions for converting HTML to text and testing each of them was pretty time consuming. If your goal is to scrub the HTML for further analysis, nltk clean_html is definitely the way to go!</p>
+]]></content>
+  </entry>
+  
+</feed>
