@@ -14,8 +14,10 @@ navigation:
   url: /
 - text: Archives
   url: /blog/archives
-- text: My Talks
+- text: Talks
   url: /talks
+- text: About
+  url: /about
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
