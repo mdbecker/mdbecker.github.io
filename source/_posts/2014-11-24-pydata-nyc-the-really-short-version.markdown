@@ -58,6 +58,6 @@ Command-line utilities for exploring your data:
 Awesome talk about measuring and tracking predictive model performance. The speaker Julia open sourced the web app they developed at Stripe called "[top model](https://github.com/stripe/topmodel)" right before her talk.
 
 # [Simple Machine Learning with SKLL 1.0](http://pydata.org/nyc2014/abstracts/#277)
-[SKLL](https://scikit-learn-laboratory.readthedocs.org/en/latest/) is a wrapper around scikit-learn that makes prototyping predictive algorithms as easy as creating a CSV and running a python script. I got a chance to talk extensively with the author and it seems like they’ve done a good job of handling most of the typical gotchas of scikit-learn.
+[SKLL](https://scikit-learn-laboratory.readthedocs.org/en/latest/) is a wrapper around scikit-learn that makes prototyping predictive algorithms as easy as creating a CSV and running a python script. I got a chance to talk extensively with the speaker and it seems like they’ve done a good job of handling most of the typical gotchas of scikit-learn.
 
 **That’s all for now, I’ll send out an update once the videos are live.**
