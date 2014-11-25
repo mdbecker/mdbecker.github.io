@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: pydata | Beckerfuffle]]></title>
+  <link href="http://mdbecker.github.io/blog/categories/pydata/atom.xml" rel="self"/>
+  <link href="http://mdbecker.github.io/"/>
+  <updated>2014-11-24T19:24:24-05:00</updated>
+  <id>http://mdbecker.github.io/</id>
+  <author>
+    <name><![CDATA[Michael Becker]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[PyData NYC: The Really Short Version]]></title>
+    <link href="http://mdbecker.github.io/blog/2014/11/24/pydata-nyc-the-really-short-version/"/>
+    <updated>2014-11-24T19:13:00-05:00</updated>
+    <id>http://mdbecker.github.io/blog/2014/11/24/pydata-nyc-the-really-short-version</id>
+    <content type="html"><![CDATA[<p>Here are my notes from PyData with links for more details. This isn&rsquo;t a complete list, and in some cases my notes don&rsquo;t really do justice to the actual talks, but I hope that these will be helpful to anyone who&rsquo;s feeling <a href="https://twitter.com/jrmontag/status/536221698937217024">PyData FOMO</a> until the videos are released.</p>
+
+<p><em>Disclaimer: I took almost no notes on the second day so a bunch of my favorite talks are missing.</em></p>
+
+<p><a href="http://pydata.org/nyc2014"><img src="https://pbs.twimg.com/media/B24Y568IQAA5AEf.png" alt="" /></a></p>
+
+<h1><a href="http://pydata.org/nyc2014/abstracts/#278">High Performance Text Processing with Rosetta</a></h1>
+
+<p>This library is a highly optimized NLP library with a focus on memory efficiency.</p>
+
+<ul>
+<li><a href="http://pythonhosted.org/rosetta/#rosetta.text.streamers.TextFileStreamer">TextFileStreamer</a> - provides a streaming tokenizer. Good for memory efficiency.</li>
+<li><a href="http://pythonhosted.org/rosetta/#rosetta.text.streamers.DBStreamer">DBStreamer</a>&nbsp;- Ditto but for data in a DB.</li>
+<li>Can be easily combined with online learning methods.</li>
+<li>An IPython notebook with example code can be <a href="http://nbviewer.ipython.org/github/columbia-applied-data-science/rosetta/blob/master/notebooks/BrightTalk.ipynb">found here</a>.</li>
+</ul>
+
+
+<h1><a href="http://pydata.org/nyc2014/keynotes/#abstract_303">Python in the Hadoop/Spark Ecosystem</a></h1>
+
+<p><a href="https://twitter.com/teoliphant/status/536170567729442816"><img src="https://pbs.twimg.com/media/B3DcSIBIcAEt4V2.jpg" alt="" /></a></p>
+
+<ul>
+<li><a href="https://github.com/Blosc/bcolz">Bcolz</a> - A columnar data container that can be compressed (supported by <a href="http://blaze.pydata.org/docs/latest/index.html">Blaze</a>).</li>
+<li><a href="https://github.com/cloudera/impyla">Impyla</a> - Python client and <a href="http://numba.pydata.org/">Numba</a>-based <a href="http://www.cloudera.com/content/cloudera/en/documentation/cloudera-impala/latest/topics/impala_udf.html">UDFs</a> for Impala.</li>
+<li><a href="https://github.com/Parsely/streamparse">Streamparse</a> - lets you run Python code against real-time streams of data. Integrates with <a href="https://storm.apache.org/">Apache Storm</a>.</li>
+<li><a href="https://github.com/mumrah/kafka-python">Kafka-python</a>&nbsp;-&nbsp;<a href="https://kafka.apache.org/">Kafka</a> protocol support in Python.</li>
+<li><a href="http://continuum.io/anaconda-cluster">Anaconda cluster</a> - Bringing the Python ecosystem to Hadoop and Spark.</li>
+<li><a href="https://libcloud.apache.org/">Libcloud</a> - Python library for interacting with many of the popular cloud service providers using a unified API.</li>
+</ul>
+
+
+<h1><a href="http://pydata.org/nyc2014/abstracts/#290">Data warehouse and conceptual modelling with Cubes 1.0</a></h1>
+
+<p>Light-weight Python framework and <a href="https://en.wikipedia.org/wiki/Online_analytical_processing">OLAP</a> HTTP server for easy development of reporting applications and aggregate browsing of multi-dimensionally modeled data. <a href="https://twitter.com/Stiivi/status/536541681026621443">The slides for this talk are already online</a>.</p>
+
+<ul>
+<li>Works best with aggregating categorical data.</li>
+<li><a href="https://github.com/DataBrewery/cubes/blob/master/Visualizer.md">Cubes visualizer</a> - Cubes Visualizer is an application for browsing and visualizing data from a cubes Slicer server.</li>
+<li>Has <a href="https://pythonhosted.org/cubes/backends/google_analytics.html">Google analytics</a> support built-in (good way to drill into google analytics data?).</li>
+<li><a href="https://github.com/jjmontesl/cubesviewer">Cubesviewer</a> - Visual tool for exploring and analyzing OLAP databases.</li>
+<li><a href="http://checkgermany.de/">http://checkgermany.de/</a> - example application.</li>
+</ul>
+
+
+<h1><a href="http://pydata.org/nyc2014/abstracts/#330">How to Make Your Future Data Scientists Love You</a></h1>
+
+<p><a href="https://twitter.com/clearspandex/status/536205002931716096"><img src="https://pbs.twimg.com/media/B3D7m_HIMAAvOEe.jpg" alt="" /></a></p>
+
+<p>Excellent talk with common mistakes made by many companies, and how to avoid making Data Science hard or impossible in the future. My notes on this talk don&rsquo;t really do it justice, so please see <a href="http://blog.sashalaundy.com/talks/data-audit/">Sasha&rsquo;s blog</a> for more details.</p>
+
+<ul>
+<li>Is your data set complete?</li>
+<li>Is your data correct?</li>
+<li>Is your data connectable?</li>
+</ul>
+
+
+<p>Command-line utilities for exploring your data:</p>
+
+<ul>
+<li><a href="https://csvkit.readthedocs.org/en/0.9.0/">csvkit</a></li>
+<li>bitly data_hacks - <a href="https://github.com/bitly/data_hacks#histogrampy">histogram.py</a></li>
+</ul>
+
+
+<h1><a href="http://pydata.org/nyc2014/speakers/#122">Recalling with precision</a></h1>
+
+<p>Awesome talk about measuring and tracking predictive model performance. The speaker Julia open sourced the web app they developed at Stripe called &ldquo;<a href="https://github.com/stripe/topmodel">top model</a>&rdquo; right before her talk.</p>
+
+<h1><a href="http://pydata.org/nyc2014/abstracts/#277">Simple Machine Learning with SKLL 1.0</a></h1>
+
+<p><a href="https://scikit-learn-laboratory.readthedocs.org/en/latest/">SKLL</a> is a wrapper around scikit-learn that makes prototyping predictive algorithms as easy as creating a CSV and running a python script. I got a chance to talk extensively with the author and it seems like they’ve done a good job of handling most of the typical gotchas of scikit-learn.</p>
+
+<p><strong>That’s all for now, I’ll send out an update once the videos are live.</strong></p>
+]]></content>
+  </entry>
+  
+</feed>
