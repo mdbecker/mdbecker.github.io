@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Working with email content - Beckerfuffle</title>
+  <title>Data Science With Python: Part 2 - Beckerfuffle</title>
   <meta name="author" content="Michael Becker">
 
    
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://mdbecker.github.io/blog/2013/02/14/working-with-email-content">
+  <link rel="canonical" href="http://mdbecker.github.io/blog/2014/11/25/data-science-with-python-part-2">
   <link href="/favicon.png" rel="icon">
   <link href='//fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
   <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
@@ -112,7 +112,7 @@
 
   <header>
   <div class="jumbotron">
-    Working With Email Content
+    Data Science With Python: Part 2
 	<h5>
 
 
@@ -125,64 +125,87 @@
   
 
 
-<i class="icon-calendar-empty"></i> <time datetime="2013-02-14T22:23:00-05:00" pubdate data-updated="true"></time></h5>
+<i class="icon-calendar-empty"></i> <time datetime="2014-11-25T07:04:41-05:00" pubdate data-updated="true"></time></h5>
   </div>
 </header>
   <div class="row-fluid">
     <div class="span12">
-      <p>When it comes to <a href="http://goo.gl/F2i6l" title="Wikipedia: Tokenization">tokenization</a>, email content presents some unique challenges. Some messages have a plain text version, some have a HTML version, and some have both. Before you can do cool things with this data like <a href="http://goo.gl/X0vQ" title="Wikipedia: NLP">natural language processing</a> or <a href="http://goo.gl/X9l0z" title="Wikipedia: Predictive Analytics">predictive analysis</a>, you have to convert the data into a uniform format (sometimes referred to as <a href="http://goo.gl/bMqGP">scrubbing</a>) prior to tokenization. In my case, I wanted all of my data to be plain text.</p>
+      <p>This is the second post in a multi-part series wherein I will explain the details surrounding the language prediction model I presented in <a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn">my Pycon 2014 talk</a>. If you make it all the way through, you will learn how to create and deploy a language prediction model of your own. Part 1 of this series can be found <a href="https://mdbecker.github.io/blog/2014/07/30/data-science-with-python-part-1/">here</a>.</p>
 
-<p>If you have a plain text version of the email, it is probably safe to use it without scrubbing. However if you encounter an e-mail without a plain text version, you&rsquo;ll need to convert the HTML version to text. <a href="http://goo.gl/wnRiJu" title="search &quot;python convert html to text&quot;">Searching the web</a>, you&rsquo;re likely to find a myriad of solutions for converting HTML to text. Python is my language of choice, and a few suggestions I found used <a href="http://goo.gl/xBDJZ" title="lxml website">lxml</a>, <a href="http://goo.gl/YUOe" title="BeautifulSoup website">BeautifulSoup</a>, and <a href="http://goo.gl/JGYNk" title="Natural Language Toolkit website">nltk</a> to convert HTML to text.</p>
+<p><a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Becker.png" alt="Realtime predictive analytics using scikit-learn &amp; RabbitMQ" /></a><br>
+<em>Realtime predictive analytics using scikit-learn &amp; RabbitMQ</em></p>
 
-<h3>lxml and soupparser, an exercise in futility</h3>
+<h2>OSEMN</h2>
 
-<p>lxml has a <a href="http://lxml.de/api/lxml.html.clean.Cleaner-class.html" title="lxml cleaner class">Cleaner</a> class which &ldquo;cleans the document of each of the possible offending elements.&rdquo; The biggest problem with using lxml is it doesn&rsquo;t handle malformed HTML gracefully. To handle these edge cases, you can use the lxml <a href="http://lxml.de/elementsoup.html">soupparser</a> to parse malformed HTML. While in most cases this will work without error, it doesn&rsquo;t produce the desired results for all input. For example, in the following case soupparser will produce an empty HTML document even though there is clearly text in the data:</p>
+<p>Let&rsquo;s start off by revisiting <a href="http://www.dataists.com/2010/09/a-taxonomy-of-data-science/">OSEMN</a>. OSEMN (pronounced <a href="http://www.dataists.com/2010/09/a-taxonomy-of-data-science/">awesome</a>) is a typical data science process that is followed by many data scientists. OSEMN stands for <strong>Obtain</strong>, <strong>Scrub</strong>, <strong>Explore</strong>, <strong>Model</strong>, and <strong>iNterpret</strong>. As Hilary put it in <a href="http://www.dataists.com/2010/09/a-taxonomy-of-data-science/">a blog post on the subject</a>: &ldquo;Different data scientists have different levels of expertise with each of these 5 areas, but ideally a data scientist should be at home with them all.&rdquo; As a common data science process, this is a great start, but sometimes this isn&rsquo;t enough. If you want to make your model a critical piece of your application, you must also make it accessible and performant. For this reason, I&rsquo;ll also discuss two more steps, <strong>Deploy</strong> and <strong>Scale</strong>.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">lxml.etree</span> <span class="kn">import</span> <span class="n">tostring</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">lxml.html.soupparser</span> <span class="kn">import</span> <span class="n">fromstring</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">data</span> <span class="o">=</span> <span class="s">&#39;&lt;/form all my text is at the end of this malformed html&#39;</span>
-</span><span class='line'><span class="n">root</span> <span class="o">=</span> <span class="n">fromstring</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</span><span class='line'><span class="k">print</span> <span class="n">tostring</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="s">&#39;&lt;html/&gt;&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<h2>Explore</h2>
 
+<p>In this post, I&rsquo;ll cover how I <strong>explored</strong> the training data for the predictive algorithm in my talk. For those who didn&rsquo;t have a chance to watch my talk, I used data from Wikipedia to train a predictive algorithm to predict the language of some text. We use this algorithm at <a href="http://aweber.jobs/">the company I work for</a> to partition user generated content for further processing and analysis.</p>
 
-<p>This is because the default HTML parser used by BeautifulSoup is the built-in HTMLParser. As the BeautifulSoup4 docs point out, in older versions (before 2.7.3 or 3.2.2) &ldquo;Python’s built-in HTML parser is just not very good&rdquo;. Now there are work arounds to this. If you&rsquo;re using BeautifulSoup4, you can <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser" title="bs4 3rd party parser documentation">specify a different parser</a> to use, which will provide better results. This all seems like a lot of work to convert HTML to text, isn&rsquo;t there a better way?</p>
+<h2>Aggregate</h2>
 
-<h3>nltk.util.clean_html is full of win!</h3>
+<p>To start off, I counted the number of times each character occurs in each language and grabbed the top 2000 from each.</p>
 
-<p>Enter <a href="http://nltk.org/book/ch03.html#dealing-with-html" title="nltk.util.clean_html">nltk.util.clean_html</a>. clean_html uses regular expressions to strip HTML tags from text. This approach helps avoid the issues found with lxml and BeautifulSoup. Looking at our previous example, we don&rsquo;t lose our text data using clean_html:</p>
+<h2>Pandas</h2>
 
-<p><img src="http://cdn.memegenerator.net/instances/400x/34904914.jpg" alt="NLTK is full of win!" /></p>
+<p><strong>TODO: Add a section here showing how we can run describe by average article length by language.</strong></p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">clean_html</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">data</span> <span class="o">=</span> <span class="s">&#39;&lt;/form all my text is at the end of this malformed html&#39;</span>
-</span><span class='line'><span class="k">print</span> <span class="n">clean_html</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="s">&#39;&lt;/form all my text is at the end of this malformed html&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Storing the data as a list of dictionaries makes it easy to load into a <a href="http://pandas.pydata.org/pandas-docs/stable/10min.html">pandas</a> <code>DataFrame</code>! You can think of a <code>DataFrame</code> as a mix between an Excel spreadsheet and a SQL database, but Python!</p>
 
+<p>We can calculate percentages from our letter counts using the <a href="http://pandas.pydata.org/pandas-docs/stable/basics.html#descriptive-statistics">div</a> method.</p>
 
-<p>Looking at <a href="http://nltk.org/_modules/nltk/util.html#clean_html" title="clean_html source code">the implementation</a>, it almost seems too simple. There are six regular expressions, and that&rsquo;s it! I&rsquo;ve tested all three solutions against several million real e-mail messages, and in all cases nltk provided the best results.</p>
+<p>We can add these to as new columns to our DataFrame using the join method.</p>
 
-<p>Sifting through all the possible solutions for converting HTML to text and testing each of them was pretty time consuming. If your goal is to scrub the HTML for further analysis, nltk clean_html is definitely the way to go!</p>
+<p>And if you’re using Pandas in IPython-Notebook, you can easily display the contents for inspection.</p>
+
+<h2>Visualize</h2>
+
+<p>Alright so now let’s use 2 unsupervised machine learning techniques, to visualize our data.
+There’s a lot going on here, so let’s break it down a little.</p>
+
+<h3>KMeans</h3>
+
+<p>First we run the KMeans clustering algorithm on our letter percentages. KMeans automatically groups our data together based on similarity.</p>
+
+<h3>PCA</h3>
+
+<p>Next we run an algorithm called Principal Component Analysis on our data. We’re using PCA to reduce our number of columns from 10-thousand, to 2. The reason for this will become clearer in the next slide.</p>
+
+<h3>Plot</h3>
+
+<p>Finally we plot the results. Since our data only has 2 dimensions, it’s easy to plot! The color of each point corresponds to its cluster number. We can see that with 4 clusters, there is a pretty clear separation of our languages.</p>
+
+<p>One thing I noticed right away when I plotted the data like this was that there are some clear outliers. Digging into the details revealed that most of these languages use their own unique character sets.</p>
+
+<h2>pairwise_distances</h2>
+
+<p>We can also use the <code>pairwise_distances</code> function from scikit-learn to find the languages that are most similar. This function calculates the Euclidean distance between each pair of points. The smaller the distance, the more similar the data points are.</p>
+
+<p>We can see that the most similar languages are in our first cluster.</p>
+
+<p>Croatian, Serbo-Croatian and Bosnian are the most similar followed by Indonesian &amp; Malay, Danish &amp; Norwegian, English &amp; Scots.</p>
+
+<p>Some of these really similar languages will be useful for benchmarking our language classifier later on.</p>
+
+<h2>Seaborn</h2>
+
+<p>Finally, Seaborn has some really awesome graphs built-in which we can also use to visualize the similarity of languages. Here we have a violin plot which is similar to a box plot except it shows the distribution in addition to the 25th, 50th, and 75th percentiles.</p>
+
+<p>Seaborn has a ton of other awesome graphs built in! Here’s a few other examples!</p>
+
+<h2>Conclusion</h2>
+
+<p>So what did we learn?</p>
+
+<ul>
+<li>Aggregating our data by language made exporing it easier.</li>
+<li>We can use KMeans clustering to find natural patterns in our data.</li>
+<li>PCA allows us to plot data that would be hard to visualize otherwise.</li>
+<li><code>pairwise_distances</code> allows us to easily idenitify the most similar (and least similar) languages.</li>
+<li>Seaborn has some really shiny graphs built-in which can allow us to make pretty data visualizations.</li>
+</ul>
+
 
     </div>
   </div>
@@ -205,21 +228,19 @@
 
   <a href="/blog/categories/data-science/"><span class="badge">data science</span></a>
 
-  <a href="/blog/categories/feature-extraction/"><span class="badge">feature extraction</span></a>
-
-  <a href="/blog/categories/html/"><span class="badge">html</span></a>
-
   <a href="/blog/categories/machine-learning/"><span class="badge">machine learning</span></a>
 
   <a href="/blog/categories/natural-language-processing/"><span class="badge">natural language processing</span></a>
 
-  <a href="/blog/categories/nltk/"><span class="badge">nltk</span></a>
-
   <a href="/blog/categories/predictive-analysis/"><span class="badge">predictive analysis</span></a>
+
+  <a href="/blog/categories/pycon/"><span class="badge">pycon</span></a>
 
   <a href="/blog/categories/python/"><span class="badge">python</span></a>
 
   <a href="/blog/categories/text-processing/"><span class="badge">text processing</span></a>
+
+  <a href="/blog/categories/wikipedia/"><span class="badge">wikipedia</span></a>
 
 
 
@@ -251,8 +272,8 @@
       <div class="span12">
         <p class="meta">
           
+            <a class="basic-alignment left" href="/blog/2014/11/24/pydata-nyc-the-really-short-version/" title="Previous Post: PyData NYC: The Really Short Version">&laquo; PyData NYC: The Really Short Version</a>
           
-            <a class="basic-alignment right" href="/blog/2013/05/21/elephant-enlightenment-part-1/" title="Next Post: Elephant Enlightenment: Part 1">Elephant Enlightenment: Part 1 &raquo;</a>
           
         </p>
       </div>
@@ -290,8 +311,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://mdbecker.github.io/blog/2013/02/14/working-with-email-content/';
-        var disqus_url = 'http://mdbecker.github.io/blog/2013/02/14/working-with-email-content/';
+        var disqus_identifier = 'http://mdbecker.github.io/blog/2014/11/25/data-science-with-python-part-2/';
+        var disqus_url = 'http://mdbecker.github.io/blog/2014/11/25/data-science-with-python-part-2/';
         var disqus_script = 'embed.js';
       
     (function () {
