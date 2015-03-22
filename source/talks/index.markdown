@@ -6,6 +6,10 @@ comments: false
 sharing: true
 footer: true
 ---
+# PyData NYC 2014
+## Data Science: It’s Easy as Py!
+{% youtube wUhMmR1JgAw %}
+
 # PyCon 2014
 ## Realtime predictive analytics using scikit-learn & RabbitMQ
 {% youtube WPyNdHygBD0 %}
