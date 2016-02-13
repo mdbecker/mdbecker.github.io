@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: open source | Beckerfuffle]]></title>
-  <link href="http://beckerfuffle.com//blog/categories/open-source/atom.xml" rel="self"/>
-  <link href="http://beckerfuffle.com//"/>
-  <updated>2016-02-13T16:38:13-05:00</updated>
-  <id>http://beckerfuffle.com//</id>
+  <link href="http://beckerfuffle.com/blog/categories/open-source/atom.xml" rel="self"/>
+  <link href="http://beckerfuffle.com/"/>
+  <updated>2016-02-13T16:39:23-05:00</updated>
+  <id>http://beckerfuffle.com/</id>
   <author>
     <name><![CDATA[Michael Becker]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[PyData NYC: The Really Short Version]]></title>
-    <link href="http://beckerfuffle.com//blog/2014/11/24/pydata-nyc-the-really-short-version/"/>
+    <link href="http://beckerfuffle.com/blog/2014/11/24/pydata-nyc-the-really-short-version/"/>
     <updated>2014-11-24T19:13:00-05:00</updated>
-    <id>http://beckerfuffle.com//blog/2014/11/24/pydata-nyc-the-really-short-version</id>
+    <id>http://beckerfuffle.com/blog/2014/11/24/pydata-nyc-the-really-short-version</id>
     <content type="html"><![CDATA[<p>Here are my notes from PyData with links for more details. This isn&rsquo;t a complete list, and in some cases my notes don&rsquo;t really do justice to the actual talks, but I hope that these will be helpful to anyone who&rsquo;s feeling <a href="https://twitter.com/jrmontag/status/536221698937217024">PyData FOMO</a> until the videos are released.</p>
 
 <p><em>Disclaimer: I took almost no notes on the second day so a bunch of my favorite talks are missing.</em></p>
@@ -98,9 +98,9 @@
   
   <entry>
     <title type="html"><![CDATA[PyCon 2014: The Long Journey North]]></title>
-    <link href="http://beckerfuffle.com//blog/2014/04/23/pycon-2014-the-long-journey-north/"/>
+    <link href="http://beckerfuffle.com/blog/2014/04/23/pycon-2014-the-long-journey-north/"/>
     <updated>2014-04-23T20:36:00-04:00</updated>
-    <id>http://beckerfuffle.com//blog/2014/04/23/pycon-2014-the-long-journey-north</id>
+    <id>http://beckerfuffle.com/blog/2014/04/23/pycon-2014-the-long-journey-north</id>
     <content type="html"><![CDATA[<p><a href="https://us.pycon.org/2014/"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/pycon2014-logo.png" alt="PyCon 2014 Logo" /></a></p>
 
 <h2>The Journey Begins</h2>

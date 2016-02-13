@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: wikipedia | Beckerfuffle]]></title>
-  <link href="http://beckerfuffle.com//blog/categories/wikipedia/atom.xml" rel="self"/>
-  <link href="http://beckerfuffle.com//"/>
-  <updated>2016-02-13T16:38:13-05:00</updated>
-  <id>http://beckerfuffle.com//</id>
+  <link href="http://beckerfuffle.com/blog/categories/wikipedia/atom.xml" rel="self"/>
+  <link href="http://beckerfuffle.com/"/>
+  <updated>2016-02-13T16:39:23-05:00</updated>
+  <id>http://beckerfuffle.com/</id>
   <author>
     <name><![CDATA[Michael Becker]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Data Science With Python: Part 1]]></title>
-    <link href="http://beckerfuffle.com//blog/2014/07/30/data-science-with-python-part-1/"/>
+    <link href="http://beckerfuffle.com/blog/2014/07/30/data-science-with-python-part-1/"/>
     <updated>2014-07-30T18:12:00-04:00</updated>
-    <id>http://beckerfuffle.com//blog/2014/07/30/data-science-with-python-part-1</id>
+    <id>http://beckerfuffle.com/blog/2014/07/30/data-science-with-python-part-1</id>
     <content type="html"><![CDATA[<p>This is the first post in a multi-part series wherein I will explain the details surrounding the language prediction model I presented in <a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn">my Pycon 2014 talk</a>. If you make it all the way through, you will learn how to create and deploy a language prediction model of your own.</p>
 
 <p><a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Becker.png" alt="Realtime predictive analytics using scikit-learn &amp; RabbitMQ" /></a><br>
