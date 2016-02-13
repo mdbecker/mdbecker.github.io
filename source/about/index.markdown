@@ -7,7 +7,7 @@ sharing: true
 footer: true
 ---
 
-I'm a Data Engineer at [AWeber](http://aweber.jobs/) and founder of the [DataPhilly Meetup](http://www.meetup.com/DataPhilly/) group. On a day to day basis, I spend a majority of my time acquiring, scrubbing, exploring, and visualizing data. I love machine learning and I get my kicks out of clustering, regression and classification algorithms.
+I'm a Senior Data Scientist at [Penn Medicine](http://www.pennmedicine.org/) where I'm building machine learning systems to improve patient outcomes by providing real-time predictive applications that empower clinicians to identify at risk individuals. In my spare time I organize the [DataPhilly Meetup](http://www.meetup.com/DataPhilly/) group and despite being terrified of public speaking I present regularly at community events and conferences.
 
 If you have found any of my work useful and would like to donate to my "bring on the singularity fund" (in either bitcoins or money), please use the button below.
 
