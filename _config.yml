@@ -7,7 +7,7 @@ title: Beckerfuffle
 subtitle: Go fuffle yourself!
 author: Michael Becker
 simple_search: http://google.com/search
-description: "I'm a Data Engineer at AWeber and founder of the DataPhilly Meetup group. On a day to day basis, I spend a majority of my time acquiring, scrubbing, exploring, and visualizing data. I love machine learning and I get my kicks out of clustering, regression and classification algorithms."
+description: "I'm a Senior Data Scientist at Penn Medicine where I'm building machine learning systems to improve patient outcomes by providing real-time predictive applications that empower clinicians to identify at risk individuals. In my spare time I organize the DataPhilly Meetup group and despite being terrified of public speaking I present regularly at community events and conferences."
 
 navigation:
 - text: Blog
