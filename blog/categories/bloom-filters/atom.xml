@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: bloom filters | Beckerfuffle]]></title>
-  <link href="http://mdbecker.github.io/blog/categories/bloom-filters/atom.xml" rel="self"/>
-  <link href="http://mdbecker.github.io/"/>
-  <updated>2016-02-13T16:13:36-05:00</updated>
-  <id>http://mdbecker.github.io/</id>
+  <link href="http://beckerfuffle.com/blog/categories/bloom-filters/atom.xml" rel="self"/>
+  <link href="http://beckerfuffle.com/"/>
+  <updated>2016-02-13T16:39:23-05:00</updated>
+  <id>http://beckerfuffle.com/</id>
   <author>
     <name><![CDATA[Michael Becker]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Elephant Enlightenment: Part 1]]></title>
-    <link href="http://mdbecker.github.io/blog/2013/05/21/elephant-enlightenment-part-1/"/>
+    <link href="http://beckerfuffle.com/blog/2013/05/21/elephant-enlightenment-part-1/"/>
     <updated>2013-05-21T09:49:00-04:00</updated>
-    <id>http://mdbecker.github.io/blog/2013/05/21/elephant-enlightenment-part-1</id>
+    <id>http://beckerfuffle.com/blog/2013/05/21/elephant-enlightenment-part-1</id>
     <content type="html"><![CDATA[<p><a href="https://engineering.aweber.com/?attachment_id=761"><img src="https://engineering.aweber.com/wp-content/uploads/2013/05/Hadoop_logo.svg_.png" title="Hadoop_logo.svg" alt="" /></a></p>
 
 <p>For some light vacation reading, I started reading <a href="http://goo.gl/9Kk20">Hadoop Beginner&rsquo;s Guide</a>. I made it through about half of the book, and I wanted to share some random facts that I found particularly enlightening.</p>
