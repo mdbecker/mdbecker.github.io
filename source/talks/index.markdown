@@ -6,6 +6,10 @@ comments: false
 sharing: true
 footer: true
 ---
+# PyOhio 2015
+## Data Science: It’s Easy as Py!
+{% youtube HIEoeEQRSAQ %}
+
 # PyData NYC 2014
 ## Data Science: It’s Easy as Py!
 {% youtube wUhMmR1JgAw %}
