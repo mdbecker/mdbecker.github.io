@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: feature extraction | Beckerfuffle]]></title>
-  <link href="http://mdbecker.github.io/blog/categories/feature-extraction/atom.xml" rel="self"/>
-  <link href="http://mdbecker.github.io/"/>
-  <updated>2016-02-13T16:13:36-05:00</updated>
-  <id>http://mdbecker.github.io/</id>
+  <link href="http://beckerfuffle.com//blog/categories/feature-extraction/atom.xml" rel="self"/>
+  <link href="http://beckerfuffle.com//"/>
+  <updated>2016-02-13T16:38:13-05:00</updated>
+  <id>http://beckerfuffle.com//</id>
   <author>
     <name><![CDATA[Michael Becker]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Working with email content]]></title>
-    <link href="http://mdbecker.github.io/blog/2013/02/14/working-with-email-content/"/>
+    <link href="http://beckerfuffle.com//blog/2013/02/14/working-with-email-content/"/>
     <updated>2013-02-14T22:23:00-05:00</updated>
-    <id>http://mdbecker.github.io/blog/2013/02/14/working-with-email-content</id>
+    <id>http://beckerfuffle.com//blog/2013/02/14/working-with-email-content</id>
     <content type="html"><![CDATA[<p>When it comes to <a href="http://goo.gl/F2i6l" title="Wikipedia: Tokenization">tokenization</a>, email content presents some unique challenges. Some messages have a plain text version, some have a HTML version, and some have both. Before you can do cool things with this data like <a href="http://goo.gl/X0vQ" title="Wikipedia: NLP">natural language processing</a> or <a href="http://goo.gl/X9l0z" title="Wikipedia: Predictive Analytics">predictive analysis</a>, you have to convert the data into a uniform format (sometimes referred to as <a href="http://goo.gl/bMqGP">scrubbing</a>) prior to tokenization. In my case, I wanted all of my data to be plain text.</p>
 
 <p>If you have a plain text version of the email, it is probably safe to use it without scrubbing. However if you encounter an e-mail without a plain text version, you&rsquo;ll need to convert the HTML version to text. <a href="http://goo.gl/wnRiJu" title="search &quot;python convert html to text&quot;">Searching the web</a>, you&rsquo;re likely to find a myriad of solutions for converting HTML to text. Python is my language of choice, and a few suggestions I found used <a href="http://goo.gl/xBDJZ" title="lxml website">lxml</a>, <a href="http://goo.gl/YUOe" title="BeautifulSoup website">BeautifulSoup</a>, and <a href="http://goo.gl/JGYNk" title="Natural Language Toolkit website">nltk</a> to convert HTML to text.</p>

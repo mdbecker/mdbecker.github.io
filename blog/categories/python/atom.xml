@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: python | Beckerfuffle]]></title>
-  <link href="http://mdbecker.github.io/blog/categories/python/atom.xml" rel="self"/>
-  <link href="http://mdbecker.github.io/"/>
-  <updated>2016-02-13T16:13:36-05:00</updated>
-  <id>http://mdbecker.github.io/</id>
+  <link href="http://beckerfuffle.com//blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://beckerfuffle.com//"/>
+  <updated>2016-02-13T16:38:13-05:00</updated>
+  <id>http://beckerfuffle.com//</id>
   <author>
     <name><![CDATA[Michael Becker]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[PyData NYC: The Really Short Version]]></title>
-    <link href="http://mdbecker.github.io/blog/2014/11/24/pydata-nyc-the-really-short-version/"/>
+    <link href="http://beckerfuffle.com//blog/2014/11/24/pydata-nyc-the-really-short-version/"/>
     <updated>2014-11-24T19:13:00-05:00</updated>
-    <id>http://mdbecker.github.io/blog/2014/11/24/pydata-nyc-the-really-short-version</id>
+    <id>http://beckerfuffle.com//blog/2014/11/24/pydata-nyc-the-really-short-version</id>
     <content type="html"><![CDATA[<p>Here are my notes from PyData with links for more details. This isn&rsquo;t a complete list, and in some cases my notes don&rsquo;t really do justice to the actual talks, but I hope that these will be helpful to anyone who&rsquo;s feeling <a href="https://twitter.com/jrmontag/status/536221698937217024">PyData FOMO</a> until the videos are released.</p>
 
 <p><em>Disclaimer: I took almost no notes on the second day so a bunch of my favorite talks are missing.</em></p>
@@ -98,9 +98,9 @@
   
   <entry>
     <title type="html"><![CDATA[Data Science With Python: Part 1]]></title>
-    <link href="http://mdbecker.github.io/blog/2014/07/30/data-science-with-python-part-1/"/>
+    <link href="http://beckerfuffle.com//blog/2014/07/30/data-science-with-python-part-1/"/>
     <updated>2014-07-30T18:12:00-04:00</updated>
-    <id>http://mdbecker.github.io/blog/2014/07/30/data-science-with-python-part-1</id>
+    <id>http://beckerfuffle.com//blog/2014/07/30/data-science-with-python-part-1</id>
     <content type="html"><![CDATA[<p>This is the first post in a multi-part series wherein I will explain the details surrounding the language prediction model I presented in <a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn">my Pycon 2014 talk</a>. If you make it all the way through, you will learn how to create and deploy a language prediction model of your own.</p>
 
 <p><a href="http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/Becker.png" alt="Realtime predictive analytics using scikit-learn &amp; RabbitMQ" /></a><br>
@@ -172,9 +172,9 @@ def parse(filename):
   
   <entry>
     <title type="html"><![CDATA[PyCon 2014: The Long Journey North]]></title>
-    <link href="http://mdbecker.github.io/blog/2014/04/23/pycon-2014-the-long-journey-north/"/>
+    <link href="http://beckerfuffle.com//blog/2014/04/23/pycon-2014-the-long-journey-north/"/>
     <updated>2014-04-23T20:36:00-04:00</updated>
-    <id>http://mdbecker.github.io/blog/2014/04/23/pycon-2014-the-long-journey-north</id>
+    <id>http://beckerfuffle.com//blog/2014/04/23/pycon-2014-the-long-journey-north</id>
     <content type="html"><![CDATA[<p><a href="https://us.pycon.org/2014/"><img src="https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/pycon2014-logo.png" alt="PyCon 2014 Logo" /></a></p>
 
 <h2>The Journey Begins</h2>
@@ -271,9 +271,9 @@ def parse(filename):
   
   <entry>
     <title type="html"><![CDATA[Pycon 2014: A Preview]]></title>
-    <link href="http://mdbecker.github.io/blog/2013/12/16/pycon-2014-a-preview/"/>
+    <link href="http://beckerfuffle.com//blog/2013/12/16/pycon-2014-a-preview/"/>
     <updated>2013-12-16T19:51:00-05:00</updated>
-    <id>http://mdbecker.github.io/blog/2013/12/16/pycon-2014-a-preview</id>
+    <id>http://beckerfuffle.com//blog/2013/12/16/pycon-2014-a-preview</id>
     <content type="html"><![CDATA[<p><a href="https://us.pycon.org/2014/schedule/talks/list/"><img src="https://us.pycon.org/2014/site_media/static/img/pycon2014-logo.png" title="Pycon 2014 Logo" alt="Pycon 2014 Logo" /></a></p>
 
 <p>After <a href="https://github.com/mdbecker/pydata_2013">my successful talks</a> at <a href="http://pydata.org/bos2013">PyData Boston in July</a>, I decided to submit one of my talks to Pycon. I&rsquo;m happy to say <a href="https://us.pycon.org/2014/schedule/presentation/224/">my talk was accepted</a>! This will be my first Pycon and I&rsquo;m really excited! Montréal is an amazing city with some awesome cuisine (Un poutine végétarien s&#8217;il vous plaît) and the best micro-brew pubs I&rsquo;ve ever been to (sorry Philly)! Besides the awesome location, I&rsquo;m really psyched about some of the talks this year! Here&rsquo;s some of my favorites.</p>
@@ -348,9 +348,9 @@ def parse(filename):
   
   <entry>
     <title type="html"><![CDATA[Working with email content]]></title>
-    <link href="http://mdbecker.github.io/blog/2013/02/14/working-with-email-content/"/>
+    <link href="http://beckerfuffle.com//blog/2013/02/14/working-with-email-content/"/>
     <updated>2013-02-14T22:23:00-05:00</updated>
-    <id>http://mdbecker.github.io/blog/2013/02/14/working-with-email-content</id>
+    <id>http://beckerfuffle.com//blog/2013/02/14/working-with-email-content</id>
     <content type="html"><![CDATA[<p>When it comes to <a href="http://goo.gl/F2i6l" title="Wikipedia: Tokenization">tokenization</a>, email content presents some unique challenges. Some messages have a plain text version, some have a HTML version, and some have both. Before you can do cool things with this data like <a href="http://goo.gl/X0vQ" title="Wikipedia: NLP">natural language processing</a> or <a href="http://goo.gl/X9l0z" title="Wikipedia: Predictive Analytics">predictive analysis</a>, you have to convert the data into a uniform format (sometimes referred to as <a href="http://goo.gl/bMqGP">scrubbing</a>) prior to tokenization. In my case, I wanted all of my data to be plain text.</p>
 
 <p>If you have a plain text version of the email, it is probably safe to use it without scrubbing. However if you encounter an e-mail without a plain text version, you&rsquo;ll need to convert the HTML version to text. <a href="http://goo.gl/wnRiJu" title="search &quot;python convert html to text&quot;">Searching the web</a>, you&rsquo;re likely to find a myriad of solutions for converting HTML to text. Python is my language of choice, and a few suggestions I found used <a href="http://goo.gl/xBDJZ" title="lxml website">lxml</a>, <a href="http://goo.gl/YUOe" title="BeautifulSoup website">BeautifulSoup</a>, and <a href="http://goo.gl/JGYNk" title="Natural Language Toolkit website">nltk</a> to convert HTML to text.</p>
