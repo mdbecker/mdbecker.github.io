@@ -67,6 +67,11 @@ Write ordinary Markdown here.
 Continue the article here.
 ```
 
+Keep the introduction above `<!--more-->` coherent and compact (roughly 40–60
+words). For posts starting with an image or heading, an optional front-matter
+`excerpt: >-` can supply introductory prose without changing the article. Excerpts
+are not cut off at a fixed word count.
+
 The post date determines `/blog/YYYY/MM/DD/title/`. Historical slugs and category
 paths are preserved. New categories use normalized lowercase URL slugs (for
 example `New Category.v2` becomes `new-category-dot-v2`). A small category plugin
@@ -81,7 +86,9 @@ after all checks pass. There is no Octopress publishing command.
 
 Typography and whitespace carry the hierarchy: no cards, sidebars, sidenotes,
 illustrations, or motion. The homepage lists reverse-chronological native Jekyll
-excerpts, stripped of HTML and limited to 40 words; existing pagination remains.
+excerpts, stripped of HTML and ending at natural sentence boundaries; existing
+pagination remains. Historical posts provide short introductions using native
+front-matter `excerpt` fields, without changing their full article bodies.
 Articles show a title, date, and the first three source-order categories.
 Historical Markdown, links, permalinks, feeds, and Disqus identifiers remain intact.
 

@@ -4,6 +4,8 @@ title: "Elephant Enlightenment: Part 1"
 date: 2013-05-21 09:49
 comments: true
 categories: [Hadoop, Big Data, MapReduce, Bloom Filters]
+excerpt: >-
+  For some light vacation reading, I started reading Hadoop Beginner's Guide. I made it through about half of the book, and I wanted to share some random facts that I found particularly enlightening.
 ---
 [![](https://engineering.aweber.com/wp-content/uploads/2013/05/Hadoop_logo.svg_.png "Hadoop_logo.svg")](https://engineering.aweber.com/?attachment_id=761)
 

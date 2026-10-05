@@ -4,6 +4,8 @@ title: "Pycon 2014: A Preview"
 date: 2013-12-16 19:51
 comments: true
 categories: [Python, PyCon, Public Speaking]
+excerpt: >-
+  After my successful talks at PyData Boston in July, I decided to submit one of my talks to Pycon. I'm happy to say my talk was accepted! This will be my first Pycon and I'm really excited!
 ---
 [![Pycon 2014 Logo](https://us.pycon.org/2014/site_media/static/img/pycon2014-logo.png "Pycon 2014 Logo")](https://us.pycon.org/2014/schedule/talks/list/)
 

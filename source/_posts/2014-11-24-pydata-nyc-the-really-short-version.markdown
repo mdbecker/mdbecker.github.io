@@ -4,6 +4,8 @@ title: "PyData NYC: The Really Short Version"
 date: 2014-11-24 19:13
 comments: true
 categories: [Python, PyData, Conferences, Open Source, Community] 
+excerpt: >-
+  Here are my notes from PyData with links for more details. This isn't a complete list, and in some cases my notes don't really do justice to the actual talks, but I hope that these will be helpful to anyone who's feeling PyData FOMO until the videos are released.
 ---
 
 Here are my notes from PyData with links for more details. This isn't a complete list, and in some cases my notes don't really do justice to the actual talks, but I hope that these will be helpful to anyone who's feeling [PyData FOMO](https://twitter.com/jrmontag/status/536221698937217024) until the videos are released.

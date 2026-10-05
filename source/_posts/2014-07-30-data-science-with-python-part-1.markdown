@@ -4,6 +4,8 @@ title: "Data Science With Python: Part 1"
 date: 2014-07-30 18:12
 comments: true
 categories: [Text Processing, Data Science, Natural Language Processing, Predictive Analysis, Machine Learning, Data Mining, Python, Wikipedia, PyCon]
+excerpt: >-
+  This is the first post in a multi-part series wherein I will explain the details surrounding the language prediction model I presented in my Pycon 2014 talk. If you make it all the way through, you will learn how to create and deploy a language prediction model of your own.
 ---
 
 This is the first post in a multi-part series wherein I will explain the details surrounding the language prediction model I presented in [my Pycon 2014 talk](http://pyvideo.org/video/2606/realtime-predictive-analytics-using-scikit-learn). If you make it all the way through, you will learn how to create and deploy a language prediction model of your own.

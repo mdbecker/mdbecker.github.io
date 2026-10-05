@@ -66,3 +66,50 @@ The existing regression suite remains aligned with the new interface. Font asset
 and licenses, production templates/CSS, and concise documentation remain.
 No production dependencies, host installations, deployment, GitHub push, or
 publication setting changes were introduced. Changes are committed locally.
+
+## Final visual QA refinements
+
+The subsequent polish pass preserves branding, palette, column dimensions, and
+article-title sizing. Media-only paragraphs now use block images without the
+empty inline line box that caused large gaps when remote images were unavailable.
+Related headings/lists use 10px spacing, paragraphs use 20px spacing, and ordinary
+section boundaries use 36px. Lists have a tighter reading rhythm with native
+hanging indentation and nested hierarchy. Metadata is 14px, with 8px title spacing
+and 16px before excerpts. Homepage entries remain separated by 40px.
+
+Linked article headings retain their original destinations and keyboard outlines
+without persistent underlines. Homepage title links use a 1px underline with a
+slightly greater offset and distinct hover/focus color. Inactive navigation labels
+are undecorated; the orange current-section rule and keyboard outlines remain.
+
+All six historical posts now use native front-matter excerpt fields containing
+complete introductory sentences. The fixed 40-word truncation was removed.
+Article bodies, permalinks, historical links, and feed content remain unchanged.
+New posts can use the existing `<!--more-->` separator or an explicit excerpt;
+no parser, summarizer, plugin, runtime dependency, or JavaScript was added.
+
+Chromium's actual font audit identified **ETBembo-RomanLF** for ordinary prose and
+**ETBembo-DisplayItalic** for the disclaimer, both custom ET Book faces at weight
+400. The ink remains `#1B2430`; no speculative weight or font replacement was made.
+
+Tests were written and run before implementation. Five observable defects failed
+in the initial red phase; font loading and technical-content preservation already
+passed. A fixture caption selector was corrected before implementation because
+historical code blocks also contain an empty caption. The seven scenarios then
+passed after implementation (8.5 seconds). Visual review uncovered compressed
+mobile table labels; an eighth scenario first failed with the word “Value” split
+across three lines. Tables now retain normal word wrapping and scroll locally.
+The final combined run passed **118 checks**: eight QA scenarios and the existing
+110 regression checks, with the opt-in production smoke check skipped.
+
+Reviewed homepage, PyData, code article, and a technical fixture at 1440px, 768px,
+and 375px, including long titles/URLs, nested/wrapped lists, inline/highlighted
+code, a wide table, figure/caption, and blockquote. Actual Chromium 200% zoom
+reflow was reviewed. No full-page horizontal overflow was observed. Offline remote
+image/embed limitations remain as described above. The media-spacing correction
+preserves image markup and URLs rather than hiding or deleting historical images.
+
+Temporary QA tests, fixtures, captures, scripts, and the task's testing container
+were removed after verification, following the user's cleanup instruction. The
+local preview container remains running at `http://127.0.0.1:4000`. Refinements are
+committed locally on the existing redesign branch and are not pushed.

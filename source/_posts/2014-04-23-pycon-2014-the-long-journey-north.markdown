@@ -4,6 +4,8 @@ title: "PyCon 2014: The Long Journey North"
 date: 2014-04-23 20:36
 comments: true
 categories: [Python, PyCon, Public Speaking, Speaking, Conferences, Open Source, Community]
+excerpt: >-
+  A little over a year ago I was frustrated with the lack of data meetups in the Philadelphia area, so I started DataPhilly. I quickly learned that when you start a tech meetup you're going to have to do some public speaking to get the ball rolling.
 ---
 [![PyCon 2014 Logo](https://raw.githubusercontent.com/mdbecker/static_files/master/pycon/pycon2014-logo.png)](https://us.pycon.org/2014/)
 

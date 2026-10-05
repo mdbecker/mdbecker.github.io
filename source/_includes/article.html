@@ -11,7 +11,7 @@
   </p>
 </header>
 {% if index %}
-  <p class="excerpt">{{ post.excerpt | strip_html | normalize_whitespace | truncatewords: 40 }}</p>
+  <p class="excerpt">{{ post.excerpt | strip_html | normalize_whitespace }}</p>
 {% else %}
   {% include article_content.html %}
 {% endif %}

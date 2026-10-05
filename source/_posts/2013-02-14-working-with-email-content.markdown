@@ -5,6 +5,8 @@ display_title: "Working With Email Content"
 date: 2013-02-14 22:23
 comments: true
 categories: [Text Processing, Data Science, Natural Language Processing, Predictive Analysis, Machine Learning, Feature Extraction, Data Mining, Python, nltk, html]
+excerpt: >-
+  When it comes to tokenization, email content presents some unique challenges. Some messages have a plain text version, some have a HTML version, and some have both.
 ---
 When it comes to [tokenization](http://goo.gl/F2i6l "Wikipedia: Tokenization"), email content presents some unique challenges. Some messages have a plain text version, some have a HTML version, and some have both. Before you can do cool things with this data like [natural language processing](http://goo.gl/X0vQ "Wikipedia: NLP") or [predictive analysis](http://goo.gl/X9l0z "Wikipedia: Predictive Analytics"), you have to convert the data into a uniform format (sometimes referred to as [scrubbing](http://goo.gl/bMqGP)) prior to tokenization. In my case, I wanted all of my data to be plain text.
 
