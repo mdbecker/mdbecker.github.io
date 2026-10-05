@@ -36,8 +36,6 @@ jobs:
         run: |
           mkdir -p "$HISTORICAL_SITE"
           git archive f956b53210bd3985408a766f431e5455c02e2459 | tar -x -C "$HISTORICAL_SITE"
-      - name: Capture historical screenshots on this runner
-        run: npm run test:baseline
       - name: Build candidate
         run: bundle exec jekyll build --trace
       - name: Run all acceptance and visual checks

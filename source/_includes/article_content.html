@@ -1,0 +1,12 @@
+{% comment %}Normalize historical section levels beneath the page title without editing Markdown.{% endcomment %}
+{% assign reading_content = content %}
+{% if content contains '<h1' %}
+  {% assign reading_content = content | replace: '<h5', '<h6' | replace: '</h5>', '</h6>' | replace: '<h4', '<h5' | replace: '</h4>', '</h5>' | replace: '<h3', '<h4' | replace: '</h3>', '</h4>' | replace: '<h2', '<h3' | replace: '</h2>', '</h3>' | replace: '<h1', '<h2' | replace: '</h1>', '</h2>' %}
+{% elsif content contains '<h2' %}
+  {% comment %}Already starts at the correct section level.{% endcomment %}
+{% elsif content contains '<h3' %}
+  {% assign reading_content = content | replace: '<h3', '<h2' | replace: '</h3>', '</h2>' | replace: '<h4', '<h3' | replace: '</h4>', '</h3>' | replace: '<h5', '<h4' | replace: '</h5>', '</h4>' | replace: '<h6', '<h5' | replace: '</h6>', '</h5>' %}
+{% endif %}
+<div class="article-body">
+  {{ reading_content }}
+</div>

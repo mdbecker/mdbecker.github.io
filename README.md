@@ -1,7 +1,7 @@
 # Beckerfuffle
 
-A small Jekyll site preserving the original Flat UI blog, six articles, archives,
-categories, and public URLs. Edit the `source` branch; `master` is the historical
+A small Jekyll site with a Tufte-inspired editorial design, preserving the six
+original articles, archives, categories, and public URLs. Edit the `source` branch; `master` is the historical
 generated site retained for rollback. The GitHub default branch need not change.
 
 ## Local preview with Docker
@@ -46,7 +46,7 @@ bundle exec jekyll serve
 Preview at <http://127.0.0.1:4000>. `bundle exec jekyll build` writes `public/`.
 Commit `Gemfile.lock` and `package-lock.json`; generated output is ignored.
 Node and Playwright are development tools only; visitors receive static HTML,
-the retained CSS, and a small native navigation script.
+self-hosted fonts and CSS. Navigation wraps without JavaScript.
 
 ## Publish a post
 
@@ -77,34 +77,71 @@ needed by the existing CSS while accepting ordinary Markdown posts.
 Preview, build, run tests, and open a pull request targeting `source`. Merge only
 after all checks pass. There is no Octopress publishing command.
 
+## Design and layouts
+
+Typography and whitespace carry the hierarchy: no cards, sidebars, sidenotes,
+illustrations, or motion. The homepage lists reverse-chronological native Jekyll
+excerpts, stripped of HTML and limited to 40 words; existing pagination remains.
+Articles show a title, date, and the first three source-order categories.
+Historical Markdown, links, permalinks, feeds, and Disqus identifiers remain intact.
+
+`source/stylesheets/screen.css` contains the shared design and a small set of
+CSS variables: paper `#FFFFF8`, text `#1B2430`, links `#245D67` (hover/focus
+`#173F46`), branding `#B34A16`, secondary text `#60676B`, rules `#DEDED6`,
+and code backgrounds `#F3F2EA`. ET Book is self-hosted with Palatino/Georgia
+fallbacks: 20px body text with 1.6 line spacing, regular headings, and the
+existing monospace code stack. The centered container is at most 56rem; the
+left-aligned reading column is at most 45rem. Mobile gutters are 1.25rem.
+Code blocks and wide tables scroll locally; images scale without distortion.
+
+[ET Book](https://github.com/edwardtufte/et-book) is designed by Dmitry Krasny,
+Bonnie Scranton, and Edward Tufte, and converted for the web by Adam Schwartz.
+The three WOFF faces are distributed under MIT; their license is included at
+`source/fonts/et-book/LICENSE`. Existing Font Awesome profile glyphs are reused.
+There are no remote font requests or new production dependencies.
+
+`default.html` owns navigation, the common masthead, main landmark, and footer.
+`article.html` renders index entries or article title/metadata; `article_content.html`
+reserves h1 for the page title and normalizes historical sections to begin at h2,
+without editing the historical Markdown or changing feed content. `post.html`
+retains adjacent-post links and comments; `page.html` shares the reading treatment
+with About, Talks, archives, and categories. Category generation retains lowercase
+historical URLs while preserving source order for article metadata.
+
+The original cyan navigation, category pills, Bootstrap grids, Google Fonts,
+Flat UI assets, and navigation toggle script have been retired. The historical
+footer attribution remains. The original mockup provides the article composition;
+the homepage intentionally uses excerpts as required by the redesign PRD.
+
 ## Verify changes
 
-Tests require the frozen historical output as well as the candidate build:
+Tests compare content and publication behavior with the frozen historical output:
 
 ```sh
 export HISTORICAL_SITE=/tmp/beckerfuffle-historical
 mkdir -p "$HISTORICAL_SITE"
 git archive f956b53210bd3985408a766f431e5455c02e2459 | tar -x -C "$HISTORICAL_SITE"
-npm run test:baseline
 bundle exec jekyll build
 npm test
 ```
 
-Capture historical baselines on the same operating system and pinned Chromium
-version used for comparisons. Never update a golden image from candidate output
-to make a failure pass. Investigate screenshot differences first. The fixture
-route manifest covers every historical HTML route; comparisons cover desktop,
-tablet, and mobile pages with a maximum 0.5% changed-pixel ratio. Screenshot files stay local and are ignored by Git; CI regenerates historical
-references from master and does not upload screenshot artifacts. External requests
-are blocked consistently. Documented masks are in
-`tests/fixtures/visual-exceptions.md`.
+The existing suite checks all historical routes at 1440px, 768px, and 375px,
+heading structure, wrapping navigation, keyboard focus/activation, page overflow,
+article text/links/images/code, pagination, category feeds, SEO/publication
+interfaces, browser errors, resources, and deployment guards. Synthetic posts
+are built outside the repository and removed automatically. Production requests
+remain opt-in with `VERIFY_PRODUCTION=1`; no deployment is implied by local tests.
 
-The suite also checks article text, code markup, local resources, browser errors,
-navigation accessibility, new posts/categories, pagination, feeds, metadata,
-Disqus identifiers, dependency cleanup, and deployment guards. The production
-test is explicitly skipped offline. After an approved deployment run
-`VERIFY_PRODUCTION=1 npm test` with the same local setup; separately verify DNS,
-HTTPS, and historical Disqus discussion association.
+For visual review, set `CANDIDATE_CAPTURE_DIR` to a temporary directory and run
+`npm test -- tests/visual.spec.js`. Inspect the homepage, PyData article, and email
+code article at all three widths; check keyboard navigation and 200% zoom too.
+External requests are blocked deterministically in tests, so historical remote
+images and embeds are not verified by these captures. Some historical images
+have empty alternative text; their content is preserved, not editorially rewritten.
+Delete captures and generated output after review. The intentional redesign
+supersedes pixel comparisons with the retired Flat UI theme.
+
+See [redesign verification](docs/redesign.md) for the test-first handoff.
 
 ## Deployment and rollback
 
@@ -112,11 +149,11 @@ HTTPS, and historical Disqus discussion association.
 and pushes to `source`. Only a successful push to `source` uploads `public/` and
 deploys via the GitHub Pages artifact API. PRs have no Pages deployment access.
 The build job has read-only repository permissions; only the dependent deploy
-job has Pages/OIDC write permissions. Same-OS golden screenshots are regenerated
-from the immutable historical commit in CI before candidate comparisons.
+job has Pages/OIDC write permissions. The immutable historical commit is extracted
+in CI for content comparisons.
 
 Before the first cutover, keep existing branch publishing active, review passing
-checks and screenshot comparisons, and approve intentional differences. In
+checks and the current design, and approve intentional differences. In
 repository settings configure the `github-pages` environment to permit only
 `source`, select **GitHub Actions** for Pages, retain **beckerfuffle.com** as the
 custom domain, and enable HTTPS. These account settings are release steps, not
@@ -133,16 +170,12 @@ offending `source` commit and publish through the same test-gated workflow.
 Monthly Dependabot PRs cover Bundler, npm test dependencies, and GitHub Actions.
 Review the release notes, run the complete suite, and examine screenshots before
 merging. Do not auto-merge upgrades. Update the runtime pin and lockfile together
-when changing Ruby, and preserve a same-browser historical comparison when
-updating Playwright. Ruby 3.3 is in security maintenance through March 2027;
+when changing Ruby, and review current-design screenshots when updating Playwright.
+Ruby 3.3 is in security maintenance through March 2027;
 schedule a tested move to a supported newer Ruby before then.
 
-Compiled `source/stylesheets/screen.css` is retained to preserve the original
-theme. The obsolete Sass/Compass sources are unnecessary for normal builds.
-The migration removes jQuery, Bootstrap JS, Modernizr, Octopress tooling, Google
-Analytics, AddThis, AWeber, Twitter widgets, Google+, and unused Flash/video
-helpers. Google Fonts requests use HTTPS. Disqus remains the approved external
-script, with historical HTTP identifiers and HTTPS embed/page URLs.
+The shared CSS replaces the original compiled theme. Disqus remains the approved
+external script, with historical HTTP identifiers and HTTPS embed/page URLs.
 
-See [migration notes](docs/migration.md) for compatibility decisions and the
-remaining production release checks.
+See [migration notes](docs/migration.md) for the earlier compatibility decisions
+and remaining production release checks.

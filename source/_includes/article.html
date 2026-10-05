@@ -1,38 +1,17 @@
-{% unless page.no_header %}
-{% if index %}
-  <div class="row-fluid">
-    <div class="span2 post-meta">
-	  <h5 class="date-time">{% include post/date.html %}<i class="fui-calendar-24"></i> {{ time | date: "%b %-d, %Y" }}</h5>
-          <div class="row-fluid">
-          {% if site.disqus_short_name and page.comments != false and post.comments != false and site.disqus_show_comment_count == true %}
-          <a href="{% if index %}{{ root_url }}{{ post.url }}{% endif %}#disqus_thread" data-disqus-identifier="http://beckerfuffle.com{{ post.url }}">Comments </a> <span class="fui-bubble-16"></span>
-          {% endif %}
-          </div>
-          {% if post.categories %}
-          <div class="row-fluid">
-          {% for category in post.categories %}
-          <a href="{{ root_url }}/{{ site.category_dir }}/{{ category | replace:' ','-' | replace:'.','-dot-' | downcase | slugify }}/"><span class="badge">{{ category | escape }}</span></a>
-          {% endfor %}
-          </div>
-          {% endif %}
-    </div>
-    <div class="span10 post-container">
-      <h1 class="link"><a href="{{ root_url }}{{ post.url }}">{{ post.title }}</a></h1>
-      {% if post.content contains site.excerpt_separator %}{{ post.excerpt }}{% else %}{{ post.content }}{% endif %}
-      {% if post.content contains site.excerpt_separator %} <a href="{{ root_url }}{{ post.url }}">{{ site.excerpt_link }}</a> {% endif %}
-    </div>
-  </div>
-{% else %}
-  <header>
-  <div class="jumbotron">
-    {{ page.display_title | default: page.title | escape }}
-	<h5>{% include post/date.html %}<i class="fui-calendar-24"></i> {{ time | date: "%b %-d, %Y" }}</h5>
-  </div>
+<header>
+  {% if index %}
+    <h2><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h2>
+  {% else %}
+    <h1>{{ page.display_title | default: page.title | escape }}</h1>
+  {% endif %}
+  {% assign article = page %}{% if index %}{% assign article = post %}{% endif %}
+  <p class="meta">
+    <time datetime="{{ article.date | date_to_xmlschema }}">{{ article.date | date: "%b %-d, %Y" }}</time>
+    <span class="categories">{% for category in article.categories limit:3 %} · <a href="{{ root_url }}/{{ site.category_dir }}/{{ category | replace:' ','-' | replace:'.','-dot-' | downcase | slugify }}/">{{ category | escape }}</a>{% endfor %}</span>
+  </p>
 </header>
-  <div class="row-fluid">
-    <div class="span12">
-      {{ content }}
-    </div>
-  </div>
+{% if index %}
+  <p class="excerpt">{{ post.excerpt | strip_html | normalize_whitespace | truncatewords: 40 }}</p>
+{% else %}
+  {% include article_content.html %}
 {% endif %}
-{% endunless %}

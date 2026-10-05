@@ -1,21 +1,18 @@
 ---
 layout: default
 ---
-
-<article role="article">
+<article>
   {% if page.title %}
   <header>
-    <div class="jumbotron">
-      {{ page.display_title | default: page.title | escape }}
-    </div>
-    {% if page.date %}<p class="meta"><time datetime="{{ page.date | date_to_xmlschema }}" pubdate></time></p>{% endif %}
+    <h1>{{ page.display_title | default: page.title | escape }}</h1>
+    {% if page.date %}<p class="meta"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time></p>{% endif %}
   </header>
   {% endif %}
-  {{ content }}
+  {% include article_content.html %}
 </article>
 {% if site.disqus_short_name and page.comments == true %}
-  <section>
-    <h1>Comments</h1>
+  <section aria-label="Comments">
+    <h2>Comments</h2>
     <div id="disqus_thread" aria-live="polite">{% include post/disqus_thread.html %}</div>
   </section>
 {% endif %}

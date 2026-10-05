@@ -33,56 +33,27 @@ test("B preserve all six articles, rich email and data-science content", async (
     const title = historical
       .match(/<div class="jumbotron">\s*([^<]+)/s)[1]
       .trim();
-    await expect(page.locator(".jumbotron")).toContainText(title);
+    await expect(page.locator("article > header h1")).toContainText(title);
+    // Compare the complete reading body, excluding redesigned metadata/footer.
     const expected = await page.evaluate((html) => {
       const d = new DOMParser().parseFromString(html, "text/html");
-      return [
-        ...d.querySelectorAll("article p, article h2, article h3, article li"),
-      ]
-        .map((e) => e.textContent.replace(/\s+/g, " ").trim())
-        .filter(Boolean);
+      const body = d.querySelector("article > .row-fluid .span12");
+      return {
+        text: body.textContent.replace(/\s+/g, " ").trim(),
+        links: [...body.querySelectorAll("a[href]")].map(e => e.getAttribute("href")),
+        images: [...body.querySelectorAll("img")].map(e => [e.getAttribute("src"), e.getAttribute("alt")]),
+        code: [...body.querySelectorAll("figure.code td.code pre")].map(e => e.textContent.trim()),
+        headings: [...body.querySelectorAll("h1,h2,h3,h4,h5,h6")].map(e => e.textContent.trim()),
+      };
     }, historical);
-    const actual = await page
-      .locator("article p, article h2, article h3, article li")
-      .evaluateAll((es) =>
-        es
-          .map((e) => e.textContent.replace(/\s+/g, " ").trim())
-          .filter(Boolean),
-      );
+    const actual = await page.locator(".article-body").evaluate(body => ({
+      text: body.textContent.replace(/\s+/g, " ").trim(),
+      links: [...body.querySelectorAll("a[href]")].map(e => e.getAttribute("href")),
+      images: [...body.querySelectorAll("img")].map(e => [e.getAttribute("src"), e.getAttribute("alt")]),
+      code: [...body.querySelectorAll("figure.code td.code pre")].map(e => e.textContent.trim()),
+      headings: [...body.querySelectorAll("h1,h2,h3,h4,h5,h6")].map(e => e.textContent.trim()),
+    }));
     expect(actual).toEqual(expected);
-    for (const selector of [
-      "article img",
-      "article a[href]",
-      "figure.code td.code pre",
-    ]) {
-      const expectedNodes = await page.evaluate(
-        ({ html, selector }) => {
-          const d = new DOMParser().parseFromString(html, "text/html");
-          return [...d.querySelectorAll(selector)].map((e) =>
-            selector.includes("img")
-              ? [e.getAttribute("src"), e.getAttribute("alt")]
-              : selector.includes(" a")
-                ? e.getAttribute("href")
-                : e.textContent.trim(),
-          );
-        },
-        { html: historical, selector },
-      );
-      const actualNodes = await page
-        .locator(selector)
-        .evaluateAll(
-          (es, selector) =>
-            es.map((e) =>
-              selector.includes("img")
-                ? [e.getAttribute("src"), e.getAttribute("alt")]
-                : selector.includes(" a")
-                  ? e.getAttribute("href")
-                  : e.textContent.trim(),
-            ),
-          selector,
-        );
-      expect(actualNodes).toEqual(expectedNodes);
-    }
     if (/working-with-email|data-science/.test(route)) {
       expect(await page.locator("figure.code td.gutter pre").count()).toBe(2);
       expect(await page.locator("figure.code td.code pre").count()).toBe(2);
@@ -95,24 +66,27 @@ test("C preserve front-matter May 21 Elephant date", async ({
   request,
 }) => {
   await page.goto("/blog/2013/05/21/elephant-enlightenment-part-1/");
-  await expect(page.locator(".jumbotron")).toContainText("May 21, 2013");
+  await expect(page.locator("article > header")).toContainText("May 21, 2013");
   expect(
     (
       await request.get("/blog/2013/07/31/elephant-enlightenment-part-1/")
     ).status(),
   ).toBe(404);
 });
-test("F mobile navigation keyboard and aria state", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
+test("F mobile navigation wraps and supports keyboard activation", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 844 });
   await page.goto("/");
-  const toggle = page.locator(".btn-navbar");
-  await expect(toggle).toHaveAttribute("aria-expanded", "false");
-  await toggle.focus();
+  const navigation = page.getByRole("navigation", { name: "Primary" });
+  for (const label of ["Blog", "Archives", "Talks", "About"])
+    await expect(navigation.getByRole("link", { name: label, exact: true })).toBeVisible();
+  const archives = navigation.getByRole("link", { name: "Archives", exact: true });
+  await archives.focus();
+  expect(await archives.evaluate(e => {
+    const style = getComputedStyle(e);
+    return style.outlineStyle !== "none" && parseFloat(style.outlineWidth) >= 2;
+  })).toBe(true);
   await page.keyboard.press("Enter");
-  await expect(toggle).toHaveAttribute("aria-expanded", "true");
-  await expect(page.locator(".navbar-responsive-collapse")).toBeVisible();
-  await page.keyboard.press("Enter");
-  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(page).toHaveURL(/\/blog\/archives\/$/);
 });
 test("G categories and archives link all original posts", async ({ page }) => {
   await page.goto("/blog/archives/");
@@ -136,6 +110,9 @@ test.beforeAll(() => {
       path.join(synthetic, "source/_posts", `2025-01-0${i}-acceptance-${i}.md`),
       `---\nlayout: post\ntitle: Acceptance post ${i}\ndate: 2025-01-0${i} 12:00:00\ncategories: [New Category.v2]\n---\nSynthetic Markdown content **works**.\n`,
     );
+});
+test.afterAll(() => {
+  if (synthetic) fs.rmSync(synthetic, { recursive: true, force: true });
 });
 function syntheticBuild() {
   const result = cp.spawnSync(

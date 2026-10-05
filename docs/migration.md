@@ -1,5 +1,10 @@
 # Octopress to Jekyll migration
 
+This records the earlier migration and its validation. The subsequent
+[Tufte redesign](redesign.md) replaces the Flat UI stylesheet, toggle script,
+and historical pixel-comparison gate. CI still compares article content and
+publication interfaces against the frozen historical output.
+
 ## Frozen references
 
 - Historical generated `master`: `f956b53210bd3985408a766f431e5455c02e2459`.

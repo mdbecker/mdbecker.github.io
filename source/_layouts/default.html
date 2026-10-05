@@ -1,29 +1,18 @@
 {% assign root_url = site.baseurl %}
 {% include head.html %}
-<body {% if page.body_id %} id="{{ page.body_id }}" {% endif %} {% if page.sidebar == false %} class="no-sidebar" {% endif %} {% if page.sidebar == 'collapse' or site.sidebar == 'collapse' %} class="collapse-sidebar sidebar-footer" {% endif %}>
-  <div class="navbar navbar-inverse navbar-static-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <button type="button" class="btn btn-navbar" aria-controls="site-navigation" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="fui-menu-24"></span>
-        </button>
-        <div id="site-navigation" class="nav-collapse collapse navbar-responsive-collapse">
-          {% include navigation.html %}
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container" id="main">
-      <div class="row-fluid">
-        <div id="content">
-          {{ content }}
-        </div>
-      </div>
-      <div class="row-fluid">
-        <footer class="footer-page" role="contentinfo">
-          {% include footer.html %}
-        </footer>
-      </div>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="container">
+    <header class="site-header">
+      {% include navigation.html %}
+      {% include header.html %}
+    </header>
+    <main id="content" tabindex="-1">
+      {{ content }}
+    </main>
+    <footer class="footer-page" role="contentinfo">
+      {% include footer.html %}
+    </footer>
   </div>
   {% include after_footer.html %}
 </body>

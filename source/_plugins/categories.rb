@@ -6,9 +6,9 @@ class HistoricalCategories < Jekyll::Generator
   priority :high
 
   def generate(site)
-    # Octopress published lowercase, alphabetically ordered category labels.
+    # Keep historical lowercase category paths while retaining source order.
     site.posts.docs.each do |post|
-      post.data["categories"] = Array(post.data["categories"]).map { |category| category.to_s.downcase }.sort
+      post.data["categories"] = Array(post.data["categories"]).map { |category| category.to_s.downcase }
     end
 
     site.categories.each do |category, _posts|

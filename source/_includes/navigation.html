@@ -1,25 +1,27 @@
+<nav aria-label="Primary">
 {% include custom/navigation.html %}
-<ul class="nav pull-right">
+<ul class="social-links" aria-label="Profiles">
     {% if site.github_user %}
-    <li><a href="https://github.com/{{ site.github_user }}" title="Github Profile"><i class="i-gthb social-navbar"></i></a></li>
+    <li><a href="https://github.com/{{ site.github_user }}" aria-label="Github Profile"><i class="i-gthb social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
     {% if site.bitbucket_user %}
-    <li><a href="https://bitbucket.org/{{ site.bitbucket_user }}" title="BitBucket Profile"><i class="icon-bitbucket-sign social-navbar"></i></a></li>
+    <li><a href="https://bitbucket.org/{{ site.bitbucket_user }}" aria-label="BitBucket Profile"><i class="icon-bitbucket-sign social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
     {% if site.linkedin_user %}
-    <li><a href="https://linkedin.com/in/{{ site.linkedin_user }}" title="Linkedin Profile"><i class="i-lnkdn-sign social-navbar"></i></a></li>
+    <li><a href="https://linkedin.com/in/{{ site.linkedin_user }}" aria-label="Linkedin Profile"><i class="i-lnkdn-sign social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
     {% if site.twitter_user %}
-    <li><a href="https://twitter.com/{{ site.twitter_user }}" title="Twitter Profile"><i class="i-twttr-sign social-navbar"></i></a></li>
+    <li><a href="https://twitter.com/{{ site.twitter_user }}" aria-label="Twitter Profile"><i class="i-twttr-sign social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
     {% if site.facebook_user %}
-    <li><a href="https://facebook.com/{{ site.facebook_user }}" title="Facebook Profile"><i class="icon-facebook-sign social-navbar"></i></a></li>
+    <li><a href="https://facebook.com/{{ site.facebook_user }}" aria-label="Facebook Profile"><i class="icon-facebook-sign social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
     {% if site.flickr_user %}
-    <li><a href="https://flickr.com/photos/{{ site.flickr_user }}" title="Flickr Profile"><i class="icon-flickr social-navbar"></i></a></li>
+    <li><a href="https://flickr.com/photos/{{ site.flickr_user }}" aria-label="Flickr Profile"><i class="icon-flickr social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
 
     {% if site.email %}
-    <li><a href="mailto:{{ site.email }}" title="Email"><i class="icon-envelope social-navbar"></i></a></li>
+    <li><a href="mailto:{{ site.email }}" aria-label="Email"><i class="icon-envelope social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
 </ul>
+</nav>
