@@ -1,0 +1,11 @@
+{
+  "name": "beckerfuffle-acceptance",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:baseline": "BASELINE_CAPTURE=1 playwright test tests/visual.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

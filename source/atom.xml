@@ -1,5 +1,5 @@
 ---
-layout: nil
+layout: null
 ---
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
@@ -7,21 +7,21 @@ layout: nil
   <title><![CDATA[{{ site.title }}]]></title>
   <link href="{{ site.url }}/atom.xml" rel="self"/>
   <link href="{{ site.url }}/"/>
-  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <updated>{{ site.posts.first.date | date_to_xmlschema }}</updated>
   <id>{{ site.url }}/</id>
   <author>
     <name><![CDATA[{{ site.author | strip_html }}]]></name>
     {% if site.email %}<email><![CDATA[{{ site.email }}]]></email>{% endif %}
   </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+  <generator uri="https://jekyllrb.com/">Jekyll</generator>
 
   {% for post in site.posts limit: 20 %}
   <entry>
-    <title type="html"><![CDATA[{{ post.title | cdata_escape }}]]></title>
+    <title type="html"><![CDATA[{{ post.title | replace: "]]>", "]]]]><![CDATA[>" }}]]></title>
     <link href="{{ site.url }}{{ post.url }}"/>
     <updated>{{ post.date | date_to_xmlschema }}</updated>
     <id>{{ site.url }}{{ post.id }}</id>
-    <content type="html"><![CDATA[{{ post.content | expand_urls: site.url | cdata_escape }}]]></content>
+    <content type="html">{{ post.content | xml_escape }}</content>
   </entry>
   {% endfor %}
 </feed>

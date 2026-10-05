@@ -1,7 +1,7 @@
 {% capture category %}{{ post.categories | size }}{% endcapture %}
 <div class="row-fluid">
 	<div class="span1">
-		<h1 class="date-time"><time datetime="{{ post.date | datetime | date_to_xmlschema }}" pubdate>{{ post.date | date: "<span class='month'>%b</span> <span class='day'>%d</span><span class='year'><!--%Y--></span>"}}</time></h1>
+		<h1 class="date-time"><time datetime="{{ post.date | date_to_xmlschema }}" pubdate>{{ post.date | date: "<span class='month'>%b</span> <span class='day'>%d</span><span class='year'><!--%Y--></span>"}}</time></h1>
 	</div>
 	<div class="span10">
 		<h1><a href="{{ root_url }}{{ post.url }}">{{post.title}}</a></h1>
@@ -15,7 +15,7 @@
 		
 
 		<footer class="archive">
-		  <span class="categories">posted in {{ post.categories | category_links }}</span>
+		  <span class="categories">posted in {% assign categories = post.categories | sort %}{% for category in categories %}<a class='category' href='/{{ site.category_dir }}/{{ category | replace:' ','-' | replace:'.','-dot-' | downcase | slugify }}/'>{{ category | escape }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}</span>
 		</footer>
 		
 	</div>

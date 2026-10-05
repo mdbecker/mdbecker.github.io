@@ -6,9 +6,9 @@ layout: default
   {% if page.title %}
   <header>
     <div class="jumbotron">
-      {% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}
+      {{ page.display_title | default: page.title | escape }}
     </div>
-    {% if page.date %}<p class="meta">{% include post/date.html %}{{ time }}</p>{% endif %}
+    {% if page.date %}<p class="meta"><time datetime="{{ page.date | date_to_xmlschema }}" pubdate></time></p>{% endif %}
   </header>
   {% endif %}
   {{ content }}
@@ -19,17 +19,3 @@ layout: default
     <div id="disqus_thread" aria-live="polite">{% include post/disqus_thread.html %}</div>
   </section>
 {% endif %}
-
-{% comment %}
-  Sidebars need to be fixed
-
-{% unless page.sidebar == false %}
-<aside class="sidebar">
-  {% if site.page_asides.size %}
-    {% include_array page_asides %}
-  {% else %}
-    {% include_array default_asides %}
-  {% endif %}
-</aside>
-{% endunless %}
-{% endcomment %}

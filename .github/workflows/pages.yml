@@ -1,0 +1,63 @@
+name: Build, verify, and publish Pages
+
+on:
+  push:
+    branches: [source]
+  pull_request:
+    branches: [source]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HISTORICAL_SITE: ${{ github.workspace }}/historical-output
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3.12'
+          bundler-cache: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Extract frozen historical output
+        run: |
+          mkdir -p "$HISTORICAL_SITE"
+          git archive f956b53210bd3985408a766f431e5455c02e2459 | tar -x -C "$HISTORICAL_SITE"
+      - name: Capture historical screenshots on this runner
+        run: npm run test:baseline
+      - name: Build candidate
+        run: bundle exec jekyll build --trace
+      - name: Run all acceptance and visual checks
+        run: npm test
+      - uses: actions/upload-pages-artifact@v5
+        if: github.event_name == 'push' && github.ref == 'refs/heads/source'
+        with:
+          path: public/
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/source'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v5
+        id: deployment

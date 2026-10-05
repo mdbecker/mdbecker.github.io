@@ -8,20 +8,20 @@ footer: true
 ---
 # PyOhio 2015
 ## Data Science: It’s Easy as Py!
-{% youtube HIEoeEQRSAQ %}
+<div class="embed-video-container"><iframe src="https://www.youtube.com/embed/HIEoeEQRSAQ" allowfullscreen></iframe></div>
 
 # PyData NYC 2014
 ## Data Science: It’s Easy as Py!
-{% youtube wUhMmR1JgAw %}
+<div class="embed-video-container"><iframe src="https://www.youtube.com/embed/wUhMmR1JgAw" allowfullscreen></iframe></div>
 
 # PyCon 2014
 ## Realtime predictive analytics using scikit-learn & RabbitMQ
-{% youtube WPyNdHygBD0 %}
+<div class="embed-video-container"><iframe src="https://www.youtube.com/embed/WPyNdHygBD0" allowfullscreen></iframe></div>
 
 # PyData Boston 2013
 ## Intro to scikit-learn
-{% vimeo 72859487 %}
+<div class="embed-video-container"><iframe src="https://player.vimeo.com/video/72859487"></iframe></div>
 
 # Philly Tech Week 2013
 ## Data Processing with Mechanical Turk
-{% vimeo 64835046 %}
+<div class="embed-video-container"><iframe src="https://player.vimeo.com/video/64835046"></iframe></div>

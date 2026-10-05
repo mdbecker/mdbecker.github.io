@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Working with email content"
+display_title: "Working With Email Content"
 date: 2013-02-14 22:23
 comments: true
 categories: [Text Processing, Data Science, Natural Language Processing, Predictive Analysis, Machine Learning, Feature Extraction, Data Mining, Python, nltk, html]
