@@ -1,0 +1,19 @@
+services:
+  blog:
+    build: .
+    # The lockfile includes x86_64-linux; this also works on Apple Silicon.
+    platform: linux/amd64
+    init: true
+    ports:
+      - "127.0.0.1:4000:4000"
+    volumes:
+      - type: bind
+        source: .
+        target: /site
+        read_only: true
+    healthcheck:
+      test: ["CMD", "ruby", "-rnet/http", "-e", "exit(Net::HTTP.get_response(URI('http://127.0.0.1:4000/')).is_a?(Net::HTTPSuccess) ? 0 : 1)"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 3

@@ -4,7 +4,33 @@ A small Jekyll site preserving the original Flat UI blog, six articles, archives
 categories, and public URLs. Edit the `source` branch; `master` is the historical
 generated site retained for rollback. The GitHub default branch need not change.
 
-## Local setup
+## Local preview with Docker
+
+With Docker Desktop running, start the blog from the repository root:
+
+```sh
+docker compose up --build
+```
+
+Open <http://127.0.0.1:4000>. Edit posts, pages, layouts, or styles normally on
+your Mac; Jekyll polls the mounted files and rebuilds automatically without
+restarting the container. Refresh the browser to see the changes.
+
+Ruby and gems are installed in the image, and generated output stays in the
+container at `/tmp/public`. The repository is mounted read-only. No host Ruby
+or Node installation is needed. The image uses the lockfile's Linux platform,
+including on Apple Silicon; Docker caches dependencies between builds.
+
+Press Ctrl+C to stop, then `docker compose down` to remove the container.
+After changing gems or the lockfile, run `docker compose up --build` again.
+Changes to `_config.yml` or Ruby plugins require `docker compose restart blog`,
+as Jekyll loads those at startup. To run a one-off production build:
+
+```sh
+docker compose run --rm blog bundle _4.0.22_ exec jekyll build --destination /tmp/public
+```
+
+## Local setup without Docker
 
 Use Ruby **3.3.12**, Bundler **4.0.22**, and Node.js **24**. Install Ruby through
 your preferred version manager rather than macOS's system Ruby.
