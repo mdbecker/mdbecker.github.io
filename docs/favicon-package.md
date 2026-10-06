@@ -1,27 +1,19 @@
-# Beckerfuffle favicon package
+# Beckerfuffle favicon package (v2)
 
-Drop the files in this directory into the Jekyll site root (or adjust paths if you keep static assets elsewhere).
+This rebuild improves true favicon-size legibility.
 
-Then copy the contents of `HEAD_SNIPPET.html` into the site's shared `<head>` include/layout.
+## What changed
 
-Included:
-- `favicon.ico` — multi-resolution 16/32/48px browser fallback.
-- `favicon.svg` — scalable modern browser favicon using the exact generated artwork.
-- `favicon-16x16.png`, `favicon-32x32.png`, `favicon-48x48.png`, `favicon-96x96.png`.
-- `apple-touch-icon.png` — 180×180 Apple home-screen icon.
-- `android-chrome-192x192.png`, `android-chrome-512x512.png` — PWA/Android "any" icons.
-- `maskable-icon-192x192.png`, `maskable-icon-512x512.png` — full-background PWA maskable icons with safe padding.
-- `safari-pinned-tab.svg` — monochrome legacy Safari pinned-tab mask.
-- `mstile-150x150.png` + `browserconfig.xml` — legacy Microsoft tile support.
-- `site.webmanifest` — modern web-app icon manifest.
-- `favicon-master.png` — 1024×1024 master for future regeneration.
+- Small favicon assets (`favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `favicon-48x48.png`, `favicon-96x96.png`, `favicon.svg`) now use a **purpose-built micro mark**:
+  - full orange rounded-square tile
+  - large cream serif **B**
+  - **no underline**
+  - minimal padding
 
-Theme colors:
-- Paper/background: `#FFFFF8`
-- Brand orange: `#B34A16`
-- Deep teal accent: approximately `#245D67`
+- Larger icons (`apple-touch-icon.png`, `android-chrome-*.png`, `maskable-icon-*.png`, `mstile-150x150.png`) keep the richer, more editorial original icon, but it is scaled larger within the canvas than before.
 
-Notes:
-- The ordinary favicon files preserve transparent space around the generated rounded tile.
-- Apple/PWA icons use a full warm-paper background so platforms do not substitute an unexpected background color.
-- Maskable variants keep the important mark inside a conservative safe zone so circular/squircle OS masks should not clip it.
+- `favicon.svg` is now a **true vector favicon**, not an embedded PNG.
+
+## Install
+
+Drop these files into your site root (or adjust paths), then paste `HEAD_SNIPPET.html` into your shared `<head>` include/layout.

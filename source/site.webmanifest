@@ -1,6 +1,9 @@
 {
   "name": "Beckerfuffle",
   "short_name": "Beckerfuffle",
+  "theme_color": "#FFFFF8",
+  "background_color": "#FFFFF8",
+  "display": "standalone",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -26,8 +29,5 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ],
-  "theme_color": "#FFFFF8",
-  "background_color": "#FFFFF8",
-  "display": "standalone"
+  ]
 }
