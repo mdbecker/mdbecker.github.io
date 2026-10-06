@@ -127,18 +127,14 @@ test("historical headings have stable permalinks and threshold TOCs", async ({
     for (const id of ids) {
       const heading = page.locator(`[id="${id}"]`);
       const permalink = heading.locator("a.anchor");
-      if (await permalink.count()) {
-        await expect(permalink).toHaveAttribute("href", "#" + id);
-        expect(await permalink.textContent()).not.toBe("#");
-      } else {
-        await expect(heading.locator("a")).not.toHaveCount(0);
-      }
+      await expect(permalink).toHaveAttribute("href", "#" + id);
+      await expect(permalink.locator("svg")).toHaveCount(1);
+      await expect(permalink).toHaveText("");
       await expect(heading.locator("a a")).toHaveCount(0);
-      const link = heading.locator("a").first();
-      if (await link.isVisible()) {
-        await link.hover();
-        expect(await link.evaluate(e => getComputedStyle(e).textDecorationLine)).toBe("underline");
-      }
+      await heading.hover();
+      await expect(permalink).toHaveCSS("opacity", "1");
+      await permalink.focus();
+      await expect(permalink).toHaveCSS("opacity", "1");
     }
     for (const href of await page
       .locator(".toc a")
