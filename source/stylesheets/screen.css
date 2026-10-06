@@ -205,9 +205,8 @@ button:focus-visible { outline: 2px solid var(--link-active); outline-offset: 4p
 .talk-entry { border-top: 1px solid var(--rule); padding-top: var(--space); margin-top: var(--space-section); scroll-margin-top: 1rem; }
 .talk-entry h2 { margin-top: 0; }
 .talk-links { display: flex; flex-wrap: wrap; gap: 1rem; }
-.article-body :is(h2,h3) { position: relative; scroll-margin-top: 1.25rem; }
-.article-body a.anchor { position: absolute; inset-inline-start: -.75em; opacity: 0; font-size: .8em; color: var(--link); }
-.article-body :is(h2,h3):hover a.anchor, .article-body a.anchor:focus-visible { opacity: 1; }
+.article-body :is(h2,h3) { scroll-margin-top: 1.25rem; }
+.article-body :is(h2,h3) a:hover, .article-body :is(h2,h3) a:focus-visible { text-decoration: underline; }
 .toc { font-size: 1rem; border-block: 1px solid var(--rule); padding-block: 1rem; margin-block: 1.25rem; }
 .toc h2 { font-size: 1.1rem; margin: 0 0 .5rem; }
 .toc ul { margin-bottom: 0; }
@@ -219,5 +218,5 @@ button:focus-visible { outline: 2px solid var(--link-active); outline-offset: 4p
 }
 @media print {
   :root, :root[data-theme], :root:not([data-theme="light"]) { color-scheme: light; --paper: #fff; --ink: #000; --link: #245d67; --link-active: #173f46; --muted: #60676b; --code: #f3f2ea; --rule: #deded6; --syntax-keyword: #704326; --syntax-number: #694567; }
-  .toc, .anchor, #theme-toggle { display: none; }
+  .toc, #theme-toggle { display: none; }
 }

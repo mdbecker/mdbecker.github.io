@@ -26,7 +26,7 @@
   {% assign contents = reading_content | toc_only %}
   {% assign heading_count = contents | split: '<li class="toc-entry' | size | minus: 1 %}
   {% assign reading_content = reading_content | inject_anchors %}
-  {% comment %}jekyll-toc 0.19 emits decorative anchors. Give each its native keyboard-accessible name using the normalized heading text.{% endcomment %}
+  {% comment %}Replace decorative anchors with linked heading text. Preserve existing heading links without nesting anchors.{% endcomment %}
   {% assign sections = reading_content | split: '<h' %}
   {% for section in sections offset:1 %}
     {% assign level = section | slice: 0, 1 %}
@@ -40,8 +40,15 @@
         {% assign contents = contents | replace: empty_link, named_link %}
       {% endif %}
       {% capture old_anchor %}<a class="anchor" href="#{{ heading_id }}" aria-hidden="true"><span class="octicon octicon-link"></span></a>{% endcapture %}
-      {% capture new_anchor %}<a class="anchor" href="#{{ heading_id }}" aria-label="Link to {{ heading_text }}"><span aria-hidden="true">#</span></a>{% endcapture %}
-      {% assign reading_content = reading_content | replace: old_anchor, new_anchor %}
+      {% assign opening = section | split: '>' | first | append: '>' %}
+      {% assign heading_markup = section | split: '</h' | first | remove_first: opening | remove_first: old_anchor %}
+      {% if heading_markup contains '<a ' %}
+        {% assign reading_content = reading_content | replace: old_anchor, '' %}
+      {% else %}
+        {% capture old_heading %}<h{{ section | split: '</h' | first }}</h{{ level }}>{% endcapture %}
+        {% capture new_heading %}<h{{ opening }}<a class="anchor" href="#{{ heading_id }}" aria-label="Link to {{ heading_text }}">{{ heading_markup | strip }}</a></h{{ level }}>{% endcapture %}
+        {% assign reading_content = reading_content | replace: old_heading, new_heading %}
+      {% endif %}
     {% endif %}
   {% endfor %}
 {% endif %}
