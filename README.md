@@ -93,7 +93,7 @@ excerpts, stripped of HTML and ending at natural sentence boundaries; existing
 pagination remains. Historical posts provide short introductions using native
 front-matter `excerpt` fields, without changing their full article bodies.
 Articles show a title, date, and the first three source-order categories.
-Historical Markdown, links, permalinks, feeds, and Disqus identifiers remain intact.
+Historical Markdown, links, permalinks, and feeds remain intact.
 
 `source/stylesheets/screen.css` contains the shared design and a small set of
 CSS variables: paper `#FFFFF8`, text `#1B2430`, links `#245D67` (hover/focus
@@ -125,7 +125,11 @@ the homepage intentionally uses excerpts as required by the redesign PRD.
 
 ## Verify changes
 
-Tests compare content and publication behavior with the frozen historical output:
+Tests compare content and publication behavior with the frozen historical output.
+Run these commands only inside a Docker test workspace with Ruby, Bundler, Node,
+locked npm dependencies, and Playwright Chromium available; install nothing on
+the host. Copy the read-only repository mount to a writable container workspace
+for dependencies, generated output, synthetic fixtures, and reports:
 
 ```sh
 export HISTORICAL_SITE=/tmp/beckerfuffle-historical
@@ -167,7 +171,7 @@ No generated-output branch or committed HTML is required. Pages must use
 must authorize `main`. Keep **beckerfuffle.com** in repository Pages settings
 and enable HTTPS; `source/CNAME` alone does not configure an Actions custom
 domain. Local tests cannot verify deployment authorization, DNS, certificates,
-or existing Disqus associations.
+or real GitHub Discussion creation and OAuth.
 
 Follow the ordered [owner migration checklist](docs/migration.md#owner-checklist-consolidate-publishing-onto-main)
 for archival tags, creating and pushing `main`, repository settings, production
@@ -188,8 +192,28 @@ when changing Ruby, and review current-design screenshots when updating Playwrig
 Ruby 3.3 is in security maintenance through March 2027;
 schedule a tested move to a supported newer Ruby before then.
 
-The shared CSS replaces the original compiled theme. Disqus remains the approved
-external script, with historical HTTP identifiers and HTTPS embed/page URLs.
+The shared CSS replaces the original compiled theme. The only approved external
+comment script is `https://giscus.app/client.js`.
+
+## Comments
+
+Comments use Giscus and GitHub Discussions in `mdbecker/mdbecker.github.io`,
+with a GitHub account required to comment. Set `comments: true` in post or page
+front matter to enable them. There is no comments server or database.
+The single `source/_includes/giscus.html` embed uses strict permanent-pathname
+mapping, the Comments category, reactions, lazy loading, and the standard light
+theme. It emits no discussion metadata.
+
+The `giscus.repo_id` and `giscus.category_id` values in `_config.yml` are public
+identifiers, not secrets. They are intentionally blank until owner setup;
+missing either suppresses the entire Comments section. Local preview works
+without configuring Giscus. All normal development and testing remain Docker-based.
+Repository-root `giscus.json` restricts origins to production and the two normal
+local-preview addresses; it is not copied into the generated site.
+
+Before activation, optionally archive historical Disqus comments outside this
+public repository. Comments were not imported. Follow the
+[owner setup steps](docs/migration.md#giscus-owner-activation) before deploying.
 
 See [migration notes](docs/migration.md) for the earlier compatibility decisions
 and remaining production release checks.

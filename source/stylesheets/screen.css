@@ -163,7 +163,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin-block: var(--space); }
   img.left, img.right { float: none; margin-inline: 0; }
 }
 @media print {
-  .site-header nav, .post-footer, #disqus_thread { display: none; }
+  .site-header nav, .post-footer, .comments { display: none; }
   body { background: white; color: black; }
   .container { max-width: none; }
   pre, table { white-space: pre-wrap; overflow-wrap: anywhere; }

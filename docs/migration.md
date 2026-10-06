@@ -37,10 +37,8 @@ Retired third-party widgets and external dynamic regions have documented masks
 in `tests/fixtures/visual-exceptions.md`; other changes must pass comparison.
 
 All six articles and historical public URLs remain. The Elephant article's
-front-matter date is May 21, 2013, despite the old source filename. Historical
-Disqus identifiers remain `http://beckerfuffle.com{post_url}` so the HTTPS
-migration does not create new discussion identities. Canonical URLs, feeds,
-fonts, and Disqus requests use HTTPS.
+front-matter date is May 21, 2013, despite the old source filename. The original migration retained historical Disqus identities; the later Giscus
+replacement below retires that integration. Canonical URLs, feeds, and fonts use HTTPS.
 
 Acceptance test source was written before production migration. The 14 offline
 scenarios were observed failing against the absent modern candidate; production
@@ -267,7 +265,7 @@ After the Actions run finishes, check all of the following manually:
 - CSS, self-hosted fonts, images, and other local resources load successfully.
 - Desktop and mobile layouts, navigation, keyboard access, and code overflow
   work as expected.
-- Existing Disqus threads retain their original comments and associations.
+- After Giscus activation, GitHub sign-in, comment creation, and pathname association work.
 - Browser console and network panels show no unexpected errors.
 
 Previous DNS and certificate issues are separate operational concerns; the
@@ -348,6 +346,98 @@ Only the workflow, Dependabot configuration, existing branch assertions, README,
 and this migration document changed. Templates, content, CSS, plugins, domain,
 Jekyll configuration, runtime dependencies, and normal Docker preview files
 remain untouched. Actual GitHub event handling and deployment authorization,
-custom-domain/DNS/HTTPS operation, and live Disqus associations remain unverified
+custom-domain/DNS/HTTPS operation, and real GitHub Discussion creation and OAuth remain unverified
 until the owner completes the manual release checklist. Local workflow checks
 inspect configuration and guards; they do not simulate or prove a real deployment.
+
+## Giscus replacement (October 5, 2026)
+
+Disqus was retired from runtime templates and configuration and replaced by one
+standard Giscus embed. Historical comments were not imported. The owner may
+export/retain Disqus data separately as an archive; no export has been performed
+or added to this public repository. Article bodies and permanent URLs remain
+unchanged. Discussions map by pathname with strict matching in the Comments
+category. Giscus IDs are public identifiers, intentionally blank at handoff;
+no Comments section renders until all four configuration values are present.
+
+Builds, dependency installation, Chromium setup, and verification ran exclusively
+inside a disposable Docker container with Ruby 3.3.12, Bundler 4.0.22, Node
+24.21.0, locked npm dependencies, and Playwright Chromium. The repository was
+mounted read-only and copied to a writable container workspace. The normal
+Docker image and Compose setup were not expanded or changed.
+
+### Giscus owner activation
+
+These steps are manual owner actions; implementation did not change GitHub,
+Disqus, Pages, DNS, or production settings.
+
+1. Before production cutover, if historical comments matter, sign in to Disqus
+   Admin, export the site's comments/data, and store the archive outside the
+   public repository. Do not add it to Git; it is not a runtime component.
+2. In `mdbecker/mdbecker.github.io`, open **Settings → General → Features** and
+   enable **Discussions**.
+3. In Discussions categories, create **Comments** with type **Announcements**.
+   Reserve it for blog comments.
+4. [Install the Giscus GitHub App](https://github.com/apps/giscus), granting access
+   only to `mdbecker/mdbecker.github.io`.
+5. Open [giscus.app](https://giscus.app). Select that repository, pathname mapping,
+   strict matching, Comments, and **Only search for discussions in this category**.
+   Enable reactions and lazy loading; disable metadata emission; select bottom
+   input position, light theme, and English. Copy only the repository and category
+   IDs into `giscus.repo_id` and `giscus.category_id` in `_config.yml`; do not
+   replace the existing embed with a generated script. These values are public.
+6. Rebuild and run the complete suite inside Docker using the existing Docker
+   testing instructions. Inspect a comment-enabled article's generated markup
+   for the real IDs and absence of Disqus. Local preview requires no Giscus IDs
+   before this step and uses the allowed port 4000 origins.
+7. Review the full diff and repository status, commit the reviewed changes, and
+   push to `main` or use the normal PR process. Let GitHub Actions build, test,
+   and deploy. No developer push or deployment was performed for this migration.
+8. After deployment, verify a historical article reads normally and loads the
+   Comments section without console errors. Sign in through GitHub, submit a
+   comment, and confirm a Discussion appears in Comments. Reopen the same path
+   and check the same discussion; verify reactions and a second article's distinct
+   discussion. Confirm disabled pages load no comment script, no Disqus requests,
+   advertisements, or tracking UI appear, HTTPS is valid, and article content and
+   layout are unchanged.
+
+Local tests inspect markup and block external requests. They do not establish
+real Discussion creation, OAuth, app permissions, or production operation.
+
+### Giscus local verification
+
+The temporary A–J suite and durable comment/security assertions were written
+before production changes. Expected missing-embed, Disqus-runtime, and fallback
+failures were observed before implementation; preservation was already GREEN
+and was not forced to fail. Initial test setup needed Chromium libraries, an
+explicit historical-output path, corrected synthetic page URLs, an uncontaminated
+baseline build, and a corrected JavaScript-disabled text assertion. Those setup
+failures are not migration RED evidence. The final corrected baseline replay,
+against an isolated copy of the unchanged pre-migration `main` source, ran after
+implementation and reported **12 expected failures, 109 passes, one skipped**:
+nine migration behaviors and three durable comment/security checks failed;
+content preservation and unrelated existing checks passed.
+
+The corrected complete GREEN run passed **121 checks**, including all ten
+temporary scenarios, with the opt-in production smoke check skipped. Output
+comparison covered every pre-change HTML, XML, and CSS file, normalizing only
+comment sections, retired embed/count scripts, the print selector, and whitespace.
+It found no unrelated output changes. The owner's subsequent About-page removal
+of the donation text/link is included separately in the final combined working
+tree; the migration itself does not edit article content.
+
+After GREEN, retired includes and the temporary BDD suite were deleted. Durable
+tests retain configured and unconfigured coverage, all four missing settings,
+post/page opt-in, disabled/unspecified/string-valued front matter, embed settings,
+the exact external-script allowlist, and allowed origins. Fake IDs exist only in
+durable synthetic tests and their temporary container workspaces, never in
+production configuration. No one-time test infrastructure remains in the repository.
+
+The surviving complete suite passed **111 checks**, with the opt-in production
+smoke check skipped, after cleanup against the combined working tree including
+the owner's About-page edit. The unchanged normal Docker Compose setup also
+built successfully. Active source/configuration contain no Disqus references;
+Docker diff and workspace comparisons passed. The disposable test container,
+generated output, overrides, reports, and task-created temporary files were
+removed after verification. The reviewed implementation and owner content edit
+were committed locally on `main` at the owner's request; nothing was pushed.

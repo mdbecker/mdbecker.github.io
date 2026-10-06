@@ -10,9 +10,4 @@ layout: default
   {% endif %}
   {% include article_content.html %}
 </article>
-{% if site.disqus_short_name and page.comments == true %}
-  <section aria-label="Comments">
-    <h2>Comments</h2>
-    <div id="disqus_thread" aria-live="polite">{% include post/disqus_thread.html %}</div>
-  </section>
-{% endif %}
+{% include giscus.html %}

@@ -37,5 +37,8 @@ navigation:
 github_user: mdbecker
 linkedin_user: mdbecker
 twitter_user: beckerfuffle
-disqus_short_name: beckerfuffle
-disqus_show_comment_count: true
+giscus:
+  repo: mdbecker/mdbecker.github.io
+  repo_id: ""
+  category: Comments
+  category_id: ""

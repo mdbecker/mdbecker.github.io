@@ -32,7 +32,7 @@ for (const [name, width, height] of [
           path: path.join(process.env.CANDIDATE_CAPTURE_DIR, file),
           fullPage: true,
           animations: "disabled",
-          mask: [page.locator("#disqus_thread"), page.locator("iframe")],
+          mask: [page.locator(".giscus"), page.locator("iframe")],
         });
       }
     });

@@ -179,15 +179,54 @@ test("J valid Atom and sitemap with HTTPS post URLs", async ({
         expect(xml).toContain("https://beckerfuffle.com" + post);
   }
 });
-test("K Disqus HTTP identifiers and HTTPS embed remain", async ({
-  request,
-}) => {
-  for (const post of posts) {
-    const html = await (await request.get(post)).text();
-    expect(html).toContain("http://beckerfuffle.com" + post);
-    expect(html).toMatch(/https:\/\/[^"'\s]*disqus\.com\/embed\.js/);
-    expect(html).toContain("disqus_thread");
+test("K Comment-enabled pages use the configured Giscus discussion mapping", async ({ page }) => {
+  const config = JSON.parse(cp.execFileSync('ruby', ['-ryaml', '-rjson', '-e', 'puts YAML.load_file("_config.yml")["giscus"].to_json'], {encoding:'utf8'}));
+  expect(config).toBeTruthy();
+  for (const route of routes) {
+    await page.goto(route);
+    const enabled = posts.includes(route) && config.repo && config.repo_id && config.category && config.category_id;
+    const script = page.locator('script[src="https://giscus.app/client.js"]');
+    await expect(script).toHaveCount(enabled ? 1 : 0);
+    await expect(page.getByRole('region', {name:'Comments', exact:true})).toHaveCount(enabled ? 1 : 0);
+    expect(await page.content()).not.toMatch(/disqus/i);
+    if (enabled) {
+      for (const [key,value] of Object.entries({repo:config.repo,'repo-id':config.repo_id,category:config.category,'category-id':config.category_id,mapping:'pathname',strict:'1','reactions-enabled':'1','emit-metadata':'0','input-position':'bottom',theme:'light',lang:'en',loading:'lazy'}))
+        await expect(script).toHaveAttribute('data-'+key,value);
+      await expect(script).toHaveAttribute('crossorigin','anonymous');
+      await expect(script).toHaveAttribute('async','');
+    }
   }
+});
+test("K configured comments honor explicit opt-in and fail safely for missing settings", async ({ page }) => {
+  const override = path.join(synthetic, "giscus.yml");
+  const config = {repo: "mdbecker/mdbecker.github.io", repo_id: "TEST_REPO_ID", category: "Comments", category_id: "TEST_CATEGORY_ID"};
+  for (const [name, comments] of [["enabled", "true"], ["disabled", "false"], ["unspecified", null], ["string", '"true"']])
+    fs.writeFileSync(path.join(synthetic, "source", name + ".md"), `---\nlayout: page\ntitle: ${name}\npermalink: /${name}/\n${comments === null ? "" : "comments: " + comments + "\n"}---\nReadable page.\n`);
+  for (const missing of [null, "repo", "repo_id", "category", "category_id"]) {
+    const values = {...config};
+    if (missing) values[missing] = "";
+    fs.writeFileSync(override, JSON.stringify({giscus: values}));
+    const result = cp.spawnSync("bundle", ["exec", "jekyll", "build", "--config", path.resolve("_config.yml") + "," + override, "--source", path.join(synthetic, "source"), "--destination", path.join(synthetic, "configured")], {encoding: "utf8"});
+    expect(result.status, result.stdout + result.stderr).toBe(0);
+    for (const route of [...posts, "/enabled/", "/disabled/", "/unspecified/", "/string/"]) {
+      const html = read(path.join(synthetic, "configured", route, "index.html"));
+      expect(html).not.toMatch(/disqus/i);
+      await page.setContent(html);
+      const enabled = !missing && (posts.includes(route) || route === "/enabled/");
+      const script = page.locator('script[src="https://giscus.app/client.js"]');
+      await expect(script).toHaveCount(enabled ? 1 : 0);
+      await expect(page.getByRole("region", {name: "Comments", exact: true})).toHaveCount(enabled ? 1 : 0);
+      if (enabled) {
+        for (const [key, value] of Object.entries({repo:config.repo, "repo-id":config.repo_id, category:config.category, "category-id":config.category_id, mapping:"pathname", strict:"1", "reactions-enabled":"1", "emit-metadata":"0", "input-position":"bottom", theme:"light", lang:"en", loading:"lazy"}))
+          await expect(script).toHaveAttribute("data-" + key, value);
+        await expect(script).toHaveAttribute("crossorigin", "anonymous");
+        await expect(script).toHaveAttribute("async", "");
+        expect(html).toContain("Comments require JavaScript and a GitHub account.");
+      }
+    }
+  }
+  expect(JSON.parse(read("giscus.json"))).toEqual({origins:["https://beckerfuffle.com", "http://127.0.0.1:4000", "http://localhost:4000"]});
+  expect(fs.existsSync("public/giscus.json")).toBe(false);
 });
 test("L active scripts secure and only approved external integration", async ({
   page,
@@ -199,11 +238,11 @@ test("L active scripts secure and only approved external integration", async ({
       .evaluateAll((es) => es.map((e) => e.getAttribute("src")));
     for (const src of scripts) {
       expect(src).not.toMatch(
-        /jquery|bootstrap|modernizr|addthis|aweber|google-analytics|jwplayer|swf|twitter/i,
+        /jquery|bootstrap|modernizr|addthis|aweber|google-analytics|jwplayer|swf|twitter|disqus/i,
       );
       expect(src).not.toMatch(/^http:/);
       if (/^https?:|^\/\//.test(src))
-        expect(src).toMatch(/^https:\/\/[^/]*disqus\.com\//);
+        expect(src).toBe("https://giscus.app/client.js");
     }
   }
 });
@@ -264,7 +303,7 @@ test("O publishing preserves domain and validates Pages artifact", () => {
 test("O external production HTTPS route smoke test", async ({ request }) => {
   test.skip(
     !process.env.VERIFY_PRODUCTION,
-    "UNVERIFIED: approved Pages cutover and live HTTPS routes require explicit verification; historical Disqus association remains a manual release gate.",
+    "UNVERIFIED: approved Pages cutover and live HTTPS routes require explicit verification; GitHub Discussion creation and OAuth remain manual release gates.",
   );
   for (const route of routes)
     expect(
