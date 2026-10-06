@@ -24,13 +24,27 @@ No host Ruby, Node, gems, browser, or package installation is needed.
 docker compose run --rm blog bundle exec jekyll build --destination /tmp/public
 ```
 
-## Profile and pages
+## Homepage Markdown and pages
 
-Edit `source/_data/profile.yml` for the homepage biography, current role, focus,
-selected work, and side quests. The combined About homepage uses small content
-includes. Exactly three selected work entries are displayed; keep descriptions
-short and team credit accurate. Experiments without verified public links use
-plain text. Review professional/personal statements before publishing.
+Edit content fragments under `source/_includes/home/`:
+
+| Section | Markdown file |
+| --- | --- |
+| Biography, role, introduction | `intro.md` |
+| Current focus | `now.md` |
+| Selected work | `selected-work.md` |
+| Selected talks introduction | `talks-intro.md` |
+| Side projects | `side-quests.md` |
+
+Edit paragraphs directly; use `[link text](https://example.org)`, `**bold**`,
+`*emphasis*`, and Markdown lists normally. Change work descriptions below their
+list headings and update side quests in their existing list. The Kramdown
+`{: .editorial-list}` annotation preserves the restrained list presentation.
+These fragments do not need front matter. Featured talks still come from the
+Talks collection, so their titles and metadata are maintained only once.
+
+The homepage remains an HTML file because the existing Jekyll pagination plugin
+requires an HTML index. Its editable prose is stored in Markdown includes.
 
 `source/index.html` is the combined About/personal homepage with `seo.type: Person`.
 `source/about/index.markdown` preserves the old URL with a static refresh redirect
@@ -41,14 +55,13 @@ personal sections; later pages show writing without repeating the biography.
 
 ## Add a talk
 
-Create `source/_talks/event-year.md` with YAML front matter:
+Create `source/_talks/event-year.md` with structured front matter and a Markdown body:
 
-```yaml
+```markdown
 ---
 title: A descriptive talk title
 event: Conference name
 year: 2026
-description: A short abstract in one to three sentences.
 featured: false
 order: 1
 # Optional, only when verified:
@@ -59,14 +72,21 @@ order: 1
 # repository: https://github.com/owner/project
 # tags: [Python, Machine Learning]
 ---
+
+A brief **Markdown** abstract.
+
+Additional paragraphs and [links](https://example.org) work normally.
 ```
 
-Required fields are `title`, `event`, `year`, `description`, `featured`, and
+Required fields are `title`, `event`, `year`, `featured`, and
 `order`. Give every talk a **unique integer order**, newest first; renumber
 existing entries when inserting a talk. Use `year` without an exact date when
 only the year is known. Jekyll's default document build date is never displayed
 as an event date. Tags may be stored for maintenance; the current presentation
 omits them to keep the list quiet.
+
+Written descriptions belong below the closing `---`; metadata belongs inside
+the front matter above it. Paragraphs, links, emphasis, and lists are supported.
 
 Talks are an `output: false` collection rendered on `/talks/` through one include.
 The filename supplies the stable anchor: `pycon-2014.md` becomes
@@ -173,7 +193,7 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
     ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 RUN mkdir /test-tools && cd /test-tools && \
     npm install @playwright/test@1.63.0 && \
-    npx playwright install --with-deps chromium
+    npx playwright install --with-deps chromium firefox
 DOCKER
 
 docker run --rm --platform linux/amd64 \
@@ -190,7 +210,7 @@ On Apple Silicon, add `--platform linux/amd64` to the test image build too.
 Dependencies, generated output, fixtures, and test reports stay inside the
 container. The surviving suite covers historical content/routes, feeds, sitemap,
 comments, deployment guards, themes, metadata/assets, heading anchors/TOCs,
-shared profile data, talks, pagination, contrast, and responsive behavior.
+Markdown content, talks, pagination, contrast, and responsive behavior.
 External services are blocked deterministically. The production test is opt-in
 with `VERIFY_PRODUCTION=1`; local success does not verify the live site.
 
@@ -204,9 +224,33 @@ approve a changed baseline or mask reading content. Historical screenshots of
 the retired theme are archival references. Remove disposable containers and
 unneeded captures explicitly; never use global Docker pruning.
 
+## Enlarged text and Android review
+
+`tests/content-header.spec.js` runs Chromium and Firefox in Docker at 320, 360,
+375, 390, 430, 768, and 1440 CSS pixels, with default, 150%, and 200% root text
+sizes in light/dark themes. It checks grouping, clipping, overlap, 44px minimum
+targets, focus, keyboard order, and theme persistence. Narrower effective CSS
+viewports complement text-only enlargement by modeling full-zoom reflow.
+They do not reproduce every browser zoom or Android text-inflation behavior.
+
+For manual desktop review, try browser zoom at 150% and 200%, then increase the
+browser's default font size separately. At narrow widths the navigation and
+utilities occupy separate rows; further wrapping is allowed at extreme sizes.
+The wordmark may wrap, but all controls should remain visible and usable.
+
+On the affected Android device, review Firefox and Chrome at normal and enlarged
+system accessibility text/display sizes (including 200% where available).
+Open the homepage, Talks, archive, and a code/TOC article in both themes. Check
+that labels and branding remain readable, controls do not overlap, no page-wide
+horizontal scrolling occurs, and theme choice survives reload. Scroll code
+blocks within their own area. Desktop automation cannot fully simulate Android
+system scaling or Firefox text inflation; this device review remains an owner
+release-acceptance step. The local preview binds to loopback; use your normal
+secure device-to-localhost forwarding method to inspect it on Android.
+
 ## Release and compatibility
 
-Review local changes and profile/talk copy, icons/social artwork, both themes,
+Review local changes and homepage/talk copy, icons/social artwork, both themes,
 mobile navigation, TOCs, and screenshots. Run the full Docker suite. Commit the
 reviewed files locally, then push through the owner's normal `main`/PR workflow.
 Nothing in the local preview deploys the site.
@@ -220,7 +264,9 @@ manual production checks. Roll back with an ordinary Git revert through the
 existing workflow; preserve Git history.
 
 See [MVP verification](docs/mvp.md), [redesign verification](docs/redesign.md),
-and [migration notes](docs/migration.md) for compatibility and owner setup.
+[migration notes](docs/migration.md), and
+[content/accessibility verification](docs/content-accessibility.md) for compatibility,
+verification evidence, and owner setup.
 
 ## Comments and licensing
 

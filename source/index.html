@@ -5,11 +5,14 @@ seo:
   type: Person
 ---
 {% if paginator.page == 1 %}
-<h1>{{ site.data.profile.name | escape }}</h1>
-{% include profile.html %}
-<section class="home-section"><h2>Now</h2><p>{{ site.data.profile.now | escape }}</p><p>{{ site.data.profile.now_community | escape }}</p></section>
-<section class="home-section" id="selected-work"><h2>Selected work</h2>{% include selected_work.html %}</section>
-<section class="home-section" id="selected-talks"><h2>Selected talks</h2><p>I share what I learn through technical talks and community events. Topics include Python, real-time predictive analytics, healthcare data science, and open-source collaboration. Here are a few of my talks.</p><ul class="editorial-list">
+{% capture intro_md %}{% include home/intro.md %}{% endcapture %}
+{{ intro_md | markdownify }}
+<section class="home-section">{% capture now_md %}{% include home/now.md %}{% endcapture %}
+{{ now_md | markdownify }}</section>
+<section class="home-section" id="selected-work">{% capture selected_work_md %}{% include home/selected-work.md %}{% endcapture %}
+{{ selected_work_md | markdownify }}</section>
+<section class="home-section" id="selected-talks">{% capture talks_intro_md %}{% include home/talks-intro.md %}{% endcapture %}
+{{ talks_intro_md | markdownify }}<ul class="editorial-list">
 {% assign featured = site.talks | where: 'featured', true | sort: 'order' %}
 {% for talk in featured limit:3 %}{% include talk.html talk=talk selected=true %}{% endfor %}
 </ul><p><a href="{{ '/talks/' | relative_url }}">All talks &rarr;</a></p></section>
@@ -34,4 +37,5 @@ seo:
 </nav>
 </div><p><a href="{{ '/blog/archives/' | relative_url }}">Explore the writing archive &rarr;</a></p>
 </section>
-{% if paginator.page == 1 %}<section class="home-section"><h2>Side quests</h2>{% include side_quests.html %}</section>{% endif %}
+{% if paginator.page == 1 %}<section class="home-section">{% capture side_quests_md %}{% include home/side-quests.md %}{% endcapture %}
+{{ side_quests_md | markdownify }}</section>{% endif %}

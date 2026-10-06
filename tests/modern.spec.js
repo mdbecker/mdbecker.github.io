@@ -144,7 +144,7 @@ test("historical headings have stable permalinks and threshold TOCs", async ({
       ).toHaveCount(1);
   }
 });
-test("home, shared biography, ordered talks and featured selection", async ({
+test("home, canonical biography, ordered talks and featured selection", async ({
   page,
 }) => {
   await page.goto("/");
@@ -161,9 +161,12 @@ test("home, shared biography, ordered talks and featured selection", async ({
     ).toBeVisible();
   await expect(page.locator("#selected-work li")).toHaveCount(3);
   await expect(page.locator("#selected-talks li")).toHaveCount(3);
-  const intro = await page.locator(".profile-intro").textContent();
+  expect(await page.locator("#selected-talks h3 a").evaluateAll(es => es.map(e => e.getAttribute("href")))).toEqual([
+    "/talks/#ete-2021", "/talks/#pydata-nyc-2018", "/talks/#pycon-2014",
+  ]);
+  const intro = await page.locator("main > p").first().textContent();
   await page.goto("/about/");
-  await expect(page.locator(".profile-intro")).toHaveText(intro);
+  await expect(page.locator("main > p").first()).toHaveText(intro);
   expect(
     JSON.parse(
       await page.locator('script[type="application/ld+json"]').textContent(),
@@ -183,8 +186,9 @@ test("home, shared biography, ordered talks and featured selection", async ({
     "philly-tech-week-2013",
   ]);
   await expect(page.locator("iframe,video")).toHaveCount(0);
+
 });
-test("new writing, shared profile edits, opt-out, repeated headings and pagination", () => {
+test("new writing, Markdown edits, opt-out, repeated headings and pagination", () => {
   const tmp = fs.mkdtempSync("/tmp/beckerfuffle-modern-");
   try {
     fs.cpSync("source", path.join(tmp, "source"), { recursive: true });
@@ -193,8 +197,8 @@ test("new writing, shared profile edits, opt-out, repeated headings and paginati
         path.join(tmp, "source/_posts", `2026-01-0${i}-modern-${i}.md`),
         `---\nlayout: post\ntitle: Modern ${i}\ndate: 2026-01-0${i}\ntoc: ${i === 1 ? "false" : "true"}\n---\n## Repeat\nA\n## Repeat\nB\n### Last\nC\n`,
       );
-    const profile = path.join(tmp, "source/_data/profile.yml");
-    fs.appendFileSync(profile, "\nintro: Shared profile regression.\n");
+    const profile = path.join(tmp, "source/_includes/home/intro.md");
+    fs.appendFileSync(profile, "\n\nShared profile regression.\n");
     const result = cp.spawnSync(
       "bundle",
       [
@@ -351,7 +355,7 @@ for (const colorScheme of ["light", "dark"])
     ).toBe("#f3f2ea");
   });
 
-test("profile and theme controls are grouped, evenly spaced and labelled on hover", async ({
+test("profile and theme controls remain separated with usable targets and hover labels", async ({
   page,
 }) => {
   await page.emulateMedia({ colorScheme: "light" });
@@ -370,12 +374,9 @@ test("profile and theme controls are grouped, evenly spaced and labelled on hove
         return { center: r.x + r.width / 2, width: r.width };
       }),
     );
-    const gaps = boxes.slice(1).map((box, i) => box.center - boxes[i].center);
-    expect(
-      Math.max(...gaps) - Math.min(...gaps),
-      `${width}px icon spacing`,
-    ).toBeLessThanOrEqual(10);
-    expect(boxes.every((box) => box.width === 44)).toBe(true);
+    for (let i = 1; i < boxes.length; i++)
+      expect(boxes[i].center - boxes[i-1].center).toBeGreaterThanOrEqual((boxes[i].width + boxes[i-1].width) / 2);
+    expect(boxes.every((box) => box.width >= 44)).toBe(true);
   }
   const theme = page.locator("#theme-toggle");
   await expect(theme).toHaveAttribute("title", "Switch to dark mode");

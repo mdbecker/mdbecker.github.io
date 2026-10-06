@@ -1,5 +1,0 @@
-<ul class="editorial-list">
-{% for work in site.data.profile.work %}
-<li><h3>{% if work.url %}<a href="{{ work.url }}">{{ work.title | escape }}</a>{% else %}{{ work.title | escape }}{% endif %}</h3>{{ work.description | markdownify }}</li>
-{% endfor %}
-</ul>

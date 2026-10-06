@@ -6,7 +6,7 @@
   <h2>{{ include.talk.title | escape }}</h2>
   {% comment %}Undated collection documents inherit site.time from Jekyll; it is not an event date.{% endcomment %}
   <p class="meta">{{ include.talk.event | escape }} · {% if include.talk.date != site.time %}{{ include.talk.date | date: '%B %-d, %Y' }}{% else %}{{ include.talk.year }}{% endif %}{% if include.talk.venue %} · {{ include.talk.venue | escape }}{% endif %}</p>
-  <p>{{ include.talk.description | escape }}</p>
+  {{ include.talk.content | markdownify }}
   <p class="talk-links">
     {% if include.talk.video %}<a href="{{ include.talk.video }}" aria-label="Watch {{ include.talk.title | escape }} at {{ include.talk.event | escape }}">Watch</a>{% endif %}
     {% if include.talk.slides %}<a href="{{ include.talk.slides }}" aria-label="Slides for {{ include.talk.title | escape }} at {{ include.talk.event | escape }}">Slides</a>{% endif %}

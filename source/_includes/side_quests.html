@@ -1,5 +1,0 @@
-<ul class="editorial-list">
-{% for quest in site.data.profile.quests %}
-<li>{% if quest.url %}<a href="{{ quest.url }}">{{ quest.description | escape }}</a>{% else %}{{ quest.description | escape }}{% endif %}</li>
-{% endfor %}
-</ul>
