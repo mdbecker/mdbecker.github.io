@@ -140,10 +140,10 @@ The shared head declares ICO, SVG, PNG, Apple touch, Safari mask, manifest, and
 Microsoft tile resources. `source/site.webmanifest` references the supplied
 Android and maskable icons. This adds no service worker or offline features.
 The original `favicon.png` remains an unlinked legacy asset; the supplied ZIP is
-preserved. Version 2 uses a simplified micro mark for browser favicons and larger
+preserved. Version 3 uses an oversized micro mark for browser favicons and larger
 editorial artwork for app icons. Its package README and separate micro/detailed
 masters are retained for maintenance; the original master remains unlinked.
-The SVG uses vector shapes and serif text rather than an embedded bitmap.
+The SVG embeds the tuned 128×128 micro artwork to avoid font-dependent rendering.
 
 The default sharing PNG is `source/images/social/beckerfuffle.png` (1200×630).
 Its editable source is `source/images/social/artwork.html`, using the existing

@@ -91,9 +91,19 @@ test("SEO, social image, favicon and manifest resolve", async ({
   await page.goto("/");
   await expect(page.locator('link[href="/favicon.png"]')).toHaveCount(0);
   const faviconSvg = await (await request.get("/favicon.svg")).text();
-  expect(faviconSvg).toContain('viewBox="0 0 64 64"');
-  expect(faviconSvg).toContain("<rect");
-  expect(faviconSvg).not.toMatch(/<image|data:image/);
+  expect(faviconSvg.includes('viewBox="0 0 128 128"')).toBe(true);
+  expect(faviconSvg.includes("<text")).toBe(false);
+  const embeddedIcon = faviconSvg.match(/href="data:image\/png;base64,([^"]+)"/);
+  expect(Boolean(embeddedIcon)).toBe(true);
+  const microPng = Buffer.from(embeddedIcon[1], "base64");
+  expect(microPng.readUInt32BE(16)).toBe(128);
+  expect(microPng.readUInt32BE(20)).toBe(128);
+  expect(await page.evaluate(() => new Promise((resolve) => {
+    const icon = new Image();
+    icon.onload = () => resolve(icon.naturalWidth > 0);
+    icon.onerror = () => resolve(false);
+    icon.src = "/favicon.svg";
+  }))).toBe(true);
   for (const href of await page
     .locator("link[rel*=icon],link[rel=manifest]")
     .evaluateAll((es) => es.map((e) => e.getAttribute("href"))))
