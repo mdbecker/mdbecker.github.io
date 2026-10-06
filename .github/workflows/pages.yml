@@ -31,7 +31,7 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox
       - name: Extract frozen historical output
         run: |
           mkdir -p "$HISTORICAL_SITE"
