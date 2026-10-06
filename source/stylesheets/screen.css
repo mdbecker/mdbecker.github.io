@@ -205,8 +205,8 @@ button:focus-visible { outline: 2px solid var(--link-active); outline-offset: 4p
 .talk-entry { border-top: 1px solid var(--rule); padding-top: var(--space); margin-top: var(--space-section); scroll-margin-top: 1rem; }
 .talk-entry h2 { margin-top: 0; }
 .talk-links { display: flex; flex-wrap: wrap; gap: 1rem; }
-.article-body :is(h2,h3) { scroll-margin-top: 1.25rem; }
-.article-body a.anchor { opacity: 0; margin-right: .4em; font-size: .8em; color: var(--link); }
+.article-body :is(h2,h3) { position: relative; scroll-margin-top: 1.25rem; }
+.article-body a.anchor { position: absolute; inset-inline-start: -.75em; opacity: 0; font-size: .8em; color: var(--link); }
 .article-body :is(h2,h3):hover a.anchor, .article-body a.anchor:focus-visible { opacity: 1; }
 .toc { font-size: 1rem; border-block: 1px solid var(--rule); padding-block: 1rem; margin-block: 1.25rem; }
 .toc h2 { font-size: 1.1rem; margin: 0 0 .5rem; }
