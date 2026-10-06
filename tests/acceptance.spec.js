@@ -242,10 +242,10 @@ test("N workflow cannot deploy PRs or failed builds", () => {
   expect(files).toHaveLength(1);
   const workflow = read(".github/workflows/" + files[0]);
   expect(workflow).toMatch(/pull_request:/);
-  expect(workflow).toMatch(/source/);
+  expect(workflow).toMatch(/branches: \[main\]/);
   expect(workflow).toMatch(/needs:.*build/);
   expect(workflow).toMatch(/github.event_name\s*==\s*['"]push['"]/);
-  expect(workflow).toContain("refs/heads/source");
+  expect(workflow).toContain("refs/heads/main");
   expect(workflow).toContain("actions/deploy-pages@");
   expect(workflow).toContain("pages: write");
   expect(workflow).toContain("id-token: write");

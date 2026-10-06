@@ -2,9 +2,9 @@ name: Build, verify, and publish Pages
 
 on:
   push:
-    branches: [source]
+    branches: [main]
   pull_request:
-    branches: [source]
+    branches: [main]
 
 permissions:
   contents: read
@@ -41,12 +41,12 @@ jobs:
       - name: Run all acceptance and visual checks
         run: npm test
       - uses: actions/upload-pages-artifact@v5
-        if: github.event_name == 'push' && github.ref == 'refs/heads/source'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           path: public/
 
   deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/source'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:

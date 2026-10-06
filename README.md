@@ -1,8 +1,11 @@
 # Beckerfuffle
 
 A small Jekyll site with a Tufte-inspired editorial design, preserving the six
-original articles, archives, categories, and public URLs. Edit the `source` branch; `master` is the historical
-generated site retained for rollback. The GitHub default branch need not change.
+original articles, archives, categories, and public URLs. `main` is the active
+development and publishing branch; pull requests target `main`. GitHub Actions
+builds, tests, and deploys generated artifacts. The old `source` and `master`
+branches are historical, with snapshots preserved through archival Git tags.
+The `source/` directory and Jekyll's `source: source` setting remain unchanged.
 
 ## Local preview with Docker
 
@@ -79,7 +82,7 @@ generates indexes and feeds; Jekyll Paginate creates `/posts/2/` after ten posts
 The Markdown converter retains historical paragraph and numbered-code markup
 needed by the existing CSS while accepting ordinary Markdown posts.
 
-Preview, build, run tests, and open a pull request targeting `source`. Merge only
+Preview, build, run tests, and open a pull request targeting `main`. Merge only
 after all checks pass. There is no Octopress publishing command.
 
 ## Design and layouts
@@ -152,29 +155,33 @@ See [redesign verification](docs/redesign.md) for the test-first handoff.
 
 ## Deployment and rollback
 
-`.github/workflows/pages.yml` builds and tests pull requests targeting `source`
-and pushes to `source`. Only a successful push to `source` uploads `public/` and
+`.github/workflows/pages.yml` builds and tests pull requests targeting `main`
+and pushes to `main`. Only a successful push to `main` uploads `public/` and
 deploys via the GitHub Pages artifact API. PRs have no Pages deployment access.
 The build job has read-only repository permissions; only the dependent deploy
 job has Pages/OIDC write permissions. The immutable historical commit is extracted
 in CI for content comparisons.
 
-Before the first cutover, keep existing branch publishing active, review passing
-checks and the current design, and approve intentional differences. In
-repository settings configure the `github-pages` environment to permit only
-`source`, select **GitHub Actions** for Pages, retain **beckerfuffle.com** as the
-custom domain, and enable HTTPS. These account settings are release steps, not
-automatically applied by the workflow. Confirm the first Actions deployment and
-smoke-test desktop/mobile routes, assets, DNS, HTTPS, and existing comments.
+No generated-output branch or committed HTML is required. Pages must use
+**GitHub Actions** as its publishing source, and the `github-pages` environment
+must authorize `main`. Keep **beckerfuffle.com** in repository Pages settings
+and enable HTTPS; `source/CNAME` alone does not configure an Actions custom
+domain. Local tests cannot verify deployment authorization, DNS, certificates,
+or existing Disqus associations.
 
-If production fails verification, restore Pages publishing from `master` at the
-repository root. The original output commit is
-`f956b53210bd3985408a766f431e5455c02e2459`. For a later regression, revert the
-offending `source` commit and publish through the same test-gated workflow.
+Follow the ordered [owner migration checklist](docs/migration.md#owner-checklist-consolidate-publishing-onto-main)
+for archival tags, creating and pushing `main`, repository settings, production
+verification, and eventual branch retirement. These are manual release steps.
+For ordinary regressions, revert the problematic change on `main` and let the
+normal workflow rebuild, test, and deploy. Emergency Octopress restoration uses
+the preserved generated-site commit
+`f956b53210bd3985408a766f431e5455c02e2459` or its archival tag and a temporary
+publishing-source change; see the checklist's rollback procedure.
 
 ## Maintenance
 
 Monthly Dependabot PRs cover Bundler, npm test dependencies, and GitHub Actions.
+They target the repository default branch automatically, without a branch override.
 Review the release notes, run the complete suite, and examine screenshots before
 merging. Do not auto-merge upgrades. Update the runtime pin and lockfile together
 when changing Ruby, and review current-design screenshots when updating Playwright.
