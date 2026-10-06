@@ -141,11 +141,16 @@ run evidence are preserved in the local Codex visualization workspace.
 
 ## Owner checklist: consolidate publishing onto main
 
-Execute these steps manually after reviewing the locally verified, uncommitted
-implementation. No branch, tag, commit, remote setting, or deployment is changed
-by the implementation itself. Commands below are release instructions, not
-commands executed during local verification. Do not merge historical `master`
-into the redesigned history.
+Execute these steps manually after reviewing the locally verified implementation
+committed on `source`. Commands below are release instructions, not commands
+executed during local verification. No archival tags, branch migration, push,
+repository settings change, or deployment has been performed. Do not merge
+historical `master` into the redesigned history.
+
+The historical hashes below identify immutable Octopress snapshots, not the
+current development tip. Keep them: the generated-site hash is also the CI
+regression reference. Creating `main` uses the current reviewed `source` branch
+and does not require a hardcoded implementation commit hash.
 
 ### 1. Preserve historical snapshots
 
@@ -193,28 +198,27 @@ existing source backup. Do not delete any historical branches during this releas
 
 ### 2. Create main from the redesigned source history
 
-The implementation starts on `source` at `12e84b5`. Confirm that the working tree
-contains only the five intended files below, that `source` is the redesigned
-history, and that no local or remote `main` already exists. If references have
-changed since verification, review the differences and repeat Docker tests
-before proceeding; do not reset or overwrite an existing branch.
+Start from the current local `source` branch, which includes the committed
+publishing implementation. Review its history and the changes relative to
+`origin/source`. Confirm the working tree is clean and no local or remote `main`
+already exists. Commit any reviewed follow-up edits on `source` before creating
+`main`. If code has changed since verification, repeat Docker tests before
+proceeding; do not reset or overwrite an existing branch.
 
 ```sh
 git status --short
 git branch --show-current
-git log -1 --oneline source
+git log --oneline origin/source..source
+git diff --check origin/source..source
+git diff origin/source..source
 git branch --list main
 git ls-remote --heads origin main
 git switch -c main source
-git diff --check
-git diff -- .github/workflows/pages.yml .github/dependabot.yml tests/acceptance.spec.js README.md docs/migration.md
-git add .github/workflows/pages.yml .github/dependabot.yml tests/acceptance.spec.js README.md docs/migration.md
-git diff --cached
-git commit -m "Consolidate Jekyll publishing onto main"
 git push -u origin main
 ```
 
-Creating `main` carries the reviewed uncommitted changes into that branch.
+Creating `main` preserves the current reviewed `source` history, including the
+already committed implementation; no second implementation commit is needed.
 The obsolete `source` **branch** is distinct from the still-required `source/`
 **directory**. Keep `_config.yml`'s `source: source`. The workflow publishes
 only generated `public/` artifacts; never commit generated HTML or create a
@@ -313,8 +317,11 @@ again. This emergency procedure is not the normal rollback mechanism.
 
 ## Main publishing local verification (October 5, 2026)
 
-The implementation was verified on `source` at `12e84b5`, without committing,
-changing branches/tags, pushing, modifying repository settings, or deploying.
+The original RED → GREEN verification started from the pre-implementation
+`source` snapshot at `12e84b5`. That hash records the test starting point only;
+it is not the commit to use when creating `main`. After verification, the
+implementation was committed on `source` at the owner's request. No branch/tag
+migration, push, repository settings change, or deployment was performed.
 All builds, tests, dependency installation, YAML validation, and final diff
 checks ran inside Docker. A disposable Compose test container used Ruby 3.3.12,
 Bundler 4.0.22, Node 24.21.0, locked npm dependencies, and Playwright Chromium.
