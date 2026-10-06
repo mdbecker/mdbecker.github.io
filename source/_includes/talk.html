@@ -1,0 +1,16 @@
+{% assign talk_id = include.talk.path | split: '/' | last | split: '.' | first %}
+{% if include.selected %}
+<li><h3><a href="{{ '/talks/' | relative_url }}#{{ talk_id }}">{{ include.talk.title | escape }}</a></h3><p class="meta">{{ include.talk.event | escape }} · {{ include.talk.year }}</p></li>
+{% else %}
+<section class="talk-entry" id="{{ talk_id }}">
+  <h2>{{ include.talk.title | escape }}</h2>
+  {% comment %}Undated collection documents inherit site.time from Jekyll; it is not an event date.{% endcomment %}
+  <p class="meta">{{ include.talk.event | escape }} · {% if include.talk.date != site.time %}{{ include.talk.date | date: '%B %-d, %Y' }}{% else %}{{ include.talk.year }}{% endif %}{% if include.talk.venue %} · {{ include.talk.venue | escape }}{% endif %}</p>
+  <p>{{ include.talk.description | escape }}</p>
+  <p class="talk-links">
+    {% if include.talk.video %}<a href="{{ include.talk.video }}" aria-label="Watch {{ include.talk.title | escape }} at {{ include.talk.event | escape }}">Watch</a>{% endif %}
+    {% if include.talk.slides %}<a href="{{ include.talk.slides }}" aria-label="Slides for {{ include.talk.title | escape }} at {{ include.talk.event | escape }}">Slides</a>{% endif %}
+    {% if include.talk.repository %}<a href="{{ include.talk.repository }}" aria-label="Code for {{ include.talk.title | escape }} at {{ include.talk.event | escape }}">Code</a>{% endif %}
+  </p>
+</section>
+{% endif %}

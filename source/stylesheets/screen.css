@@ -74,7 +74,9 @@ a:focus-visible { outline: 2px solid var(--link-active); outline-offset: 4px; }
 .site-header nav a:hover, .site-header nav a:focus { color: var(--link-active); }
 .nav a[aria-current] { color: var(--brand); border-bottom: 2px solid var(--brand); }
 .social-links { gap: .5rem; }
-.social-links a { min-width: 32px; justify-content: center; text-decoration: none; }
+.social-links a { min-width: 44px; justify-content: center; text-decoration: none; }
+.theme-control { border-left: 1px solid var(--rule); padding-left: .5rem; }
+.theme-control:has([hidden]) { display: none; }
 .social-navbar, .social-links i { font-family: "FontAwesome"; font-style: normal; font-size: 1.2rem; }
 .i-gthb::before { content: "\f09b"; }
 .i-lnkdn-sign::before { content: "\f08c"; }
@@ -135,9 +137,9 @@ pre code { padding: 0; overflow-wrap: normal; }
 .highlight .gutter { width: 1%; color: var(--muted); border-right: 1px solid var(--rule); }
 .highlight .code { width: 99%; }
 .highlight .c, .highlight .c1, .highlight .cm, .highlight .cs { color: var(--muted); font-style: italic; }
-.highlight .k, .highlight .kn, .highlight .kd, .highlight .o { color: #704326; }
+.highlight .k, .highlight .kn, .highlight .kd, .highlight .o { color: var(--syntax-keyword); }
 .highlight .s, .highlight .s1, .highlight .s2, .highlight .na, .highlight .nb { color: var(--link); }
-.highlight .m, .highlight .mi, .highlight .mf { color: #694567; }
+.highlight .m, .highlight .mi, .highlight .mf { color: var(--syntax-number); }
 table { display: block; max-width: 100%; overflow-x: auto; overflow-wrap: normal; border-collapse: collapse; font-size: .9em; margin-bottom: var(--space); }
 th, td { padding: .4rem .75rem; text-align: left; border-bottom: 1px solid var(--rule); }
 th { font-weight: 700; }
@@ -167,4 +169,55 @@ hr { border: 0; border-top: 1px solid var(--rule); margin-block: var(--space); }
   body { background: white; color: black; }
   .container { max-width: none; }
   pre, table { white-space: pre-wrap; overflow-wrap: anywhere; }
+}
+
+/* One palette for saved dark mode and the OS default, including no-JS use. */
+:root { color-scheme: light; --syntax-keyword: #704326; --syntax-number: #694567; }
+:root[data-theme="dark"] {
+  color-scheme: dark; --paper: #151713; --ink: #e9e7dc;
+  --link: #8fbfc7; --link-active: #b2d9df; --brand: #e08a54;
+  --muted: #a5aa9c; --rule: #44483d; --code: #22261f;
+  --syntax-keyword: #e0a77d; --syntax-number: #d5acd1;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark; --paper: #151713; --ink: #e9e7dc;
+    --link: #8fbfc7; --link-active: #b2d9df; --brand: #e08a54;
+    --muted: #a5aa9c; --rule: #44483d; --code: #22261f;
+    --syntax-keyword: #e0a77d; --syntax-number: #d5acd1;
+  }
+}
+::selection { background: var(--link); color: var(--paper); }
+button:focus-visible { outline: 2px solid var(--link-active); outline-offset: 4px; }
+#theme-toggle { background: none; color: var(--muted); border: 0; cursor: pointer; padding: .5rem; width: 44px; height: 44px; }
+#theme-toggle[hidden] { display: none; }
+#theme-toggle svg { width: 22px; height: 22px; vertical-align: middle; }
+#theme-toggle[aria-label="Switch to dark mode"] .sun,
+#theme-toggle[aria-label="Switch to light mode"] .moon { display: none; }
+.home-section { border-top: 1px solid var(--rule); margin-top: var(--space-section); padding-top: var(--space); }
+.home-section > h2 { margin-top: 0; }
+.editorial-list { list-style: none; padding: 0; }
+.editorial-list li { margin-bottom: var(--space); }
+.editorial-list h3 { margin-top: 0; }
+.editorial-list p { margin-bottom: 0; }
+.blog-index .compact h3 { margin: 0; font-size: 1.2rem; }
+.blog-index .compact .meta { margin: .25rem 0 0; }
+.talk-entry { border-top: 1px solid var(--rule); padding-top: var(--space); margin-top: var(--space-section); scroll-margin-top: 1rem; }
+.talk-entry h2 { margin-top: 0; }
+.talk-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+.article-body :is(h2,h3) { scroll-margin-top: 1.25rem; }
+.article-body a.anchor { opacity: 0; margin-right: .4em; font-size: .8em; color: var(--link); }
+.article-body :is(h2,h3):hover a.anchor, .article-body a.anchor:focus-visible { opacity: 1; }
+.toc { font-size: 1rem; border-block: 1px solid var(--rule); padding-block: 1rem; margin-block: 1.25rem; }
+.toc h2 { font-size: 1.1rem; margin: 0 0 .5rem; }
+.toc ul { margin-bottom: 0; }
+@media (min-width: 1200px) {
+  .container:has(.article-navigation) { max-width: 74rem; }
+  .article-navigation { position: relative; }
+  .toc { position: absolute; left: calc(100% + 2rem); top: 0; width: 15rem; height: 100%; margin: 0; border: 0; padding: 0; }
+  .toc-inner { position: sticky; top: 1.25rem; max-height: calc(100vh - 2.5rem); overflow-y: auto; }
+}
+@media print {
+  :root, :root[data-theme], :root:not([data-theme="light"]) { color-scheme: light; --paper: #fff; --ink: #000; --link: #245d67; --link-active: #173f46; --muted: #60676b; --code: #f3f2ea; --rule: #deded6; --syntax-keyword: #704326; --syntax-number: #694567; }
+  .toc, .anchor, #theme-toggle { display: none; }
 }

@@ -1,0 +1,27 @@
+name: Michael Becker
+role: Lead Machine Learning Engineer
+organization: Penn Medicine
+organization_url: https://www.pennmedicine.org/
+intro: >-
+  I work on turning machine learning and AI into useful, production systems for healthcare.
+focus: >-
+  I'm interested in the part after the model works: deploying it, integrating it into real workflows, measuring whether it helps, and keeping it reliable.
+community: >-
+  I co-founded DataPhilly and help connect people working with data and AI in Philadelphia.
+now: >-
+  My focus is production healthcare ML and AI: reliable applications and evaluation, retrieval and LLM-based systems, secure clinical workflow integration, and applied research. I also stay involved with DataPhilly and the local data community.
+work:
+  - title: CHIME
+    url: https://github.com/CodeForPhilly/chime
+    description: The COVID-19 Hospital Impact Model for Epidemics, an open-source collaboration helping hospitals plan for pandemic capacity needs.
+  - title: Applied clinical AI
+    url: https://doi.org/10.1055/a-2893-7363
+    description: Team work evaluating and deploying practical clinical ML and AI systems, including a 2026 study of AI-generated replies to patient portal messages.
+  - title: DataPhilly
+    url: https://dataphilly.com/
+    description: Co-founding Philadelphia's data community, connecting people through talks, workshops, and shared technical curiosity.
+quests:
+  - description: Experimenting with an LLM-generated reinforcement-learning curriculum.
+  - description: Local generative-image and video experiments on Apple Silicon.
+  - description: A 4K-remaster workflow involving video processing and upscaling.
+    url: https://github.com/mdbecker/4k_remaster

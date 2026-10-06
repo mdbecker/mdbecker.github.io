@@ -1,22 +1,37 @@
 ---
 layout: default
+title: About Michael Becker
+seo:
+  type: Person
 ---
-<h1 class="visually-hidden">Recent articles</h1>
+{% if paginator.page == 1 %}
+<h1>{{ site.data.profile.name | escape }}</h1>
+{% include profile.html %}
+<section class="home-section"><h2>Now</h2><p>{{ site.data.profile.now | escape }}</p></section>
+<section class="home-section" id="selected-work"><h2>Selected work</h2>{% include selected_work.html %}</section>
+<section class="home-section" id="selected-talks"><h2>Selected talks</h2><p>I share what I learn through technical talks and community events, from Python and real-time predictive analytics to healthcare data science and open-source collaboration.</p><ul class="editorial-list">
+{% assign featured = site.talks | where: 'featured', true | sort: 'order' %}
+{% for talk in featured limit:3 %}{% include talk.html talk=talk selected=true %}{% endfor %}
+</ul><p><a href="{{ '/talks/' | relative_url }}">All talks &rarr;</a></p></section>
+{% else %}<h1>Writing</h1>{% endif %}
+<section class="home-section" id="writing">
+{% assign newest_year = site.posts.first.date | date: '%Y' | plus: 0 %}
+<h2>{% if newest_year >= 2026 %}Latest writing{% else %}From the archive{% endif %}</h2>
 <div class="blog-index">
-  {% assign index = true %}
-  {% for post in paginator.posts %}
-    <article>
-      {% include article.html %}
-    </article>
-  {% endfor %}
-  <div class="pagination">
-    {% if paginator.next_page %}
-    <a class="prev" href="{{paginator.next_page_path}}">&larr; Older</a>
-    {% endif %}
-
-    {% if paginator.previous_page %}
-    <a class="next" href="{{paginator.previous_page_path}}">Newer &rarr;</a>
-    {% endif %}
-  </div>
-</div>
-
+{% for post in paginator.posts %}
+  <article{% if forloop.index > 3 %} class="compact"{% endif %}>
+  {% if forloop.index <= 3 %}
+    <header><h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3><p class="meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %-d, %Y' }}</time></p></header>
+    <p class="excerpt">{{ post.excerpt | strip_html | normalize_whitespace }}</p>
+  {% else %}
+    <h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3><p class="meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %-d, %Y' }}</time></p>
+  {% endif %}
+  </article>
+{% endfor %}
+<nav class="pagination" aria-label="Writing pages">
+{% if paginator.next_page %}<a href="{{ paginator.next_page_path | relative_url }}">&larr; Older</a>{% endif %}
+{% if paginator.previous_page %}<a href="{{ paginator.previous_page_path | relative_url }}">Newer &rarr;</a>{% endif %}
+</nav>
+</div><p><a href="{{ '/blog/archives/' | relative_url }}">Explore the writing archive &rarr;</a></p>
+</section>
+{% if paginator.page == 1 %}<section class="home-section"><h2>Side quests</h2>{% include side_quests.html %}</section>{% endif %}

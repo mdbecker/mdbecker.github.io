@@ -7,6 +7,47 @@
 {% elsif content contains '<h3' %}
   {% assign reading_content = content | replace: '<h3', '<h2' | replace: '</h3>', '</h2>' | replace: '<h4', '<h3' | replace: '</h4>', '</h3>' | replace: '<h5', '<h4' | replace: '</h5>', '</h4>' | replace: '<h6', '<h5' | replace: '</h6>', '</h5>' %}
 {% endif %}
-<div class="article-body">
-  {{ reading_content }}
+{% comment %}Kramdown leaves image-only headings without IDs. Preserve their markup and assign a stable section fallback before the TOC parser runs.{% endcomment %}
+{% assign sections = reading_content | split: '<h' %}
+{% capture normalized_content %}{{ sections.first }}{% for section in sections offset:1 %}
+  {% assign opening = section | split: '>' | first %}
+  {% assign level = section | slice: 0, 1 %}
+  {% assign heading_section = section %}
+  {% if '123456' contains level %}
+    {% unless opening contains 'id=' %}
+      {% capture old_opening %}{{ opening }}>{% endcapture %}
+      {% capture new_opening %}{{ opening }} id="section-{{ forloop.index }}">{% endcapture %}
+      {% assign heading_section = section | replace_first: old_opening, new_opening %}
+    {% endunless %}
+  {% endif %}
+  <h{{ heading_section }}{% endfor %}{% endcapture %}
+{% assign reading_content = normalized_content %}
+{% if page.layout == 'post' and page.toc != false %}
+  {% assign contents = reading_content | toc_only %}
+  {% assign heading_count = contents | split: '<li class="toc-entry' | size | minus: 1 %}
+  {% assign reading_content = reading_content | inject_anchors %}
+  {% comment %}jekyll-toc 0.19 emits decorative anchors. Give each its native keyboard-accessible name using the normalized heading text.{% endcomment %}
+  {% assign sections = reading_content | split: '<h' %}
+  {% for section in sections offset:1 %}
+    {% assign level = section | slice: 0, 1 %}
+    {% if level == '2' or level == '3' %}
+      {% assign heading_id = section | split: 'id="' | last | split: '"' | first %}
+      {% assign heading_text = section | split: '</h' | first | prepend: '<h' | strip_html | strip | escape %}
+      {% if heading_text == '' %}
+        {% assign heading_text = section | split: 'alt="' | last | split: '"' | first | escape %}
+        {% capture empty_link %}href="#{{ heading_id }}"></a>{% endcapture %}
+        {% capture named_link %}href="#{{ heading_id }}">{{ heading_text }}</a>{% endcapture %}
+        {% assign contents = contents | replace: empty_link, named_link %}
+      {% endif %}
+      {% capture old_anchor %}<a class="anchor" href="#{{ heading_id }}" aria-hidden="true"><span class="octicon octicon-link"></span></a>{% endcapture %}
+      {% capture new_anchor %}<a class="anchor" href="#{{ heading_id }}" aria-label="Link to {{ heading_text }}"><span aria-hidden="true">#</span></a>{% endcapture %}
+      {% assign reading_content = reading_content | replace: old_anchor, new_anchor %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+<div{% if heading_count >= 3 %} class="article-navigation"{% endif %}>
+  {% if heading_count >= 3 %}
+  <nav class="toc" aria-label="Table of contents"><div class="toc-inner"><h2>Contents</h2>{{ contents }}</div></nav>
+  {% endif %}
+  <div class="article-body">{{ reading_content }}</div>
 </div>

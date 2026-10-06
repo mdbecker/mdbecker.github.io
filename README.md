@@ -1,55 +1,79 @@
 # Beckerfuffle
 
-A small Jekyll site with a Tufte-inspired editorial design, preserving the six
-original articles, archives, categories, and public URLs. `main` is the active
-development and publishing branch; pull requests target `main`. GitHub Actions
-builds, tests, and deploys generated artifacts. The old `source` and `master`
-branches are historical, with snapshots preserved through archival Git tags.
-The `source/` directory and Jekyll's `source: source` setting remain unchanged.
+A small Jekyll 4.4 personal site for Michael Becker: production ML, healthcare AI,
+community, talks, writing, and technical rabbit holes. Warm paper, self-hosted
+ET Book, restrained typography, and orange branding remain the visual identity.
+The six historical articles, public URLs, categories, Atom identities, and Giscus
+associations are preserved. `main` is the active publishing branch.
 
-## Local preview with Docker
+## Docker-only local development
 
-With Docker Desktop running, start the blog from the repository root:
-
-```sh
-docker compose up --build
-```
-
-Open <http://127.0.0.1:4000>. Edit posts, pages, layouts, or styles normally on
-your Mac; Jekyll polls the mounted files and rebuilds automatically without
-restarting the container. Refresh the browser to see the changes.
-
-Ruby and gems are installed in the image, and generated output stays in the
-container at `/tmp/public`. The repository is mounted read-only. No host Ruby
-or Node installation is needed. The image uses the lockfile's Linux platform,
-including on Apple Silicon; Docker caches dependencies between builds.
-
-Press Ctrl+C to stop, then `docker compose down` to remove the container.
-After changing gems or the lockfile, run `docker compose up --build` again.
-Changes to `_config.yml` or Ruby plugins require `docker compose restart blog`,
-as Jekyll loads those at startup. To run a one-off production build:
+With Docker Desktop running:
 
 ```sh
-docker compose run --rm blog bundle _4.0.22_ exec jekyll build --destination /tmp/public
+docker compose up --build -d
 ```
 
-## Local setup without Docker
-
-Use Ruby **3.3.12**, Bundler **4.0.22**, and Node.js **24**. Install Ruby through
-your preferred version manager rather than macOS's system Ruby.
+Open <http://127.0.0.1:4000>. The repository mount is read-only; generated HTML
+stays inside the container at `/tmp/public`. Editing source files triggers a
+rebuild. After configuration/plugin changes, run `docker compose restart blog`.
+After Gemfile/lockfile changes, rebuild the image. Stop with `docker compose down`.
+No host Ruby, Node, gems, browser, or package installation is needed.
 
 ```sh
-gem install bundler -v 4.0.22
-bundle install
-npm ci
-npx playwright install chromium
-bundle exec jekyll serve
+docker compose run --rm blog bundle exec jekyll build --destination /tmp/public
 ```
 
-Preview at <http://127.0.0.1:4000>. `bundle exec jekyll build` writes `public/`.
-Commit `Gemfile.lock` and `package-lock.json`; generated output is ignored.
-Node and Playwright are development tools only; visitors receive static HTML,
-self-hosted fonts and CSS. Navigation wraps without JavaScript.
+## Profile and pages
+
+Edit `source/_data/profile.yml` for the homepage biography, current role, focus,
+selected work, and side quests. The combined About homepage uses small content
+includes. Exactly three selected work entries are displayed; keep descriptions
+short and team credit accurate. Experiments without verified public links use
+plain text. Review professional/personal statements before publishing.
+
+`source/index.html` is the combined About/personal homepage with `seo.type: Person`.
+`source/about/index.markdown` preserves the old URL with a static refresh redirect
+and a canonical link to `/`; it contains no duplicate biography. Navigation is
+About → Blog → Talks; Blog opens the existing writing archive and is highlighted
+on posts, categories, and writing pagination. Only pagination page one includes
+personal sections; later pages show writing without repeating the biography.
+
+## Add a talk
+
+Create `source/_talks/event-year.md` with YAML front matter:
+
+```yaml
+---
+title: A descriptive talk title
+event: Conference name
+year: 2026
+description: A short abstract in one to three sentences.
+featured: false
+order: 1
+# Optional, only when verified:
+# date: 2026-05-04
+# venue: Philadelphia
+# video: https://example.org/recording
+# slides: https://example.org/slides
+# repository: https://github.com/owner/project
+# tags: [Python, Machine Learning]
+---
+```
+
+Required fields are `title`, `event`, `year`, `description`, `featured`, and
+`order`. Give every talk a **unique integer order**, newest first; renumber
+existing entries when inserting a talk. Use `year` without an exact date when
+only the year is known. Jekyll's default document build date is never displayed
+as an event date. Tags may be stored for maintenance; the current presentation
+omits them to keep the list quiet.
+
+Talks are an `output: false` collection rendered on `/talks/` through one include.
+The filename supplies the stable anchor: `pycon-2014.md` becomes
+`/talks/#pycon-2014`. Renaming files changes these anchors. Optional Watch,
+Slides, and Code links appear only when supplied; no players load on page open.
+The homepage selects `featured: true`, sorts by `order`, and displays up to three.
+Keep the intended featured set to three.
 
 ## Publish a post
 
@@ -59,161 +83,145 @@ Create `source/_posts/YYYY-MM-DD-title.md`:
 ---
 layout: post
 title: My new post
-date: 2026-10-04 12:00:00 -0400
+date: 2026-10-06 12:00:00 -0400
 categories: [Python, Data Science]
 comments: true
+# Optional:
+# description: A concise sharing/search description.
+# image: /images/my-post.png
+# last_modified_at: 2026-10-07
+# toc: false
 ---
-Write ordinary Markdown here.
+A compact introduction.
 
 <!--more-->
 
-Continue the article here.
+## First section
+Continue the article in ordinary Markdown.
 ```
 
-Keep the introduction above `<!--more-->` coherent and compact (roughly 40–60
-words). For posts starting with an image or heading, an optional front-matter
-`excerpt: >-` can supply introductory prose without changing the article. Excerpts
-are not cut off at a fixed word count.
+Dates and slugs determine `/blog/YYYY/MM/DD/title/`; do not change historical
+values. Use the excerpt separator, or a native `excerpt: >-` front-matter value.
+Never invent modification dates. The homepage shows excerpts for the first
+three posts, compact title/date links for the rest, and preserves ten posts per
+page using `paginator.posts`. It says **From the archive** until the newest
+published post is from 2026 or later, then **Latest writing**.
 
-The post date determines `/blog/YYYY/MM/DD/title/`. Historical slugs and category
-paths are preserved. New categories use normalized lowercase URL slugs (for
-example `New Category.v2` becomes `new-category-dot-v2`). A small category plugin
-generates indexes and feeds; Jekyll Paginate creates `/posts/2/` after ten posts.
-The Markdown converter retains historical paragraph and numbered-code markup
-needed by the existing CSS while accepting ordinary Markdown posts.
+## Themes and article navigation
 
-Preview, build, run tests, and open a pull request targeting `main`. Merge only
-after all checks pass. There is no Octopress publishing command.
+Without a saved choice, CSS follows the OS light/dark preference, including
+when JavaScript is disabled. The four profile/theme controls form one compact
+group with 44px targets, uniform spacing, and a small divider before the theme
+button. All navigation controls have native hover titles; the theme title and
+accessible label describe the available action. The button switches to the opposite
+visible theme and saves `beckerfuffle-theme` in localStorage. Only `light` and
+`dark` are valid. Clear that key to resume OS preference; storage denial still
+allows switching on the current page. The early head script applies saved
+choices before the stylesheet paints. Print output uses a light palette.
 
-## Design and layouts
+Kramdown generates heading IDs. Historical heading levels are normalized beneath
+the page H1 without rewriting Markdown. An image-only heading that Kramdown
+leaves unnamed receives a stable `section-N` fallback. `jekyll-toc` generates
+navigation from these final H2/H3 headings, and its decorative anchors are given
+accessible names in Liquid. Posts show a single Contents nav when at least three
+eligible headings exist and `toc: false` is absent. Short posts and ordinary
+pages have no TOC. It is an in-flow section on smaller screens and a sticky right
+rail at 1200px and above. Heading links appear on hover or keyboard focus.
 
-Typography and whitespace carry the hierarchy: no cards, sidebars, sidenotes,
-illustrations, or motion. The homepage lists reverse-chronological native Jekyll
-excerpts, stripped of HTML and ending at natural sentence boundaries; existing
-pagination remains. Historical posts provide short introductions using native
-front-matter `excerpt` fields, without changing their full article bodies.
-Articles show a title, date, and the first three source-order categories.
-Historical Markdown, links, permalinks, and feeds remain intact.
+## Metadata and artwork
 
-`source/stylesheets/screen.css` contains the shared design and a small set of
-CSS variables: paper `#FFFFF8`, text `#1B2430`, links `#245D67` (hover/focus
-`#173F46`), branding `#B34A16`, secondary text `#60676B`, rules `#DEDED6`,
-and code backgrounds `#F3F2EA`. ET Book is self-hosted with Palatino/Georgia
-fallbacks: 20px body text with 1.6 line spacing, regular headings, and the
-existing monospace code stack. The centered container is at most 56rem; the
-left-aligned reading column is at most 45rem. Mobile gutters are 1.25rem.
-Code blocks and wide tables scroll locally; images scale without distortion.
+`jekyll-seo-tag` is the single source for title, canonical, description, Open
+Graph, Twitter cards, and JSON-LD. `_config.yml` holds the structured author,
+canonical HTTPS domain, public profiles, and default image. Footer and Atom
+templates use `site.author.name`; entry identities and dates are preserved.
 
-[ET Book](https://github.com/edwardtufte/et-book) is designed by Dmitry Krasny,
-Bonnie Scranton, and Edward Tufte, and converted for the web by Adam Schwartz.
-The three WOFF faces are distributed under MIT; their license is included at
-`source/fonts/et-book/LICENSE`. Existing Font Awesome profile glyphs are reused.
-There are no remote font requests or new production dependencies.
+The supplied favicon artwork is copied to `source/` using its original filenames.
+The shared head declares ICO, SVG, PNG, Apple touch, Safari mask, manifest, and
+Microsoft tile resources. `source/site.webmanifest` references the supplied
+Android and maskable icons. This adds no service worker or offline features.
+The original `favicon.png` remains an unlinked legacy asset; the supplied ZIP is
+preserved. The package README and master artwork are retained for maintenance.
 
-`default.html` owns navigation, the common masthead, main landmark, and footer.
-`article.html` renders index entries or article title/metadata; `article_content.html`
-reserves h1 for the page title and normalizes historical sections to begin at h2,
-without editing the historical Markdown or changing feed content. `post.html`
-retains adjacent-post links and comments; `page.html` shares the reading treatment
-with About, Talks, archives, and categories. Category generation retains lowercase
-historical URLs while preserving source order for article metadata.
+The default sharing PNG is `source/images/social/beckerfuffle.png` (1200×630).
+Its editable source is `source/images/social/artwork.html`, using the existing
+self-hosted font. Regenerate inside a Docker Playwright workspace: open that file
+with Chromium at a 1200×630 viewport and device scale 1, wait for
+`document.fonts.ready`, then screenshot the viewport to the PNG path. Generation
+is a maintenance step; there is no runtime image service.
 
-The original cyan navigation, category pills, Bootstrap grids, Google Fonts,
-Flat UI assets, and navigation toggle script have been retired. The historical
-footer attribution remains. The original mockup provides the article composition;
-the homepage intentionally uses excerpts as required by the redesign PRD.
+## Run the full suite in Docker
 
-## Verify changes
-
-Tests compare content and publication behavior with the frozen historical output.
-Run these commands only inside a Docker test workspace with Ruby, Bundler, Node,
-locked npm dependencies, and Playwright Chromium available; install nothing on
-the host. Copy the read-only repository mount to a writable container workspace
-for dependencies, generated output, synthetic fixtures, and reports:
+Build the normal preview image first with `docker compose build`. Build a
+separate disposable test image; this leaves the normal development image small:
 
 ```sh
-export HISTORICAL_SITE=/tmp/beckerfuffle-historical
-mkdir -p "$HISTORICAL_SITE"
-git archive f956b53210bd3985408a766f431e5455c02e2459 | tar -x -C "$HISTORICAL_SITE"
-bundle exec jekyll build
-npm test
+docker build -t beckerfuffle-test -f - . <<'DOCKER'
+FROM node:24-bookworm AS node
+FROM mdbeckergithubio-blog:latest
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
+    ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+RUN mkdir /test-tools && cd /test-tools && \
+    npm install @playwright/test@1.63.0 && \
+    npx playwright install --with-deps chromium
+DOCKER
+
+docker run --rm --platform linux/amd64 \
+  -v "$PWD:/repo:ro" --entrypoint sh beckerfuffle-test -c '
+  set -eu
+  cp -a /repo /work && cd /work && npm ci &&
+  mkdir -p /tmp/historical &&
+  git archive f956b53210bd3985408a766f431e5455c02e2459 | tar -x -C /tmp/historical
+  bundle exec jekyll build && HISTORICAL_SITE=/tmp/historical npm test
+  '
 ```
 
-The existing suite checks all historical routes at 1440px, 768px, and 375px,
-heading structure, wrapping navigation, keyboard focus/activation, page overflow,
-article text/links/images/code, pagination, category feeds, SEO/publication
-interfaces, browser errors, resources, and deployment guards. Synthetic posts
-are built outside the repository and removed automatically. Production requests
-remain opt-in with `VERIFY_PRODUCTION=1`; no deployment is implied by local tests.
+On Apple Silicon, add `--platform linux/amd64` to the test image build too.
+Dependencies, generated output, fixtures, and test reports stay inside the
+container. The surviving suite covers historical content/routes, feeds, sitemap,
+comments, deployment guards, themes, metadata/assets, heading anchors/TOCs,
+shared profile data, talks, pagination, contrast, and responsive behavior.
+External services are blocked deterministically. The production test is opt-in
+with `VERIFY_PRODUCTION=1`; local success does not verify the live site.
 
-For visual review, set `CANDIDATE_CAPTURE_DIR` to a temporary directory and run
-`npm test -- tests/visual.spec.js`. Inspect the homepage, PyData article, and email
-code article at all three widths; check keyboard navigation and 200% zoom too.
-External requests are blocked deterministically in tests, so historical remote
-images and embeds are not verified by these captures. Some historical images
-have empty alternative text; their content is preserved, not editorially rewritten.
-Delete captures and generated output after review. The intentional redesign
-supersedes pixel comparisons with the retired Flat UI theme.
+For visual review, run `CANDIDATE_CAPTURE_DIR=/tmp/captures npm test --
+tests/modern.spec.js` **inside** a named test container. It captures homepage,
+code/TOC article, writing archive, and Talks at 1440×900, 768×1024, and 390×844 in both
+themes. Use `docker cp` to retrieve captures before removing that container.
+The established `tests/visual.spec.js` also checks every historical route at
+1440, 768, and 375 pixels. Review screenshots explicitly; do not automatically
+approve a changed baseline or mask reading content. Historical screenshots of
+the retired theme are archival references. Remove disposable containers and
+unneeded captures explicitly; never use global Docker pruning.
 
-See [redesign verification](docs/redesign.md) for the test-first handoff.
+## Release and compatibility
 
-## Deployment and rollback
+Review local changes and profile/talk copy, icons/social artwork, both themes,
+mobile navigation, TOCs, and screenshots. Run the full Docker suite. Commit the
+reviewed files locally, then push through the owner's normal `main`/PR workflow.
+Nothing in the local preview deploys the site.
 
-`.github/workflows/pages.yml` builds and tests pull requests targeting `main`
-and pushes to `main`. Only a successful push to `main` uploads `public/` and
-deploys via the GitHub Pages artifact API. PRs have no Pages deployment access.
-The build job has read-only repository permissions; only the dependent deploy
-job has Pages/OIDC write permissions. The immutable historical commit is extracted
-in CI for content comparisons.
+The existing GitHub Actions workflow builds/tests and publishes successful pushes
+to `main`; PRs cannot deploy. After release manually verify HTTPS/canonicals,
+assets/social metadata, theme persistence, About/Talks/resource links, historical
+posts/archives/categories, comments, Atom, sitemap, and console/network errors.
+DNS, OAuth, Discussion creation, and real third-party video playback remain
+manual production checks. Roll back with an ordinary Git revert through the
+existing workflow; preserve Git history.
 
-No generated-output branch or committed HTML is required. Pages must use
-**GitHub Actions** as its publishing source, and the `github-pages` environment
-must authorize `main`. Keep **beckerfuffle.com** in repository Pages settings
-and enable HTTPS; `source/CNAME` alone does not configure an Actions custom
-domain. Local tests cannot verify deployment authorization, DNS, certificates,
-or real GitHub Discussion creation and OAuth.
+See [MVP verification](docs/mvp.md), [redesign verification](docs/redesign.md),
+and [migration notes](docs/migration.md) for compatibility and owner setup.
 
-Follow the ordered [owner migration checklist](docs/migration.md#owner-checklist-consolidate-publishing-onto-main)
-for archival tags, creating and pushing `main`, repository settings, production
-verification, and eventual branch retirement. These are manual release steps.
-For ordinary regressions, revert the problematic change on `main` and let the
-normal workflow rebuild, test, and deploy. Emergency Octopress restoration uses
-the preserved generated-site commit
-`f956b53210bd3985408a766f431e5455c02e2459` or its archival tag and a temporary
-publishing-source change; see the checklist's rollback procedure.
+## Comments and licensing
 
-## Maintenance
+Giscus configuration remains unchanged: strict pathname mapping, Comments
+category, reactions, lazy loading, and explicit `comments: true` opt-in. Its public
+repo/category IDs remain blank pending owner setup, suppressing the Comments
+section safely. `giscus.json` permits production and the two local preview
+origins. See the [owner setup steps](docs/migration.md#giscus-owner-activation).
 
-Monthly Dependabot PRs cover Bundler, npm test dependencies, and GitHub Actions.
-They target the repository default branch automatically, without a branch override.
-Review the release notes, run the complete suite, and examine screenshots before
-merging. Do not auto-merge upgrades. Update the runtime pin and lockfile together
-when changing Ruby, and review current-design screenshots when updating Playwright.
-Ruby 3.3 is in security maintenance through March 2027;
-schedule a tested move to a supported newer Ruby before then.
-
-The shared CSS replaces the original compiled theme. The only approved external
-comment script is `https://giscus.app/client.js`.
-
-## Comments
-
-Comments use Giscus and GitHub Discussions in `mdbecker/mdbecker.github.io`,
-with a GitHub account required to comment. Set `comments: true` in post or page
-front matter to enable them. There is no comments server or database.
-The single `source/_includes/giscus.html` embed uses strict permanent-pathname
-mapping, the Comments category, reactions, lazy loading, and the standard light
-theme. It emits no discussion metadata.
-
-The `giscus.repo_id` and `giscus.category_id` values in `_config.yml` are public
-identifiers, not secrets. They are intentionally blank until owner setup;
-missing either suppresses the entire Comments section. Local preview works
-without configuring Giscus. All normal development and testing remain Docker-based.
-Repository-root `giscus.json` restricts origins to production and the two normal
-local-preview addresses; it is not copied into the generated site.
-
-Before activation, optionally archive historical Disqus comments outside this
-public repository. Comments were not imported. Follow the
-[owner setup steps](docs/migration.md#giscus-owner-activation) before deploying.
-
-See [migration notes](docs/migration.md) for the earlier compatibility decisions
-and remaining production release checks.
+ET Book is MIT licensed; see `source/fonts/et-book/LICENSE`. Existing Font Awesome
+profile glyphs are reused. There are no blocking external fonts, analytics,
+frontend bundle, new articles, or comment-provider migration. Monthly Dependabot
+updates remain subject to tests and screenshot review.

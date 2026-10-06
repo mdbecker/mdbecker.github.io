@@ -1,8 +1,10 @@
 <ul class="nav">
   {% for link in site.navigation %}
-    {% assign active = false %}
-    {% if page.url == link.url %}{% assign active = true %}{% endif %}
-    {% if link.url == '/' and page.layout == 'post' %}{% assign active = true %}{% endif %}
-    <li><a href="{{ link.url | relative_url }}"{% if active %} aria-current="page"{% endif %}>{{ link.text | escape }}</a></li>
+    {% assign active = nil %}
+    {% if link.url == '/blog/archives/' %}
+      {% if page.url contains '/blog/' or page.url contains '/posts/' %}{% assign active = 'true' %}{% endif %}
+    {% endif %}
+    {% if page.url == link.url %}{% assign active = 'page' %}{% endif %}
+    <li><a href="{{ link.url | relative_url }}" title="{{ link.text | escape }}"{% if active %} aria-current="{{ active }}"{% endif %}>{{ link.text | escape }}</a></li>
   {% endfor %}
 </ul>

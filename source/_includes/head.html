@@ -1,25 +1,24 @@
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html lang="{{ site.lang | default: 'en' }}">
 <head>
   <meta charset="utf-8">
-  <title>{% if page.title %}{{ page.title | escape }} - {% endif %}{{ site.title | escape }}</title>
-  <meta name="author" content="{{ site.author | escape }}">
-
-   {% capture description %}{% if page.description %}{{ page.description }}{% elsif site.description %}{{ site.description }}{% endif %}{% endcapture %}
-  <meta name="description" content="{{ description | escape }}">
-  {% capture keywords %}{% if page.keywords %}{{ page.keywords }}{% elsif site.keywords %}{{ site.keywords }}{% endif %}{% endcapture %}
-  <meta name="keywords" content="{{ keywords | escape }}">
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link rel="canonical" href="{{ page.url | absolute_url }}">
-  <link href="{{ root_url }}/favicon.png" rel="icon">
-  <link href="{{ root_url }}/stylesheets/screen.css" media="all" rel="stylesheet" type="text/css">
-  <link href="{{ site.subscribe_rss }}" rel="alternate" title="{{site.title}}" type="application/atom+xml">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#fffff8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#151713" media="(prefers-color-scheme: dark)">
+  <script>try{var t=localStorage.getItem('beckerfuffle-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+  {% seo %}
+  {% if page.redirect_to %}<meta http-equiv="refresh" content="0; url={{ page.redirect_to | relative_url }}">{% endif %}
+  <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/favicon-32x32.png' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ '/favicon-16x16.png' | relative_url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | relative_url }}">
+  <link rel="manifest" href="{{ '/site.webmanifest' | relative_url }}">
+  <link rel="mask-icon" href="{{ '/safari-pinned-tab.svg' | relative_url }}" color="#b34a16">
+  <meta name="msapplication-config" content="{{ '/browserconfig.xml' | relative_url }}">
+  <link href="{{ '/stylesheets/screen.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ site.subscribe_rss | relative_url }}" rel="alternate" title="{{ site.title }}" type="application/atom+xml">
+  <script src="{{ '/js/theme.js' | relative_url }}" defer></script>
   {% include custom/head.html %}
 </head>

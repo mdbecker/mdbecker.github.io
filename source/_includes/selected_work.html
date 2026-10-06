@@ -1,0 +1,5 @@
+<ul class="editorial-list">
+{% for work in site.data.profile.work %}
+<li><h3><a href="{{ work.url }}">{{ work.title | escape }}</a></h3><p>{{ work.description | escape }}</p></li>
+{% endfor %}
+</ul>

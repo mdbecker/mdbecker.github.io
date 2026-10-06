@@ -1,3 +1,4 @@
+const visit = require('./visit.cjs');
 const { test, expect } = require("@playwright/test");
 const fs = require("fs"),
   path = require("path"),
@@ -21,7 +22,7 @@ test("B preserve all six articles, rich email and data-science content", async (
 }) => {
   expect(posts).toHaveLength(6);
   for (const route of posts) {
-    await page.goto(route);
+    await visit(page, route);
     await expect(page.locator("article")).toBeVisible();
     const historical = read(
       path.join(
@@ -46,13 +47,17 @@ test("B preserve all six articles, rich email and data-science content", async (
         headings: [...body.querySelectorAll("h1,h2,h3,h4,h5,h6")].map(e => e.textContent.trim()),
       };
     }, historical);
-    const actual = await page.locator(".article-body").evaluate(body => ({
+    const actual = await page.locator(".article-body").evaluate(body => {
+      body = body.cloneNode(true);
+      body.querySelectorAll("a.anchor").forEach(e => e.remove());
+      return {
       text: body.textContent.replace(/\s+/g, " ").trim(),
       links: [...body.querySelectorAll("a[href]")].map(e => e.getAttribute("href")),
       images: [...body.querySelectorAll("img")].map(e => [e.getAttribute("src"), e.getAttribute("alt")]),
       code: [...body.querySelectorAll("figure.code td.code pre")].map(e => e.textContent.trim()),
       headings: [...body.querySelectorAll("h1,h2,h3,h4,h5,h6")].map(e => e.textContent.trim()),
-    }));
+      };
+    });
     expect(actual).toEqual(expected);
     if (/working-with-email|data-science/.test(route)) {
       expect(await page.locator("figure.code td.gutter pre").count()).toBe(2);
@@ -77,9 +82,9 @@ test("F mobile navigation wraps and supports keyboard activation", async ({ page
   await page.setViewportSize({ width: 375, height: 844 });
   await page.goto("/");
   const navigation = page.getByRole("navigation", { name: "Primary" });
-  for (const label of ["Blog", "Archives", "Talks", "About"])
+  for (const label of ["About", "Blog", "Talks"])
     await expect(navigation.getByRole("link", { name: label, exact: true })).toBeVisible();
-  const archives = navigation.getByRole("link", { name: "Archives", exact: true });
+  const archives = navigation.getByRole("link", { name: "Blog", exact: true });
   await archives.focus();
   expect(await archives.evaluate(e => {
     const style = getComputedStyle(e);
@@ -93,7 +98,7 @@ test("G categories and archives link all original posts", async ({ page }) => {
   for (const route of posts)
     await expect(page.locator(`a[href="${route}"]`).first()).toBeVisible();
   for (const route of routes.filter((r) => r.includes("/categories/"))) {
-    await page.goto(route);
+    await visit(page, route);
     expect(
       await page.locator("article a, #blog-archives a").count(),
     ).toBeGreaterThan(0);
@@ -183,7 +188,7 @@ test("K Comment-enabled pages use the configured Giscus discussion mapping", asy
   const config = JSON.parse(cp.execFileSync('ruby', ['-ryaml', '-rjson', '-e', 'puts YAML.load_file("_config.yml")["giscus"].to_json'], {encoding:'utf8'}));
   expect(config).toBeTruthy();
   for (const route of routes) {
-    await page.goto(route);
+    await visit(page, route);
     const enabled = posts.includes(route) && config.repo && config.repo_id && config.category && config.category_id;
     const script = page.locator('script[src="https://giscus.app/client.js"]');
     await expect(script).toHaveCount(enabled ? 1 : 0);
@@ -232,7 +237,7 @@ test("L active scripts secure and only approved external integration", async ({
   page,
 }) => {
   for (const route of routes) {
-    expect((await page.goto(route)).status()).toBe(200);
+    expect((await visit(page, route)).status()).toBe(200);
     const scripts = await page
       .locator("script[src]")
       .evaluateAll((es) => es.map((e) => e.getAttribute("src")));
@@ -256,7 +261,7 @@ test("M local assets and browser console stay healthy", async ({
     if (m.type() === "error") errors.push(m.text());
   });
   for (const route of routes) {
-    expect((await page.goto(route)).status()).toBe(200);
+    expect((await visit(page, route)).status()).toBe(200);
     const assets = await page
       .locator('img[src],script[src],link[rel="stylesheet"]')
       .evaluateAll((es) => es.map((e) => e.src || e.href));

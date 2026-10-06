@@ -441,3 +441,18 @@ Docker diff and workspace comparisons passed. The disposable test container,
 generated output, overrides, reports, and task-created temporary files were
 removed after verification. The reviewed implementation and owner content edit
 were committed locally on `main` at the owner's request; nothing was pushed.
+
+## Personal-site MVP compatibility update (October 2026)
+
+Historical Markdown and heading-level normalization remain in place. Kramdown
+now generates IDs; image-only headings without an ID receive a stable section
+fallback in the rendering include. Post TOCs are generated after normalization.
+Heading permalink controls are excluded from historical prose/link comparisons.
+The site author is now structured metadata; Atom and category feed templates use
+`site.author.name`. Entry IDs and published/updated timestamps remain unchanged.
+About and Talks no longer present obsolete page dates. See [MVP verification](mvp.md).
+
+Owner review subsequently merged About into the homepage. `/about/` remains a
+static redirect/canonical alias to `/`; Blog navigation opens the existing
+`/blog/archives/` route. Historical post/category routes and feed identities are
+unchanged. Profile/theme controls are grouped and have native hover titles.

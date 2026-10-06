@@ -1,3 +1,4 @@
+const visit = require('./visit.cjs');
 const { test, expect } = require("@playwright/test");
 const routes = require("./fixtures/routes.json");
 const fs = require("fs"), path = require("path");
@@ -16,11 +17,11 @@ for (const [name, width, height] of [
           ? r.continue()
           : r.fulfill({ status: 200, body: "", contentType: "text/plain" }),
       );
-      expect((await page.goto(route)).status(), route).toBe(200);
+      expect((await visit(page, route)).status(), route).toBe(200);
       await page.evaluate(() => document.fonts.ready);
       await expect(page.getByRole("main")).toBeVisible();
       await expect(page.locator("main h1")).toHaveCount(1);
-      for (const name of ["Blog", "Archives", "Talks", "About"])
+      for (const name of ["About", "Blog", "Talks"])
         await expect(page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name, exact: true })).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(await page.locator("body").evaluate(e => parseFloat(getComputedStyle(e).fontSize))).toBeGreaterThanOrEqual(20);

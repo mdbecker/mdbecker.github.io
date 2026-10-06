@@ -2,26 +2,31 @@
 {% include custom/navigation.html %}
 <ul class="social-links" aria-label="Profiles">
     {% if site.github_user %}
-    <li><a href="https://github.com/{{ site.github_user }}" aria-label="Github Profile"><i class="i-gthb social-navbar" aria-hidden="true"></i></a></li>
+    <li><a href="https://github.com/{{ site.github_user }}" aria-label="Github Profile" title="Github Profile"><i class="i-gthb social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
     {% if site.bitbucket_user %}
-    <li><a href="https://bitbucket.org/{{ site.bitbucket_user }}" aria-label="BitBucket Profile"><i class="icon-bitbucket-sign social-navbar" aria-hidden="true"></i></a></li>
+    <li><a href="https://bitbucket.org/{{ site.bitbucket_user }}" aria-label="BitBucket Profile" title="BitBucket Profile"><i class="icon-bitbucket-sign social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
     {% if site.linkedin_user %}
-    <li><a href="https://linkedin.com/in/{{ site.linkedin_user }}" aria-label="Linkedin Profile"><i class="i-lnkdn-sign social-navbar" aria-hidden="true"></i></a></li>
+    <li><a href="https://linkedin.com/in/{{ site.linkedin_user }}" aria-label="Linkedin Profile" title="Linkedin Profile"><i class="i-lnkdn-sign social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
     {% if site.twitter_user %}
-    <li><a href="https://twitter.com/{{ site.twitter_user }}" aria-label="Twitter Profile"><i class="i-twttr-sign social-navbar" aria-hidden="true"></i></a></li>
+    <li><a href="https://twitter.com/{{ site.twitter_user }}" aria-label="Twitter Profile" title="Twitter Profile"><i class="i-twttr-sign social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
     {% if site.facebook_user %}
-    <li><a href="https://facebook.com/{{ site.facebook_user }}" aria-label="Facebook Profile"><i class="icon-facebook-sign social-navbar" aria-hidden="true"></i></a></li>
+    <li><a href="https://facebook.com/{{ site.facebook_user }}" aria-label="Facebook Profile" title="Facebook Profile"><i class="icon-facebook-sign social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
     {% if site.flickr_user %}
-    <li><a href="https://flickr.com/photos/{{ site.flickr_user }}" aria-label="Flickr Profile"><i class="icon-flickr social-navbar" aria-hidden="true"></i></a></li>
+    <li><a href="https://flickr.com/photos/{{ site.flickr_user }}" aria-label="Flickr Profile" title="Flickr Profile"><i class="icon-flickr social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
 
     {% if site.email %}
-    <li><a href="mailto:{{ site.email }}" aria-label="Email"><i class="icon-envelope social-navbar" aria-hidden="true"></i></a></li>
+    <li><a href="mailto:{{ site.email }}" aria-label="Email" title="Email"><i class="icon-envelope social-navbar" aria-hidden="true"></i></a></li>
     {% endif %}
+<li class="theme-control">
+<button id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><g class="sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></g><path class="moon" d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z"/></svg>
+</button>
+</li>
 </ul>
 </nav>

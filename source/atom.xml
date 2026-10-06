@@ -10,7 +10,7 @@ layout: null
   <updated>{{ site.posts.first.date | date_to_xmlschema }}</updated>
   <id>{{ site.url }}/</id>
   <author>
-    <name><![CDATA[{{ site.author | strip_html }}]]></name>
+    <name><![CDATA[{{ site.author.name | strip_html }}]]></name>
     {% if site.email %}<email><![CDATA[{{ site.email }}]]></email>{% endif %}
   </author>
   <generator uri="https://jekyllrb.com/">Jekyll</generator>

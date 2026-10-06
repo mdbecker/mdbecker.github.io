@@ -1,0 +1,5 @@
+{% assign profile = site.data.profile %}
+<p class="profile-role">{{ profile.role | escape }} at <a href="{{ profile.organization_url }}">{{ profile.organization | escape }}</a>.</p>
+<p class="profile-intro">{{ profile.intro | escape }}</p>
+<p>{{ profile.focus | escape }}</p>
+<p>{{ profile.community | escape }}</p>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <rect x="0" y="0" width="1000" height="1000" fill="none"/>
+  <text x="500" y="735"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="690"
+        font-weight="700"
+        fill="#000">B</text>
+  <rect x="285" y="785" width="430" height="48" rx="24" fill="#000"/>
+</svg>

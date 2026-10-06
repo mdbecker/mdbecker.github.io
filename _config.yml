@@ -2,8 +2,34 @@ url: https://beckerfuffle.com
 baseurl: ""
 title: Beckerfuffle
 subtitle: Go fuffle yourself!
-author: Michael Becker
-description: "I'm a Senior Data Scientist at Penn Medicine where I'm building machine learning systems to improve patient outcomes by providing real-time predictive applications that empower clinicians to identify at risk individuals. In my spare time I organize the DataPhilly Meetup group and despite being terrified of public speaking I present regularly at community events and conferences."
+author:
+  name: Michael Becker
+  url: https://beckerfuffle.com/
+tagline: Go fuffle yourself!
+lang: en
+social:
+  name: Michael Becker
+  links:
+    - https://github.com/mdbecker
+    - https://www.linkedin.com/in/mdbecker
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      toc: true
+  - scope:
+      path: ""
+    values:
+      image: /images/social/beckerfuffle.png
+collections:
+  talks:
+    output: false
+toc:
+  min_level: 2
+  max_level: 3
+  ordered_list: false
+description: "Michael Becker writes about machine learning, production AI, healthcare technology, Python, and assorted technical rabbit holes."
 
 source: source
 destination: public
@@ -15,10 +41,12 @@ highlighter: rouge
 kramdown:
   input: GFM
   hard_wrap: false
-  auto_ids: false
+  auto_ids: true
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-toc
 paginate: 10
 paginate_path: /posts/:num/
 excerpt_separator: "<!--more-->"
@@ -26,14 +54,12 @@ excerpt_link: "Read on &rarr;"
 category_dir: blog/categories
 subscribe_rss: /atom.xml
 navigation:
-  - text: Blog
+  - text: About
     url: /
-  - text: Archives
+  - text: Blog
     url: /blog/archives/
   - text: Talks
     url: /talks/
-  - text: About
-    url: /about/
 github_user: mdbecker
 linkedin_user: mdbecker
 twitter_user: beckerfuffle
