@@ -1,17 +1,9 @@
 <header>
-  {% if index %}
-    <h2><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h2>
-  {% else %}
-    <h1>{{ page.display_title | default: page.title | escape }}</h1>
-  {% endif %}
-  {% assign article = page %}{% if index %}{% assign article = post %}{% endif %}
+  <h1>{{ page.display_title | default: page.title | escape }}</h1>
+  {% assign article = page %}
   <p class="meta">
     <time datetime="{{ article.date | date_to_xmlschema }}">{{ article.date | date: "%b %-d, %Y" }}</time>
     <span class="categories">{% for category in article.categories limit:3 %} · <a href="{{ root_url }}/{{ site.category_dir }}/{{ category | replace:' ','-' | replace:'.','-dot-' | downcase | slugify }}/">{{ category | escape }}</a>{% endfor %}</span>
   </p>
 </header>
-{% if index %}
-  <p class="excerpt">{{ post.excerpt | strip_html | normalize_whitespace }}</p>
-{% else %}
-  {% include article_content.html %}
-{% endif %}
+{% include article_content.html %}

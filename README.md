@@ -224,6 +224,33 @@ approve a changed baseline or mask reading content. Historical screenshots of
 the retired theme are archival references. Remove disposable containers and
 unneeded captures explicitly; never use global Docker pruning.
 
+## CSS maintenance
+
+`source/stylesheets/screen.css` is the single stylesheet, ordered as fonts,
+theme palettes, global typography, page structure, navigation, article content,
+historical highlighting, editorial pages, TOCs, responsive rules, and print.
+Share a small grouped selector when related components intentionally use the
+same declarations in the same circumstances; keep component-specific behavior
+separate. Prefer deleting unused rules to adding utility classes.
+Use descriptive component names (`site-header`, `site-footer`, `icon-github`);
+keep generated syntax-highlighting and TOC hooks compatible with their producers.
+
+Header container queries control group reflow based on available space at the
+visitor's text size. The article viewport query expands its container; the TOC
+container query enables the sidebar only when both columns fit. Preserve both.
+Keep historical Rouge tokens and numbered-code table rules: generated article
+markup, rather than source text alone, determines whether selectors are used.
+The dark palettes support saved preferences and OS preferences independently.
+
+Run the Docker suite above for responsive and visual checks. In the disposable
+test workspace, `CLEANUP_CAPTURE=/tmp/before npm test --
+tests/cleanup-behavior.spec.js` records unmasked screenshots and computed styles
+in Chromium and Firefox. Rebuild after editing, then use
+`CLEANUP_CAPTURE=/tmp/after CLEANUP_COMPARE=/tmp/before npm test --
+tests/cleanup-behavior.spec.js` to check exact style, geometry, and screenshot
+preservation. Keep these outputs inside the container; use `docker cp` for
+manual review. Never replace a baseline merely to accept a visual change.
+
 ## Enlarged text and Android review
 
 `tests/content-header.spec.js` runs Chromium and Firefox in Docker at 320, 360,
