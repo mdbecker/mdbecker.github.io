@@ -151,6 +151,12 @@ is a maintenance step; there is no runtime image service.
 
 ## Run the full suite in Docker
 
+Verify the footer build year and both author formats inside the running preview container:
+
+```sh
+docker compose exec -T blog bundle exec ruby tests/copyright.rb
+```
+
 Build the normal preview image first with `docker compose build`. Build a
 separate disposable test image; this leaves the normal development image small:
 
