@@ -31,7 +31,7 @@ for (const engine of ['chromium','firefox'])
     try {
       const page = await browser.newPage();
       await isolateNetwork(page);
-      for (const width of [320,360,375,390,430,768,1440]) for (const scale of [1,1.5,2]) for (const scheme of ['light','dark']) {
+      for (const width of [320,360,375,390,430,768,1440,1920]) for (const scale of [1,1.5,2]) for (const scheme of ['light','dark']) {
         await page.setViewportSize({width,height:900});
         await page.emulateMedia({colorScheme:scheme});
         await page.goto(baseURL+'/');

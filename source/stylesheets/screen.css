@@ -200,8 +200,6 @@ hr { border: 0; border-top: 1px solid var(--rule); margin-block: var(--space); }
 .editorial-list li { margin-bottom: var(--space); }
 .editorial-list h3 { margin-top: 0; }
 .editorial-list p { margin-bottom: 0; }
-.blog-index .compact h3 { margin: 0; }
-.blog-index .compact .meta { margin: .25rem 0 0; }
 .talk-entry { scroll-margin-top: 1rem; }
 .talk-links { display: flex; flex-wrap: wrap; gap: 1rem; }
 

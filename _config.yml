@@ -42,7 +42,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-toc
 paginate: 10
-paginate_path: /posts/:num/
+paginate_path: /blog/page/:num/
 excerpt_separator: "<!--more-->"
 category_dir: blog/categories
 subscribe_rss: /atom.xml
@@ -50,7 +50,7 @@ navigation:
   - text: About
     url: /
   - text: Blog
-    url: /blog/archives/
+    url: /blog/
   - text: Talks
     url: /talks/
 github_user: mdbecker

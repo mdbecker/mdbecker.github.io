@@ -43,15 +43,16 @@ list headings and update side quests in their existing list. The Kramdown
 These fragments do not need front matter. Featured talks still come from the
 Talks collection, so their titles and metadata are maintained only once.
 
-The homepage remains an HTML file because the existing Jekyll pagination plugin
-requires an HTML index. Its editable prose is stored in Markdown includes.
+The homepage's editable prose is stored in Markdown includes.
 
 `source/index.html` is the combined About/personal homepage with `seo.type: Person`.
 `source/about/index.markdown` preserves the old URL with a static refresh redirect
 and a canonical link to `/`; it contains no duplicate biography. Navigation is
-About → Blog → Talks; Blog opens the existing writing archive and is highlighted
-on posts, categories, and writing pagination. Only pagination page one includes
-personal sections; later pages show writing without repeating the biography.
+About → Blog → Talks, linking to `/`, `/blog/`, and `/talks/`. Blog is highlighted
+on the reading index, later Blog pages, archive, articles, and categories.
+The About homepage always includes all personal sections and three recent posts.
+`source/blog/index.html` is the dedicated reading index; its prominent archive
+link opens `/blog/archives/`, the complete compact index grouped by year.
 
 ## Add a talk
 
@@ -121,10 +122,22 @@ Continue the article in ordinary Markdown.
 
 Dates and slugs determine `/blog/YYYY/MM/DD/title/`; do not change historical
 values. Use the excerpt separator, or a native `excerpt: >-` front-matter value.
-Never invent modification dates. The homepage shows excerpts for the first
-three posts, compact title/date links for the rest, and preserves ten posts per
-page using `paginator.posts`. It says **From the archive** until the newest
-published post is from 2026 or later, then **Latest writing**.
+Never invent modification dates. Both homepage and Blog previews use
+`source/_includes/post_preview.html`, with a post as the sole required parameter.
+Previews show titles, dates, up to three linked categories, and Read more links.
+`post.excerpt` is stripped of HTML, normalized to plain-text whitespace, and
+capped at 85 words, including for Markdown posts without an explicit excerpt or
+`<!--more-->` marker. Historical front matter stays unchanged.
+The homepage shows only the three newest previews and a **Read the blog →** link.
+It says **From the archive** until the newest published post is from 2026 or
+later, then **Latest writing**.
+
+The existing `jekyll-paginate` plugin paginates only `source/blog/index.html`,
+which must remain an HTML index without a front-matter permalink. Keep
+`paginate: 10` and `paginate_path: /blog/page/:num/` in `_config.yml`.
+Page one is `/blog/`; Older/Newer links use Jekyll's next/previous page paths.
+The homepage has no pagination dependencies. No published `/posts/N/` routes
+exist in the historical generated-route inventory.
 
 ## Themes and page navigation
 
@@ -153,7 +166,7 @@ Heading links appear on hover or keyboard focus.
 The homepage uses its existing Markdown section headings and stable anchors
 (`now`, `selected-work`, `selected-talks`, `writing`, `side-quests`). Talks come
 from the collection in `order` order, using filename anchors. Archives list
-represented years (`year-YYYY`); categories and later writing pages list their
+represented years (`year-YYYY`); categories and every Blog pagination page list their
 own posts, linking to local `post-` anchors derived from Jekyll post identities.
 Titles and destinations stay with their existing content; no separate TOC files
 or new front matter are required. Preserve section IDs and talk filenames when
@@ -213,6 +226,19 @@ Compose test service copies the read-only repository into `/work` and uses the
 image's installed dependencies. Synthetic builds, historical Git extraction,
 and generated output stay in that writable container workspace. No setup or
 installation is needed on the host.
+
+To verify pagination independently with disposable content in Docker:
+
+```sh
+docker compose run --rm test sh -c 'cp -a /repo/. /work/ && cp -a /test-tools/node_modules /work/ && bundle exec jekyll build && npm test -- tests/blog.spec.js'
+```
+
+The permanent Blog scenarios build a temporary source with 22 posts, check
+10/10/2 previews, unique articles, ordering, previous/next paths, matching TOCs,
+bounded future excerpts, and the complete About homepage. Fixtures are removed
+after the scenario; no synthetic posts enter the repository. The full suite
+also checks Chromium and Firefox at 320, 375, 390, 768, 1440, and 1920px with
+100%, 150%, and 200% text, light/dark themes, and print.
 
 Dependencies, generated output, fixtures, and test reports stay inside the
 container. The surviving suite covers historical content/routes, feeds, sitemap,

@@ -4,7 +4,6 @@ title: About Michael Becker
 seo:
   type: Person
 ---
-{% if paginator.page == 1 %}
 {% capture intro_md %}{% include home/intro.md %}{% endcapture %}
 {{ intro_md | markdownify }}
 {% capture now_md %}{% include home/now.md %}{% endcapture %}
@@ -21,26 +20,12 @@ seo:
 {% assign featured = site.talks | where: 'featured', true | sort: 'order' %}
 {% for talk in featured limit:3 %}{% include talk.html talk=talk selected=true %}{% endfor %}
 </ul><p><a href="{{ '/talks/' | relative_url }}">All talks &rarr;</a></p></section>
-{% else %}<h1>Writing</h1>{% include toc.html source='writing' %}{% endif %}
 <section class="home-section" id="writing">
 {% assign newest_year = site.posts.first.date | date: '%Y' | plus: 0 %}
 <h2>{% if newest_year >= 2026 %}Latest writing{% else %}From the archive{% endif %}</h2>
 <div class="blog-index">
-{% for post in paginator.posts %}
-  <article id="post-{{ post.id | slugify }}"{% if forloop.index > 3 %} class="compact"{% endif %}>
-  {% if forloop.index <= 3 %}
-    <header><h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3><p class="meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %-d, %Y' }}</time></p></header>
-    <p class="excerpt">{{ post.excerpt | strip_html | normalize_whitespace }}</p>
-  {% else %}
-    <h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3><p class="meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %-d, %Y' }}</time></p>
-  {% endif %}
-  </article>
-{% endfor %}
-<nav class="pagination" aria-label="Writing pages">
-{% if paginator.next_page %}<a href="{{ paginator.next_page_path | relative_url }}">&larr; Older</a>{% endif %}
-{% if paginator.previous_page %}<a href="{{ paginator.previous_page_path | relative_url }}">Newer &rarr;</a>{% endif %}
-</nav>
-</div><p><a href="{{ '/blog/archives/' | relative_url }}">Explore the writing archive &rarr;</a></p>
+{% for post in site.posts limit:3 %}{% include post_preview.html post=post %}{% endfor %}
+</div><p><a href="{{ '/blog/' | relative_url }}">Read the blog &rarr;</a></p>
 </section>
-{% if paginator.page == 1 %}<section class="home-section">
-{{ side_quests_md | markdownify }}</section>{% endif %}
+<section class="home-section">
+{{ side_quests_md | markdownify }}</section>

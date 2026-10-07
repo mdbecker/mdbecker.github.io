@@ -1,0 +1,8 @@
+<article id="post-{{ include.post.id | slugify }}">
+  <header>
+    <h3><a href="{{ include.post.url | relative_url }}">{{ include.post.title | escape }}</a></h3>
+    <p class="meta"><time datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: '%b %-d, %Y' }}</time>{% for category in include.post.categories limit:3 %} &middot; {% include category_link.html category=category %}{% endfor %}</p>
+  </header>
+  <p class="excerpt">{{ include.post.excerpt | strip_html | normalize_whitespace | truncatewords: 85 }}</p>
+  <p><a href="{{ include.post.url | relative_url }}">Read more &rarr;</a></p>
+</article>

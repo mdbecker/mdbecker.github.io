@@ -1,0 +1,18 @@
+---
+layout: default
+title: Blog
+---
+<h1>Blog</h1>
+<p>Notes on Python, machine learning, healthcare technology, and assorted technical rabbit holes.</p>
+<p><a href="{{ '/blog/archives/' | relative_url }}">Browse all posts in the archive &rarr;</a></p>
+{% include toc.html source='writing' %}
+<section class="blog-index">
+  <h2>Latest posts</h2>
+  {% for post in paginator.posts %}{% include post_preview.html post=post %}{% endfor %}
+  {% if paginator.next_page or paginator.previous_page %}
+  <nav class="pagination" aria-label="Blog pages">
+    {% if paginator.next_page %}<a href="{{ paginator.next_page_path | relative_url }}">&larr; Older</a>{% endif %}
+    {% if paginator.previous_page %}<a href="{{ paginator.previous_page_path | relative_url }}">Newer &rarr;</a>{% endif %}
+  </nav>
+  {% endif %}
+</section>

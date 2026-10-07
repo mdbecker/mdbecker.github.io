@@ -88,7 +88,7 @@ test("F mobile navigation wraps and supports keyboard activation", async ({ page
     return style.outlineStyle !== "none" && parseFloat(style.outlineWidth) >= 2;
   })).toBe(true);
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/\/blog\/archives\/$/);
+  await expect(page).toHaveURL(/\/blog\/$/);
 });
 test("G categories and archives link all original posts", async ({ page }) => {
   await page.goto("/blog/archives/");
@@ -129,13 +129,16 @@ test("H ordinary new Markdown and normalized new category", () => {
   }
   expect(read(path.join(root, 'blog/categories/new-category-dot-v2/atom.xml'))).toContain('Acceptance post 5');
 });
-test("I eleven posts paginate at historical second-page URL", () => {
+test("I eleven posts paginate on Blog while About keeps three previews", () => {
   const root = syntheticBuild();
   const home = read(path.join(root, "index.html")),
-    second = read(path.join(root, "posts/2/index.html"));
-  expect((home.match(/<article\b/g) || []).length).toBe(10);
+    first = read(path.join(root, "blog/index.html")),
+    second = read(path.join(root, "blog/page/2/index.html"));
+  expect((home.match(/<article\b/g) || []).length).toBe(3);
+  expect(home).toContain('Selected work');
+  expect((first.match(/<article\b/g) || []).length).toBe(10);
   expect((second.match(/<article\b/g) || []).length).toBe(1);
-  expect(home).toMatch(/href=["']\/posts\/2\//);
+  expect(first).toMatch(/href=["']\/blog\/page\/2\//);
   expect(second).toContain("Working with email content");
 });
 test("J valid Atom and sitemap with HTTPS post URLs", async ({

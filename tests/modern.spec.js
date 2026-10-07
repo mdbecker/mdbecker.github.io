@@ -199,7 +199,7 @@ test("new writing, Markdown edits, universal navigation, repeated headings and p
     expect(read("index.html")).toContain("Latest writing");
     expect(read("index.html")).toContain("Shared profile regression.");
     expect(read("about/index.html")).toContain('http-equiv="refresh"');
-    expect(read("posts/2/index.html")).not.toContain("Selected work");
+    expect(read("blog/page/2/index.html")).not.toContain("Selected work");
     expect(read("blog/2026/01/01/modern-1/index.html")).toContain(
       'aria-label="On this page"',
     );
@@ -386,7 +386,7 @@ test("the merged About homepage has its own navigation and preserves the old Abo
     nav.getByRole("link", { name: "Blog", exact: true }),
   ).not.toHaveAttribute("aria-current", /.+/);
   await nav.getByRole("link", { name: "Blog", exact: true }).click();
-  await expect(page).toHaveURL(/\/blog\/archives\/$/);
+  await expect(page).toHaveURL(/\/blog\/$/);
   await page.goto("/about/");
   await expect(page).toHaveURL(/:\d+\/$/);
   await expect(page.locator("main h1")).toHaveText("Michael Becker");
@@ -490,11 +490,11 @@ test('synthetic pagination, future pages, short posts and empty categories obtai
     fs.writeFileSync(`${tmp}/source/future.md`,'---\nlayout: page\ntitle: Future\n---\nIntro.\n\n## Section\nBody.\n');
     fs.writeFileSync(`${tmp}/source/empty.html`,'---\nlayout: category_index\ntitle: Empty\ncategory: no-such-category\n---\n');
     buildSource(tmp);
-    for(const file of ['posts/2/index.html','future/index.html','empty/index.html','blog/2026/01/01/toc-1/index.html']) {
+    for(const file of ['blog/page/2/index.html','future/index.html','empty/index.html','blog/2026/01/01/toc-1/index.html']) {
       await page.setContent(fs.readFileSync(`${tmp}/public/${file}`,'utf8')); await assertTocIntegrity(page);
-      if(file.startsWith('posts/')) expect(await page.locator('.toc a').allTextContents()).toEqual(await page.locator('.blog-index article h3 a').allTextContents());
+      if(file.startsWith('blog/page/')) expect(await page.locator('.toc a').allTextContents()).toEqual(await page.locator('.blog-index article h3 a').allTextContents());
       if(file==='future/index.html') expect(await page.locator('.toc a').allTextContents()).toEqual(['Start','Section']);
-      if(file==='empty/index.html'||file.startsWith('blog/')) expect(await page.locator('.toc a').allTextContents()).toEqual(['Start']);
+      if(file==='empty/index.html'||file==='blog/2026/01/01/toc-1/index.html') expect(await page.locator('.toc a').allTextContents()).toEqual(['Start']);
     }
   } finally {fs.rmSync(tmp,{recursive:true,force:true});}
 });
