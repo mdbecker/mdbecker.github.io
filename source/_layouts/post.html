@@ -1,15 +1,12 @@
 ---
 layout: default
-single: true
 ---
 <article class="hentry">
   {% include article.html %}
   <footer class="post-footer">
-    {% unless page.sharing == false %}{% include post/sharing.html %}{% endunless %}
     <nav aria-label="Adjacent articles">
       {% if page.previous.url %}<a href="{{ page.previous.url | relative_url }}">&laquo; {{ page.previous.title | escape }}</a>{% endif %}
       {% if page.next.url %}<a href="{{ page.next.url | relative_url }}">{{ page.next.title | escape }} &raquo;</a>{% endif %}
     </nav>
   </footer>
 </article>
-{% include giscus.html %}

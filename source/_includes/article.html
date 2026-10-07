@@ -3,7 +3,7 @@
   {% assign article = page %}
   <p class="meta">
     <time datetime="{{ article.date | date_to_xmlschema }}">{{ article.date | date: "%b %-d, %Y" }}</time>
-    <span class="categories">{% for category in article.categories limit:3 %} · <a href="{{ root_url }}/{{ site.category_dir }}/{{ category | replace:' ','-' | replace:'.','-dot-' | downcase | slugify }}/">{{ category | escape }}</a>{% endfor %}</span>
+    <span class="categories">{% for category in article.categories limit:3 %} · {% include category_link.html category=category %}{% endfor %}</span>
   </p>
 </header>
 {% include article_content.html %}

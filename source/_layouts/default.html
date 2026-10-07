@@ -9,11 +9,11 @@
     </header>
     <main id="content" tabindex="-1">
       {{ content }}
+      {% include giscus.html %}
     </main>
     <footer class="site-footer" role="contentinfo">
       {% include footer.html %}
     </footer>
   </div>
-  {% include after_footer.html %}
 </body>
 </html>

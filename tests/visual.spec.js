@@ -1,3 +1,4 @@
+const { isolateNetwork } = require('./helpers.cjs');
 const visit = require('./visit.cjs');
 const { test, expect } = require("@playwright/test");
 const routes = require("./fixtures/routes.json");
@@ -12,11 +13,7 @@ for (const [name, width, height] of [
   for (const route of routes)
     test(`D/E visual ${name} ${route}`, async ({ page }) => {
       await page.setViewportSize({ width, height });
-      await page.route("**/*", r =>
-        new URL(r.request().url()).hostname === "127.0.0.1"
-          ? r.continue()
-          : r.fulfill({ status: 200, body: "", contentType: "text/plain" }),
-      );
+      await isolateNetwork(page);
       expect((await visit(page, route)).status(), route).toBe(200);
       await page.evaluate(() => document.fonts.ready);
       await expect(page.getByRole("main")).toBeVisible();

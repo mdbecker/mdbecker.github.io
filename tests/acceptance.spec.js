@@ -1,3 +1,4 @@
+const { isolateNetwork, copySource, buildSource } = require('./helpers.cjs');
 const visit = require('./visit.cjs');
 const { test, expect } = require("@playwright/test");
 const fs = require("fs"),
@@ -7,11 +8,7 @@ const routes = require("./fixtures/routes.json");
 const posts = routes.filter((r) => /^\/blog\/\d/.test(r));
 const read = (p) => fs.readFileSync(p, "utf8");
 test.beforeEach(async ({ page }) =>
-  page.route("**/*", (r) =>
-    new URL(r.request().url()).hostname === "127.0.0.1"
-      ? r.continue()
-      : r.fulfill({ status: 200, body: "", contentType: "text/plain" }),
-  ),
+  isolateNetwork(page),
 );
 test("A all historical HTML routes survive", async ({ request }) => {
   for (const route of routes)
@@ -106,10 +103,7 @@ test("G categories and archives link all original posts", async ({ page }) => {
 });
 let synthetic;
 test.beforeAll(() => {
-  synthetic = fs.mkdtempSync(
-    path.join(require("os").tmpdir(), "beckerfuffle-synthetic-"),
-  );
-  fs.cpSync("source", path.join(synthetic, "source"), { recursive: true });
+  synthetic = copySource("beckerfuffle-synthetic-");
   for (let i = 1; i <= 5; i++)
     fs.writeFileSync(
       path.join(synthetic, "source/_posts", `2025-01-0${i}-acceptance-${i}.md`),
@@ -120,24 +114,7 @@ test.afterAll(() => {
   if (synthetic) fs.rmSync(synthetic, { recursive: true, force: true });
 });
 function syntheticBuild() {
-  const result = cp.spawnSync(
-    "bundle",
-    [
-      "exec",
-      "jekyll",
-      "build",
-      "--trace",
-      "--config",
-      path.resolve("_config.yml"),
-      "--source",
-      path.join(synthetic, "source"),
-      "--destination",
-      path.join(synthetic, "public"),
-    ],
-    { encoding: "utf8", env: process.env },
-  );
-  expect(result.status, result.stdout + "\n" + result.stderr).toBe(0);
-  return path.join(synthetic, "public");
+  return buildSource(synthetic);
 }
 test("H ordinary new Markdown and normalized new category", () => {
   const root = syntheticBuild();
@@ -147,6 +124,10 @@ test("H ordinary new Markdown and normalized new category", () => {
   expect(
     read(path.join(root, "blog/categories/new-category-dot-v2/index.html")),
   ).toContain("Acceptance post 5");
+  for (const file of ['blog/2025/01/05/acceptance-5/index.html', 'blog/archives/index.html']) {
+    expect(read(path.join(root, file))).toContain('href="/blog/categories/new-category-dot-v2/"');
+  }
+  expect(read(path.join(root, 'blog/categories/new-category-dot-v2/atom.xml'))).toContain('Acceptance post 5');
 });
 test("I eleven posts paginate at historical second-page URL", () => {
   const root = syntheticBuild();
@@ -211,9 +192,8 @@ test("K configured comments honor explicit opt-in and fail safely for missing se
     const values = {...config};
     if (missing) values[missing] = "";
     fs.writeFileSync(override, JSON.stringify({giscus: values}));
-    const result = cp.spawnSync("bundle", ["exec", "jekyll", "build", "--config", path.resolve("_config.yml") + "," + override, "--source", path.join(synthetic, "source"), "--destination", path.join(synthetic, "configured")], {encoding: "utf8"});
-    expect(result.status, result.stdout + result.stderr).toBe(0);
-    for (const route of [...posts, "/enabled/", "/disabled/", "/unspecified/", "/string/"]) {
+    buildSource(synthetic, { config: path.resolve("_config.yml") + "," + override, destination: "configured" });
+    for (const route of [...posts, "/enabled/", "/disabled/", "/unspecified/", "/string/", "/about/"]) {
       const html = read(path.join(synthetic, "configured", route, "index.html"));
       expect(html).not.toMatch(/disqus/i);
       await page.setContent(html);
@@ -221,6 +201,7 @@ test("K configured comments honor explicit opt-in and fail safely for missing se
       const script = page.locator('script[src="https://giscus.app/client.js"]');
       await expect(script).toHaveCount(enabled ? 1 : 0);
       await expect(page.getByRole("region", {name: "Comments", exact: true})).toHaveCount(enabled ? 1 : 0);
+      await expect(page.locator('main > section.comments')).toHaveCount(enabled ? 1 : 0);
       if (enabled) {
         for (const [key, value] of Object.entries({repo:config.repo, "repo-id":config.repo_id, category:config.category, "category-id":config.category_id, mapping:"pathname", strict:"1", "reactions-enabled":"1", "emit-metadata":"0", "input-position":"bottom", theme:"light", lang:"en", loading:"lazy"}))
           await expect(script).toHaveAttribute("data-" + key, value);

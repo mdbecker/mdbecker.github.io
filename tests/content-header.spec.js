@@ -1,12 +1,12 @@
+const { isolateNetwork, copySource, buildSource } = require('./helpers.cjs');
 const { test, expect, chromium, firefox } = require('@playwright/test');
-const fs = require('fs'), path = require('path'), cp = require('child_process');
+const fs = require('fs');
 test('Markdown is the authoritative editable content and supports rich edits', async ({ page }) => {
   expect(fs.existsSync('source/_data/profile.yml')).toBe(false);
   for (const name of ['intro','now','selected-work','talks-intro','side-quests'])
     expect(fs.existsSync(`source/_includes/home/${name}.md`)).toBe(true);
-  const tmp = fs.mkdtempSync('/tmp/markdown-content-');
+  const tmp = copySource('markdown-content-');
   try {
-    fs.cpSync('source', `${tmp}/source`, {recursive:true});
     fs.appendFileSync(`${tmp}/source/_includes/home/intro.md`, '\n\n**Bold edit** and *emphasis* with [a link](https://example.org/).\n\n- List edit\n');
     fs.appendFileSync(`${tmp}/source/_talks/ete-2021.md`, '\n\n**Talk edit** and *emphasis* with [a link](https://example.org/).\n\n- Talk list\n\nSecond paragraph.\n');
     for (const name of fs.readdirSync('source/_talks')) {
@@ -14,8 +14,7 @@ test('Markdown is the authoritative editable content and supports rich edits', a
       expect(text.split('---')[1]).not.toMatch(/^description:/m);
       expect(text.split('---').slice(2).join('---').trim()).not.toBe('');
     }
-    const r = cp.spawnSync('bundle',['exec','jekyll','build','--config',path.resolve('_config.yml'),'--source',`${tmp}/source`,'--destination',`${tmp}/public`],{encoding:'utf8'});
-    expect(r.status, r.stdout+r.stderr).toBe(0);
+    buildSource(tmp);
     for (const [file, bold, item] of [['index.html','Bold edit','List edit'],['talks/index.html','Talk edit','Talk list']]) {
       await page.setContent(fs.readFileSync(`${tmp}/public/${file}`,'utf8'));
       await expect(page.locator('strong').filter({hasText:bold})).toHaveCount(1);
@@ -31,7 +30,7 @@ for (const engine of ['chromium','firefox'])
     const browser = await ({chromium,firefox}[engine]).launch();
     try {
       const page = await browser.newPage();
-      await page.route('**/*', r => new URL(r.request().url()).hostname === '127.0.0.1' ? r.continue() : r.fulfill({body:''}));
+      await isolateNetwork(page);
       for (const width of [320,360,375,390,430,768,1440]) for (const scale of [1,1.5,2]) for (const scheme of ['light','dark']) {
         await page.setViewportSize({width,height:900});
         await page.emulateMedia({colorScheme:scheme});
@@ -86,7 +85,7 @@ for (const engine of ['chromium', 'firefox'])
     const browser = await ({ chromium, firefox }[engine]).launch();
     try {
       const page = await browser.newPage();
-      await page.route('**/*', r => new URL(r.request().url()).hostname === '127.0.0.1' ? r.continue() : r.fulfill({ body: '' }));
+      await isolateNetwork(page);
       for (const width of [320, 768, 1440]) for (const scale of [1, 1.5, 2]) {
         await page.setViewportSize({ width, height: 900 });
         await page.goto(baseURL + '/blog/2014/07/30/data-science-with-python-part-1/');

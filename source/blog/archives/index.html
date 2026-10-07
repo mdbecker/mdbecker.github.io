@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Blog Archive
-footer: false
 ---
 
 <div id="blog-archives">

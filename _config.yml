@@ -1,7 +1,6 @@
 url: https://beckerfuffle.com
 baseurl: ""
 title: Beckerfuffle
-subtitle: Go fuffle yourself!
 author:
   name: Michael Becker
   url: https://beckerfuffle.com/
@@ -13,11 +12,6 @@ social:
     - https://github.com/mdbecker
     - https://www.linkedin.com/in/mdbecker
 defaults:
-  - scope:
-      path: ""
-      type: posts
-    values:
-      toc: true
   - scope:
       path: ""
     values:
@@ -50,7 +44,6 @@ plugins:
 paginate: 10
 paginate_path: /posts/:num/
 excerpt_separator: "<!--more-->"
-excerpt_link: "Read on &rarr;"
 category_dir: blog/categories
 subscribe_rss: /atom.xml
 navigation:

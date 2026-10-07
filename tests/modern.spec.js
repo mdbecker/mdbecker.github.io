@@ -1,17 +1,13 @@
+const { isolateNetwork, copySource, buildSource } = require('./helpers.cjs');
 const visit = require("./visit.cjs");
 const { test, expect, chromium, firefox } = require("@playwright/test");
 const fs = require("fs"),
-  path = require("path"),
-  cp = require("child_process");
+  path = require("path");
 const posts = require("./fixtures/routes.json").filter((r) =>
   /^\/blog\/\d/.test(r),
 );
 test.beforeEach(async ({ page }) =>
-  page.route("**/*", (r) =>
-    new URL(r.request().url()).hostname === "127.0.0.1"
-      ? r.continue()
-      : r.fulfill({ body: "" }),
-  ),
+  isolateNetwork(page),
 );
 for (const scheme of ["dark", "light"])
   test(`OS ${scheme} and live preference`, async ({ page }) => {
@@ -189,9 +185,8 @@ test("home, canonical biography, ordered talks and featured selection", async ({
 
 });
 test("new writing, Markdown edits, universal navigation, repeated headings and pagination", () => {
-  const tmp = fs.mkdtempSync("/tmp/beckerfuffle-modern-");
+  const tmp = copySource("beckerfuffle-modern-");
   try {
-    fs.cpSync("source", path.join(tmp, "source"), { recursive: true });
     for (let i = 1; i <= 5; i++)
       fs.writeFileSync(
         path.join(tmp, "source/_posts", `2026-01-0${i}-modern-${i}.md`),
@@ -199,22 +194,7 @@ test("new writing, Markdown edits, universal navigation, repeated headings and p
       );
     const profile = path.join(tmp, "source/_includes/home/intro.md");
     fs.appendFileSync(profile, "\n\nShared profile regression.\n");
-    const result = cp.spawnSync(
-      "bundle",
-      [
-        "exec",
-        "jekyll",
-        "build",
-        "--config",
-        path.resolve("_config.yml"),
-        "--source",
-        path.join(tmp, "source"),
-        "--destination",
-        path.join(tmp, "public"),
-      ],
-      { encoding: "utf8" },
-    );
-    expect(result.status, result.stdout + result.stderr).toBe(0);
+    buildSource(tmp);
     const read = (p) => fs.readFileSync(path.join(tmp, "public", p), "utf8");
     expect(read("index.html")).toContain("Latest writing");
     expect(read("index.html")).toContain("Shared profile regression.");
@@ -461,7 +441,7 @@ for (const engine of ['chromium','firefox']) test(`${engine} shared geometry, re
   const browser = await ({chromium,firefox}[engine]).launch();
   try {
     const page = await browser.newPage();
-    await page.route('**/*', r => new URL(r.request().url()).hostname === '127.0.0.1' ? r.continue() : r.fulfill({body:''}));
+    await isolateNetwork(page);
     const measurements = [];
     for (const width of [320,375,390,768,1200,1440,1920]) for (const scale of [1,1.5,2]) for (const theme of ['light','dark']) {
       await page.setViewportSize({width,height:900}); await page.emulateMedia({colorScheme:theme});
@@ -504,14 +484,12 @@ for (const engine of ['chromium','firefox']) test(`${engine} shared geometry, re
   } finally { await browser.close(); }
 });
 test('synthetic pagination, future pages, short posts and empty categories obtain navigation automatically',async({page})=>{
-  const tmp=fs.mkdtempSync('/tmp/universal-toc-');
+  const tmp=copySource('universal-toc-');
   try {
-    fs.cpSync('source',`${tmp}/source`,{recursive:true});
     for(let i=1;i<=5;i++) fs.writeFileSync(`${tmp}/source/_posts/2026-01-0${i}-toc-${i}.md`,`---\nlayout: post\ntitle: Synthetic ${i}\ndate: 2026-01-0${i}\ntoc: false\n---\nShort prose.\n`);
     fs.writeFileSync(`${tmp}/source/future.md`,'---\nlayout: page\ntitle: Future\n---\nIntro.\n\n## Section\nBody.\n');
     fs.writeFileSync(`${tmp}/source/empty.html`,'---\nlayout: category_index\ntitle: Empty\ncategory: no-such-category\n---\n');
-    const r=cp.spawnSync('bundle',['exec','jekyll','build','--config',path.resolve('_config.yml'),'--source',`${tmp}/source`,'--destination',`${tmp}/public`],{encoding:'utf8'});
-    expect(r.status,r.stdout+r.stderr).toBe(0);
+    buildSource(tmp);
     for(const file of ['posts/2/index.html','future/index.html','empty/index.html','blog/2026/01/01/toc-1/index.html']) {
       await page.setContent(fs.readFileSync(`${tmp}/public/${file}`,'utf8')); await assertTocIntegrity(page);
       if(file.startsWith('posts/')) expect(await page.locator('.toc a').allTextContents()).toEqual(await page.locator('.blog-index article h3 a').allTextContents());

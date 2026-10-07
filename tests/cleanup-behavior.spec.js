@@ -1,3 +1,4 @@
+const { isolateNetwork } = require('./helpers.cjs');
 const { test, expect, chromium, firefox } = require('@playwright/test');
 const fs = require('node:fs');
 const routes = ['/', '/blog/archives/', '/talks/', '/blog/2013/02/14/working-with-email-content/', '/blog/2014/07/30/data-science-with-python-part-1/'];
@@ -10,7 +11,7 @@ for (const browserName of ['chromium', 'firefox']) {
       const page = await browser.newPage();
       try {
       test.setTimeout(600000);
-      await page.route('**/*', r => new URL(r.request().url()).hostname === '127.0.0.1' ? r.continue() : r.fulfill({ body: '' }));
+      await isolateNetwork(page);
       for (const width of [320, 375, 390, 768, 1440]) for (const scale of [100, 150, 200]) for (const theme of ['light', 'dark', 'print']) {
         await page.setViewportSize({ width, height: 900 });
         await page.emulateMedia({ media: theme === 'print' ? 'print' : 'screen', colorScheme: theme === 'dark' ? 'dark' : 'light' });

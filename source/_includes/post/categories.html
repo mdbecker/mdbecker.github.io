@@ -1,4 +1,0 @@
-{% assign categories = post.categories | default: page.categories | sort %}
-{% for category in categories %}
-  <a href="{{ root_url }}/{{ site.category_dir }}/{{ category | replace:' ','-' | replace:'.','-dot-' | downcase | slugify }}/"><span class="badge">{{ category | escape }}</span></a>
-{% endfor %}

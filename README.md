@@ -331,3 +331,38 @@ ET Book is MIT licensed; see `source/fonts/et-book/LICENSE`. Existing Font Aweso
 profile glyphs are reused. There are no blocking external fonts, analytics,
 frontend bundle, new articles, or comment-provider migration. Monthly Dependabot
 updates remain subject to tests and screenshot review.
+
+## Template maintenance
+
+The four layouts retain distinct roles: `default` supplies the site shell and
+comments placement, `page` handles ordinary pages and redirects, `post` handles
+articles and adjacent navigation, and `category_index` supplies category listings.
+Header and footer markup live directly in their includes; meaningful custom
+navigation remains separate. The masthead and SEO metadata share `tagline`.
+
+Main and generated category Atom feeds use `atom_feed.xml` for rendering, with
+thin entry points retaining their titles, URLs, post collections, and limits.
+`category_link.html` keeps article and archive category URLs aligned with the
+existing generator. Historical heading normalization and `HistoricalKramdown`
+remain necessary for old article anchors, images, and numbered code tables.
+
+Tests share external-network isolation and disposable Jekyll source/build helpers
+in `tests/helpers.cjs`. Callers keep their fixture edits and cleanup explicit.
+Coverage remains divided between historical acceptance, modern integrations,
+Markdown/header accessibility, cross-page reflow/print, and broad visual routes;
+overlapping viewports exercise different assertions.
+
+Run the locked toolchain entirely in Docker:
+
+```sh
+docker compose build blog
+docker compose --profile test build test
+docker compose --profile test run --rm test
+docker compose up -d blog
+```
+
+The preview is available at <http://127.0.0.1:4000/>. Optional regression evidence
+uses `DEDUP_BASELINE` (a prior generated site) for semantic HTML and XML comparisons,
+and `CLEANUP_CAPTURE` / `CLEANUP_COMPARE` for exact screenshots and computed layout
+comparisons. Set those paths inside the test container; no host tool installation
+is needed.

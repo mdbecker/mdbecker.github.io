@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[{{ include.title }}]]></title>
+  <link href="{{ include.self_url }}" rel="self"/>
+  <link href="{{ site.url }}/"/>
+  <updated>{{ site.posts.first.date | date_to_xmlschema }}</updated>
+  <id>{{ site.url }}/</id>
+  <author>
+    <name><![CDATA[{{ site.author.name | strip_html }}]]></name>
+    {% if site.email %}<email><![CDATA[{{ site.email }}]]></email>{% endif %}
+  </author>
+  <generator uri="https://jekyllrb.com/">Jekyll</generator>
+
+  {% for post in include.posts limit: include.limit %}
+  <entry>
+    <title type="html"><![CDATA[{{ post.title | replace: "]]>", "]]]]><![CDATA[>" }}]]></title>
+    <link href="{{ site.url }}{{ post.url }}"/>
+    <updated>{{ post.date | date_to_xmlschema }}</updated>
+    <id>{{ site.url }}{{ post.id }}</id>
+    <content type="html">{{ post.content | xml_escape }}</content>
+  </entry>
+  {% endfor %}
+</feed>
