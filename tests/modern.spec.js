@@ -1,5 +1,5 @@
 const visit = require("./visit.cjs");
-const { test, expect } = require("@playwright/test");
+const { test, expect, chromium, firefox } = require("@playwright/test");
 const fs = require("fs"),
   path = require("path"),
   cp = require("child_process");
@@ -112,7 +112,7 @@ test("SEO, social image, favicon and manifest resolve", async ({
   for (const icon of manifest.icons)
     expect((await request.get(icon.src)).status()).toBe(200);
 });
-test("historical headings have stable permalinks and threshold TOCs", async ({
+test("historical headings have stable permalinks and universal TOCs", async ({
   page,
 }) => {
   for (const route of posts) {
@@ -122,8 +122,8 @@ test("historical headings have stable permalinks and threshold TOCs", async ({
     expect(ids.every(Boolean)).toBe(true);
     expect(new Set(ids).size).toBe(ids.length);
     await expect(
-      page.getByRole("navigation", { name: "Table of contents" }),
-    ).toHaveCount(ids.length >= 3 ? 1 : 0);
+      page.getByRole("navigation", { name: "On this page" }),
+    ).toHaveCount(1);
     for (const id of ids) {
       const heading = page.locator(`[id="${id}"]`);
       const permalink = heading.locator("a.anchor");
@@ -188,7 +188,7 @@ test("home, canonical biography, ordered talks and featured selection", async ({
   await expect(page.locator("iframe,video")).toHaveCount(0);
 
 });
-test("new writing, Markdown edits, opt-out, repeated headings and pagination", () => {
+test("new writing, Markdown edits, universal navigation, repeated headings and pagination", () => {
   const tmp = fs.mkdtempSync("/tmp/beckerfuffle-modern-");
   try {
     fs.cpSync("source", path.join(tmp, "source"), { recursive: true });
@@ -220,8 +220,8 @@ test("new writing, Markdown edits, opt-out, repeated headings and pagination", (
     expect(read("index.html")).toContain("Shared profile regression.");
     expect(read("about/index.html")).toContain('http-equiv="refresh"');
     expect(read("posts/2/index.html")).not.toContain("Selected work");
-    expect(read("blog/2026/01/01/modern-1/index.html")).not.toContain(
-      'aria-label="Table of contents"',
+    expect(read("blog/2026/01/01/modern-1/index.html")).toContain(
+      'aria-label="On this page"',
     );
     expect(read("blog/2026/01/02/modern-2/index.html")).toContain(
       'id="repeat-1"',
@@ -255,8 +255,9 @@ for (const width of [1440, 768, 390])
         const toc = page.locator(".toc");
         if (await toc.count()) {
           const t = await toc.boundingBox(),
-            a = await page.locator(".article-body").boundingBox();
-          expect(width >= 1200 ? t.x >= a.x + a.width : t.y < a.y).toBe(true);
+            a = await page.locator("main").boundingBox();
+          const sidebar = await toc.evaluate(e => getComputedStyle(e).position === "absolute");
+          expect(sidebar ? t.x >= a.x + a.width : Math.abs(t.x - a.x) < 1).toBe(true);
         }
         if (process.env.CANDIDATE_CAPTURE_DIR) {
           fs.mkdirSync(process.env.CANDIDATE_CAPTURE_DIR, { recursive: true });
@@ -412,4 +413,138 @@ test("the merged About homepage has its own navigation and preserves the old Abo
   const alias = await (await request.get("/about/")).text();
   expect(alias).toContain('http-equiv="refresh"');
   expect(alias).not.toContain('class="profile-intro"');
+});
+
+// Universal page navigation and shared layout regressions.
+const readableRoutes = require('./fixtures/routes.json').filter(r => r !== '/about/');
+const long = '/blog/2014/07/30/data-science-with-python-part-1/';
+const short = '/blog/2014/11/24/pydata-nyc-the-really-short-version/';
+async function assertTocIntegrity(page) {
+  const toc = page.getByRole('navigation', { name: 'On this page', exact: true });
+  await expect(toc).toHaveCount(1);
+  await expect(toc.getByRole('heading', { name: 'On this page', exact: true })).toHaveCount(1);
+  const result = await toc.locator('a').evaluateAll(es => es.map(e => {
+    const id = decodeURIComponent(new URL(e.href).hash.slice(1));
+    const targets = [...document.querySelectorAll('[id]')].filter(t => t.id === id);
+    return { text: e.textContent.trim(), count: targets.length, order: targets[0] ? [...document.querySelectorAll('[id]')].indexOf(targets[0]) : -1 };
+  }));
+  expect(result.length).toBeGreaterThan(0);
+  for (const r of result) { expect(r.text).not.toBe(''); expect(r.count).toBe(1); }
+  expect(result.map(r => r.order)).toEqual(result.map(r => r.order).sort((a,b) => a-b));
+  const ids = await page.locator('[id]').evaluateAll(es => es.map(e => e.id));
+  expect(new Set(ids).size).toBe(ids.length);
+}
+test('universal navigation has unique local targets on every readable route', async ({page,request}) => {
+  for (const route of readableRoutes) { await page.goto(route); await assertTocIntegrity(page); }
+  for (const route of ['/about/','/atom.xml','/sitemap.xml','/site.webmanifest'])
+    expect(await (await request.get(route)).text()).not.toContain('aria-label="On this page"');
+});
+test('home, talks, archive and category navigation follows existing content', async ({page}) => {
+  await page.goto('/');
+  expect(await page.locator('.toc a').allTextContents()).toEqual(['Now','Selected work','Selected talks','Writing','Side quests']);
+  await page.goto('/talks/');
+  expect(await page.locator('.toc a').allTextContents()).toEqual(await page.locator('.talk-entry h2').allTextContents());
+  await expect(page.locator('.toc a')).toHaveCount(8);
+  await expect(page.locator('iframe,video')).toHaveCount(0);
+  await page.goto('/blog/archives/');
+  expect(await page.locator('.toc a').allTextContents()).toEqual(await page.locator('#blog-archives > h2').allTextContents());
+  await page.goto('/blog/categories/python/');
+  expect(await page.locator('.toc a').allTextContents()).toEqual(await page.locator('#blog-archives article h3 a').allTextContents());
+  for (const route of [short,long]) {
+    await page.goto(route);
+    await expect(page.locator('.toc a').first()).toHaveText('Start');
+    expect(await page.locator('.toc a').count()).toBe(1 + await page.locator('.article-body h2,.article-body h3').count());
+  }
+});
+for (const engine of ['chromium','firefox']) test(`${engine} shared geometry, reflow, text scaling and keyboard navigation`, async ({baseURL}) => {
+  test.setTimeout(600000);
+  const browser = await ({chromium,firefox}[engine]).launch();
+  try {
+    const page = await browser.newPage();
+    await page.route('**/*', r => new URL(r.request().url()).hostname === '127.0.0.1' ? r.continue() : r.fulfill({body:''}));
+    const measurements = [];
+    for (const width of [320,375,390,768,1200,1440,1920]) for (const scale of [1,1.5,2]) for (const theme of ['light','dark']) {
+      await page.setViewportSize({width,height:900}); await page.emulateMedia({colorScheme:theme});
+      let alignment;
+      for (const route of ['/', '/talks/', '/blog/archives/', '/blog/categories/python/',short,long]) {
+        await page.goto(baseURL+route);
+        await page.evaluate(s => document.documentElement.style.fontSize = `${s*100}%`,scale);
+        await page.evaluate(() => document.fonts.ready);
+        const g = await page.evaluate(() => {
+          const rect = s => { const r = document.querySelector(s).getBoundingClientRect(); return {x:r.x,y:r.y,w:r.width,h:r.height}; };
+          return {main:rect('main'),nav:rect('.site-header nav'),mast:rect('.masthead'),footer:rect('.site-footer'),toc:rect('.toc'),root:parseFloat(getComputedStyle(document.documentElement).fontSize),pos:getComputedStyle(document.querySelector('.toc')).position,scroll:document.documentElement.scrollWidth};
+        });
+        expect(g.scroll).toBeLessThanOrEqual(width);
+        for (const s of ['nav','mast','footer']) expect(Math.abs(g[s].x-g.main.x)).toBeLessThan(1);
+        if (alignment === undefined) alignment = g.main.x;
+        expect(Math.abs(g.main.x-alignment)).toBeLessThan(1);
+        expect(g.main.w).toBeCloseTo(Math.min(52*g.root,width-2.5*g.root),0);
+        if (width >= 70.5*g.root) {
+          expect(g.toc.x).toBeCloseTo(g.main.x+g.main.w+2*g.root,0);
+          expect(g.toc.w).toBeCloseTo(14*g.root,0);
+          expect(g.toc.x+g.toc.w).toBeLessThanOrEqual(width);
+        } else { expect(g.pos).toBe('static'); expect(g.toc.x).toBeCloseTo(g.main.x,0); }
+        measurements.push({engine,width,scale,theme,route,...g});
+      }
+    }
+    await page.goto(baseURL+long);
+    await page.locator('.toc a').first().focus();
+    expect(await page.locator('.toc a').first().evaluate(e => getComputedStyle(e).outlineStyle)).not.toBe('none');
+    await page.keyboard.press('Enter'); await expect(page).toHaveURL(/#content$/);
+    await page.locator('.toc a').first().focus();
+    await page.keyboard.press('Tab');
+    await expect(page.locator(':focus')).toHaveAttribute('href', await page.locator('.toc a').nth(1).getAttribute('href'));
+    const href = await page.locator(':focus').getAttribute('href');
+    await page.keyboard.press('Enter'); expect(new URL(page.url()).hash).toBe(href);
+    await page.emulateMedia({media:'print'}); await expect(page.locator('.toc')).toBeHidden();
+    if (process.env.TOC_EVIDENCE) {
+      fs.mkdirSync(process.env.TOC_EVIDENCE, { recursive: true });
+      fs.writeFileSync(`${process.env.TOC_EVIDENCE}/${engine}-geometry.json`, JSON.stringify(measurements, null, 2));
+    }
+  } finally { await browser.close(); }
+});
+test('synthetic pagination, future pages, short posts and empty categories obtain navigation automatically',async({page})=>{
+  const tmp=fs.mkdtempSync('/tmp/universal-toc-');
+  try {
+    fs.cpSync('source',`${tmp}/source`,{recursive:true});
+    for(let i=1;i<=5;i++) fs.writeFileSync(`${tmp}/source/_posts/2026-01-0${i}-toc-${i}.md`,`---\nlayout: post\ntitle: Synthetic ${i}\ndate: 2026-01-0${i}\ntoc: false\n---\nShort prose.\n`);
+    fs.writeFileSync(`${tmp}/source/future.md`,'---\nlayout: page\ntitle: Future\n---\nIntro.\n\n## Section\nBody.\n');
+    fs.writeFileSync(`${tmp}/source/empty.html`,'---\nlayout: category_index\ntitle: Empty\ncategory: no-such-category\n---\n');
+    const r=cp.spawnSync('bundle',['exec','jekyll','build','--config',path.resolve('_config.yml'),'--source',`${tmp}/source`,'--destination',`${tmp}/public`],{encoding:'utf8'});
+    expect(r.status,r.stdout+r.stderr).toBe(0);
+    for(const file of ['posts/2/index.html','future/index.html','empty/index.html','blog/2026/01/01/toc-1/index.html']) {
+      await page.setContent(fs.readFileSync(`${tmp}/public/${file}`,'utf8')); await assertTocIntegrity(page);
+      if(file.startsWith('posts/')) expect(await page.locator('.toc a').allTextContents()).toEqual(await page.locator('.blog-index article h3 a').allTextContents());
+      if(file==='future/index.html') expect(await page.locator('.toc a').allTextContents()).toEqual(['Start','Section']);
+      if(file==='empty/index.html'||file.startsWith('blog/')) expect(await page.locator('.toc a').allTextContents()).toEqual(['Start']);
+    }
+  } finally {fs.rmSync(tmp,{recursive:true,force:true});}
+});
+test('TOC navigation remains native with JavaScript disabled',async({browser,baseURL})=>{
+  const context=await browser.newContext({javaScriptEnabled:false});
+  try {
+    const page=await context.newPage();
+    for(const route of ['/', '/talks/', '/blog/archives/', '/blog/categories/python/', short, long]) {
+      await page.goto(baseURL+route); await assertTocIntegrity(page);
+      const link=page.locator('.toc a').last(); const fragment=await link.getAttribute('href');
+      await link.click(); expect(new URL(page.url()).hash).toBe(fragment);
+    }
+  } finally {await context.close();}
+});
+test('all desktop pages use the wider reading column',async({page})=>{
+  await page.setViewportSize({width:1440,height:900});
+  for(const route of ['/', '/talks/',long]) {
+    await page.goto(route);
+    expect((await page.locator('main').boundingBox()).width).toBeCloseTo(52*16,0);
+    expect((await page.locator('.container').boundingBox()).width).toBeCloseTo(72*16,0);
+  }
+});
+test('switching page types preserves horizontal alignment',async({page})=>{
+  await page.setViewportSize({width:1440,height:900}); let x;
+  for(const route of ['/', '/talks/',long]) {
+    await page.goto(route);
+    const current=(await page.locator('main').boundingBox()).x;
+    if(x===undefined) x=current;
+    expect(current).toBeCloseTo(x,0);
+  }
 });

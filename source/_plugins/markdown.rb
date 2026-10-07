@@ -4,6 +4,14 @@ require "jekyll/converters/markdown/kramdown_parser"
 require "rouge"
 require "cgi"
 
+# jekyll-toc's filters require page.toc == true, even when called explicitly.
+# Enable the existing parser for readable page/post layouts without author flags.
+Jekyll::Hooks.register [:pages, :documents], :pre_render do |document, payload|
+  if %w[page post].include?(document.data["layout"]) && !document.data["redirect_to"]
+    payload["page"]["toc"] = true
+  end
+end
+
 # Jekyll's documented custom Markdown processor delegates prose to Kramdown.
 # The retained stylesheet expects the historical code table and line gutter.
 class Jekyll::Converters::Markdown::HistoricalKramdown

@@ -22,9 +22,9 @@
   {% endif %}
   <h{{ heading_section }}{% endfor %}{% endcapture %}
 {% assign reading_content = normalized_content %}
-{% if page.layout == 'post' and page.toc != false %}
+{% comment %}Every readable page gets navigation; legacy toc front matter is ignored.{% endcomment %}
+{% if page.layout == 'post' or include.source == 'page' %}
   {% assign contents = reading_content | toc_only %}
-  {% assign heading_count = contents | split: '<li class="toc-entry' | size | minus: 1 %}
   {% assign reading_content = reading_content | inject_anchors %}
   {% comment %}Append accessible chain-link permalinks while preserving existing heading markup and links.{% endcomment %}
   {% assign sections = reading_content | split: '<h' %}
@@ -48,9 +48,6 @@
     {% endif %}
   {% endfor %}
 {% endif %}
-<div{% if heading_count >= 3 %} class="article-navigation"{% endif %}>
-  {% if heading_count >= 3 %}
-  <nav class="toc" aria-label="Table of contents"><div class="toc-inner"><h2>Contents</h2>{{ contents }}</div></nav>
-  {% endif %}
-  <div class="article-body">{{ reading_content }}</div>
-</div>
+{% assign toc_source = include.source | default: 'post' %}
+{% include toc.html source=toc_source headings=contents %}
+<div class="article-body">{{ reading_content }}</div>

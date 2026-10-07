@@ -17,3 +17,16 @@ services:
       timeout: 5s
       start_period: 30s
       retries: 3
+  test:
+    profiles: [test]
+    image: mdbeckergithubio-test
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    platform: linux/amd64
+    init: true
+    volumes:
+      - type: bind
+        source: .
+        target: /repo
+        read_only: true

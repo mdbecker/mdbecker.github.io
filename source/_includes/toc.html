@@ -1,0 +1,41 @@
+<nav class="toc" aria-label="On this page">
+  <div class="toc-inner">
+    <h2>On this page</h2>
+    {% case include.source %}
+    {% when 'home' %}
+    <ul>
+      <li><a href="#now">{{ include.now | newline_to_br | split: '<br />' | first | remove_first: '## ' | strip | escape }}</a></li>
+      <li><a href="#selected-work">{{ include.work | newline_to_br | split: '<br />' | first | remove_first: '## ' | strip | escape }}</a></li>
+      <li><a href="#selected-talks">{{ include.talks | newline_to_br | split: '<br />' | first | remove_first: '## ' | strip | escape }}</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#side-quests">{{ include.quests | newline_to_br | split: '<br />' | first | remove_first: '## ' | strip | escape }}</a></li>
+    </ul>
+    {% when 'talks' %}
+    <ul>
+      {% assign talks = site.talks | sort: 'order' %}
+      {% for talk in talks %}
+      {% assign talk_id = talk.path | split: '/' | last | split: '.' | first %}
+      <li><a href="#{{ talk_id }}">{{ talk.title | escape }}</a></li>
+      {% else %}<li><a href="#content">Start</a></li>{% endfor %}
+    </ul>
+    {% when 'archive' %}
+    <ul>
+      {% assign years = site.posts | group_by_exp: 'post', "post.date | date: '%Y'" %}
+      {% for year in years %}<li><a href="#year-{{ year.name }}">{{ year.name }}</a></li>
+      {% else %}<li><a href="#content">Start</a></li>{% endfor %}
+    </ul>
+    {% when 'category', 'writing' %}
+    <ul>
+      {% if include.source == 'category' %}{% assign entries = site.categories[page.category] %}
+      {% else %}{% assign entries = paginator.posts %}{% endif %}
+      {% for post in entries %}<li><a href="#post-{{ post.id | slugify }}">{{ post.title | escape }}</a></li>
+      {% else %}<li><a href="#content">Start</a></li>{% endfor %}
+    </ul>
+    {% else %}
+      {% capture list_start %}<ul id="toc" class="section-nav"><li><a href="#content">Start</a></li>{% endcapture %}
+      {% if include.headings contains '<li' %}
+        {{ include.headings | replace_first: '<ul id="toc" class="section-nav">', list_start }}
+      {% else %}<ul><li><a href="#content">Start</a></li></ul>{% endif %}
+    {% endcase %}
+  </div>
+</nav>

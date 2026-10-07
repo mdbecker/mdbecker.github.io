@@ -110,7 +110,6 @@ comments: true
 # description: A concise sharing/search description.
 # image: /images/my-post.png
 # last_modified_at: 2026-10-07
-# toc: false
 ---
 A compact introduction.
 
@@ -127,7 +126,7 @@ three posts, compact title/date links for the rest, and preserves ten posts per
 page using `paginator.posts`. It says **From the archive** until the newest
 published post is from 2026 or later, then **Latest writing**.
 
-## Themes and article navigation
+## Themes and page navigation
 
 Without a saved choice, CSS follows the OS light/dark preference, including
 when JavaScript is disabled. The four profile/theme controls form one compact
@@ -143,10 +142,29 @@ Kramdown generates heading IDs. Historical heading levels are normalized beneath
 the page H1 without rewriting Markdown. An image-only heading that Kramdown
 leaves unnamed receives a stable `section-N` fallback. `jekyll-toc` generates
 navigation from these final H2/H3 headings, and its decorative anchors are given
-accessible names in Liquid. Posts show a single Contents nav when at least three
-eligible headings exist and `toc: false` is absent. Short posts and ordinary
-pages have no TOC. It is an in-flow section on smaller screens and a sticky right
-rail at 1200px and above. Heading links appear on hover or keyboard focus.
+accessible names in Liquid. Every readable page shows exactly one **On this page** navigation through
+`source/_includes/toc.html`. Posts and future ordinary `layout: page` pages
+receive Start (`#content`) followed by eligible H2/H3 headings automatically,
+including short pages. Legacy `toc: false` no longer suppresses navigation. A small pre-render hook in
+the existing Markdown integration enables `jekyll-toc` for page/post layouts;
+the plugin otherwise requires an explicit `page.toc == true`.
+Heading links appear on hover or keyboard focus.
+
+The homepage uses its existing Markdown section headings and stable anchors
+(`now`, `selected-work`, `selected-talks`, `writing`, `side-quests`). Talks come
+from the collection in `order` order, using filename anchors. Archives list
+represented years (`year-YYYY`); categories and later writing pages list their
+own posts, linking to local `post-` anchors derived from Jekyll post identities.
+Titles and destinations stay with their existing content; no separate TOC files
+or new front matter are required. Preserve section IDs and talk filenames when
+editing so incoming links remain valid.
+
+Every page shares a centered 72rem container with 1.25rem horizontal padding,
+a left-aligned reading column capped at 52rem, a 14rem TOC, and a 2rem gap.
+A container query enables the sticky right sidebar only when the container's
+content box has at least 68rem available. At smaller effective widths, including
+enlarged text, the same TOC appears in normal flow near the beginning of the
+content. Long sidebar lists scroll within the viewport. Print hides navigation.
 
 ## Metadata and artwork
 
@@ -180,33 +198,22 @@ Verify the footer build year and both author formats inside the running preview 
 docker compose exec -T blog bundle exec ruby tests/copyright.rb
 ```
 
-Build the normal preview image first with `docker compose build`. Build a
-separate disposable test image; this leaves the normal development image small:
+Build the preview base and the permanent test image, then run the full suite:
 
 ```sh
-docker build -t beckerfuffle-test -f - . <<'DOCKER'
-FROM node:24-bookworm AS node
-FROM mdbeckergithubio-blog:latest
-COPY --from=node /usr/local/bin/node /usr/local/bin/node
-COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
-RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
-    ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
-RUN mkdir /test-tools && cd /test-tools && \
-    npm install @playwright/test@1.63.0 && \
-    npx playwright install --with-deps chromium firefox
-DOCKER
-
-docker run --rm --platform linux/amd64 \
-  -v "$PWD:/repo:ro" --entrypoint sh beckerfuffle-test -c '
-  set -eu
-  cp -a /repo /work && cd /work && npm ci &&
-  mkdir -p /tmp/historical &&
-  git archive f956b53210bd3985408a766f431e5455c02e2459 | tar -x -C /tmp/historical
-  bundle exec jekyll build && HISTORICAL_SITE=/tmp/historical npm test
-  '
+docker compose build blog
+docker compose build test
+docker compose run --rm test
 ```
 
-On Apple Silicon, add `--platform linux/amd64` to the test image build too.
+`Dockerfile.test` installs the Ruby dependencies from the preview base, Node,
+the locked Playwright package, and its matching Chromium/Firefox browsers and
+system libraries. Rebuild both images after dependency lockfile changes. The
+Compose test service copies the read-only repository into `/work` and uses the
+image's installed dependencies. Synthetic builds, historical Git extraction,
+and generated output stay in that writable container workspace. No setup or
+installation is needed on the host.
+
 Dependencies, generated output, fixtures, and test reports stay inside the
 container. The surviving suite covers historical content/routes, feeds, sitemap,
 comments, deployment guards, themes, metadata/assets, heading anchors/TOCs,
@@ -214,8 +221,18 @@ Markdown content, talks, pagination, contrast, and responsive behavior.
 External services are blocked deterministically. The production test is opt-in
 with `VERIFY_PRODUCTION=1`; local success does not verify the live site.
 
-For visual review, run `CANDIDATE_CAPTURE_DIR=/tmp/captures npm test --
-tests/modern.spec.js` **inside** a named test container. It captures homepage,
+For visual review, keep a named test container until its captures are retrieved:
+
+```sh
+docker compose run --name beckerfuffle-review \
+  -e CANDIDATE_CAPTURE_DIR=/tmp/captures test
+mkdir -p test-results
+docker cp beckerfuffle-review:/tmp/captures ./test-results/captures
+docker rm beckerfuffle-review
+```
+
+For a focused rerun, `CANDIDATE_CAPTURE_DIR=/tmp/captures npm test --
+tests/modern.spec.js` **inside** a named test container also works. It captures homepage,
 code/TOC article, writing archive, and Talks at 1440×900, 768×1024, and 390×844 in both
 themes. Use `docker cp` to retrieve captures before removing that container.
 The established `tests/visual.spec.js` also checks every historical route at
@@ -236,8 +253,9 @@ Use descriptive component names (`site-header`, `site-footer`, `icon-github`);
 keep generated syntax-highlighting and TOC hooks compatible with their producers.
 
 Header container queries control group reflow based on available space at the
-visitor's text size. The article viewport query expands its container; the TOC
-container query enables the sidebar only when both columns fit. Preserve both.
+visitor's text size. The shared TOC
+container query enables the sidebar only when both columns fit; all page types
+keep the same container width.
 Keep historical Rouge tokens and numbered-code table rules: generated article
 markup, rather than source text alone, determines whether selectors are used.
 The dark palettes support saved preferences and OS preferences independently.
@@ -252,6 +270,12 @@ preservation. Keep these outputs inside the container; use `docker cp` for
 manual review. Never replace a baseline merely to accept a visual change.
 
 ## Enlarged text and Android review
+
+`tests/modern.spec.js` additionally checks universal TOC targets on every
+readable route, synthetic pagination/future/empty pages, JavaScript-free anchors,
+and shared geometry in Chromium/Firefox at 320, 375, 390, 768, 1200, 1440, and
+1920px with 100%, 150%, and 200% text in both themes. Set `TOC_EVIDENCE` to a
+container directory to save measurements.
 
 `tests/content-header.spec.js` runs Chromium and Firefox in Docker at 320, 360,
 375, 390, 430, 768, and 1440 CSS pixels, with default, 150%, and 200% root text

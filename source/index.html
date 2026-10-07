@@ -7,22 +7,27 @@ seo:
 {% if paginator.page == 1 %}
 {% capture intro_md %}{% include home/intro.md %}{% endcapture %}
 {{ intro_md | markdownify }}
-<section class="home-section">{% capture now_md %}{% include home/now.md %}{% endcapture %}
+{% capture now_md %}{% include home/now.md %}{% endcapture %}
+{% capture selected_work_md %}{% include home/selected-work.md %}{% endcapture %}
+{% capture talks_intro_md %}{% include home/talks-intro.md %}{% endcapture %}
+{% capture side_quests_md %}{% include home/side-quests.md %}{% endcapture %}
+{% include toc.html source='home' now=now_md work=selected_work_md talks=talks_intro_md quests=side_quests_md %}
+<section class="home-section">
 {{ now_md | markdownify }}</section>
-<section class="home-section" id="selected-work">{% capture selected_work_md %}{% include home/selected-work.md %}{% endcapture %}
+<section class="home-section" id="selected-work">
 {{ selected_work_md | markdownify }}</section>
-<section class="home-section" id="selected-talks">{% capture talks_intro_md %}{% include home/talks-intro.md %}{% endcapture %}
+<section class="home-section" id="selected-talks">
 {{ talks_intro_md | markdownify }}<ul class="editorial-list">
 {% assign featured = site.talks | where: 'featured', true | sort: 'order' %}
 {% for talk in featured limit:3 %}{% include talk.html talk=talk selected=true %}{% endfor %}
 </ul><p><a href="{{ '/talks/' | relative_url }}">All talks &rarr;</a></p></section>
-{% else %}<h1>Writing</h1>{% endif %}
+{% else %}<h1>Writing</h1>{% include toc.html source='writing' %}{% endif %}
 <section class="home-section" id="writing">
 {% assign newest_year = site.posts.first.date | date: '%Y' | plus: 0 %}
 <h2>{% if newest_year >= 2026 %}Latest writing{% else %}From the archive{% endif %}</h2>
 <div class="blog-index">
 {% for post in paginator.posts %}
-  <article{% if forloop.index > 3 %} class="compact"{% endif %}>
+  <article id="post-{{ post.id | slugify }}"{% if forloop.index > 3 %} class="compact"{% endif %}>
   {% if forloop.index <= 3 %}
     <header><h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3><p class="meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %-d, %Y' }}</time></p></header>
     <p class="excerpt">{{ post.excerpt | strip_html | normalize_whitespace }}</p>
@@ -37,5 +42,5 @@ seo:
 </nav>
 </div><p><a href="{{ '/blog/archives/' | relative_url }}">Explore the writing archive &rarr;</a></p>
 </section>
-{% if paginator.page == 1 %}<section class="home-section">{% capture side_quests_md %}{% include home/side-quests.md %}{% endcapture %}
+{% if paginator.page == 1 %}<section class="home-section">
 {{ side_quests_md | markdownify }}</section>{% endif %}

@@ -8,6 +8,14 @@ layout: default
     {% if page.date %}<p class="meta"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time></p>{% endif %}
   </header>
   {% endif %}
-  {% include article_content.html %}
+  {% if page.redirect_to %}
+  <div class="article-body">{{ content }}</div>
+  {% else %}
+  {% assign toc_source = 'page' %}
+  {% if page.category %}{% assign toc_source = 'category' %}
+  {% elsif page.url == '/blog/archives/' %}{% assign toc_source = 'archive' %}
+  {% elsif page.url == '/talks/' %}{% assign toc_source = 'talks' %}{% endif %}
+  {% include article_content.html source=toc_source %}
+  {% endif %}
 </article>
 {% include giscus.html %}
